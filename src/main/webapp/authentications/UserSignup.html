@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+
+<script src="http://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
+
+<script src="../utilites/CommonTypes.js" type="text/javascript" charset="utf-8"></script>
+
+<script>
+	function callAjaxServelet(){
+		
+		var name  = $("#userName").val();
+		var phoneNumber = $("#phoneNumber").val();
+		var password = $("#password").val();
+		var address = $("#address").val();
+		var email = $("#email").val();
+		var ipAddress = $("#IpAddress").val();
+
+		if(ipAddress == undefined || ipAddress == "" || ipAddress == null)
+			ipAddress = "localhost:8080";
+		
+		var jsonData = {
+				"name":name,
+				"phoneNumber": phoneNumber,
+				"password": password,
+				"address" : address,
+				"email"	  : email
+		}		
+		var url = "http://"+IP_ADDRESS+"/"+APPLICATION_NAME+"/HandleAjaxCall"
+		$.ajax({
+		    type: "POST",
+		    url: url+"?action=1&"+$("#frmToSbt").serialize(),
+		    contentType: "application/json",
+		    data: {},
+		    success: function(response) {
+		    }
+		});
+	} 
+	
+	
+	function callAjaxServeletToLogin(){
+		
+		var ipAddress = $("#IpAddress").val();
+
+		if(ipAddress == undefined || ipAddress == "" || ipAddress == null)
+			ipAddress = "localhost:8080";
+		
+		var url = "http://"+IP_ADDRESS+"/"+APPLICATION_NAME+"/HandleAjaxCall"
+
+		$.ajax({
+		    type: "POST",
+		    url: url+"?action=2&"+$("#frmToLogin").serialize(),
+		    contentType: "application/json",
+		    data: {},
+		    success: function(response) {
+		    }
+		});
+	}
+	
+	function fetchGoogleDrivesPhotos(){
+		var url = "http://"+IP_ADDRESS+"/"+APPLICATION_NAME+"/HandleAjaxCall"
+
+		$.ajax({
+		    type: "POST",
+		    url: url+"?action=4",
+		    contentType: "application/json",
+		    data: {},
+		    success: function(response) {
+		    }
+		});
+	  
+	}
+	
+</script>
+</head>
+
+<body>
+		<div>
+			<form method="post" id="frmToSbt">
+				<input type="text" placeholder="IpAddress" name="IpAddress" id="IpAddress"/><br/>
+				<input type="text" placeholder="name" name="userName" id="userName"/><br/> 
+				<input type="email" placeholder="email" name="email" id="email"/><br/>
+				<input type="text" placeholder="phone number" name="phoneNumber" id="phoneNumber"/><br/>
+				<input type="text" placeholder="Address" name="address" id="address"/><br/>
+				<input type="password" placeholder="password" name="password" id="password"/><br/>
+				
+				<input type="button"  name="button" onclick="callAjaxServelet();" value="Click to ajax call" />
+			</form>
+		</div>
+		
+		<div>
+			<span>Login</span>
+			
+				<form method="post" id="frmToLogin">
+				 <input type="text" placeholder="IpAddress" name="IpAddress" id="IpAddress"/><br/>
+				<input type="email" placeholder="email" name="email" id="email"/><br/>
+				<input type="password" placeholder="password" name="password" id="password"/><br/>
+				<input type="button"  name="button" onclick="callAjaxServeletToLogin();" value="Click to Login" />
+			</form>
+			
+		</div>
+		
+		<div>
+			<input type="button" name="fetch photos" value="" id="fetch photos" onclick="fetchGoogleDrivesPhotos();"/>
+			
+		</div>
+	
+</body>
+</html>
