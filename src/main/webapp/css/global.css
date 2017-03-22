@@ -1,0 +1,110 @@
+.login-container{	
+	height: 100%;
+	width: 100%;
+}
+
+.login-container-inner-container{
+	width: 100%;
+	height: 50%;
+	bottom: 25%;
+	top: 25%;
+	position: relative;
+	padding: 20px;
+}
+
+
+.login-container-inner{	
+	background-color: white;
+	opacity: 0.9;
+}
+
+.login-container-inner input{
+	border: none;
+	height: 45px;
+	outline: 0;
+	border-radius: 0;
+}
+
+/*.login-container-inner input[type="text"]{
+	background-color: rgba(128, 128, 128, 0.11);
+}*/
+
+.login-container-inner input::-webkit-input-placeholder{
+	color: #c4cac4;
+	font-size: 16px;
+}
+
+.login-container-inner input{
+	border-bottom: 1px solid;
+	border-bottom-color: rgba(128, 128, 128, 0.11);
+    box-shadow: none;
+    webkit-box-shadow: none;
+
+    color: #526d52;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+@media(max-width: 749px){
+	.login-container-inner{
+		height: 50%;
+		width: 90%;	
+		top: 25%;
+		bottom: 25%;
+		position: relative;
+		left: 5%;
+		right: 5%;
+	}
+}
+
+@media(min-width: 750px){
+	.login-container-inner{
+		height: 40%;
+		width: 50%;
+		top: 30%;
+    	bottom: 30%;
+    	position: relative;
+    	left: 25%;
+    	right: 25%;
+	}
+}
+
+.padding-top-20{
+	padding-top: 20px;
+}
+
+.neem-color{
+	background: #232 url('../img/friends.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+
+
+.validation-error {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  border-bottom-color: #a94442 !important;
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}

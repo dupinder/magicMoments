@@ -1,0 +1,694 @@
+@charset "UTF-8";
+
+
+
+
+
+@media (min-width: 800px){
+  .reel{
+    width: 50% !important;
+  }
+
+  .login{
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 799px){
+  .reel{
+    width: 220% !important;
+  }
+
+  .login{
+    width: 45.1% !important;
+  }
+
+}
+
+@media (min-width: 1200px){
+  .center-block.login-wrap{
+    position: absolute;
+    left: 25%;
+    right: 25%;
+  }
+}
+
+
+
+body,
+html,
+p,
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+#wrapper,
+*,
+body,
+html {
+  -webkit-font-smoothing: antialiased;
+}
+
+.rupee:before,
+b {
+  font-weight: 400;
+}
+
+.f-bolt span,
+.rupee:before,
+ul li {
+  display: inline-block;
+}
+
+*,
+:after,
+:before {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body,
+html {
+  border: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+body {
+  line-height: 1.5;
+  word-wrap: break-word;
+  -webkit-text-size-adjust: none;
+  overflow-y: scroll;
+  background: #F0F4F5;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 400;
+  margin: 0;
+}
+
+@font-face {
+  font-family: sspRegular;
+  src: url("https://s.freecharge.in/mobile/fonts/sourcesanspro/SourceSansPro-Regular.eot?v=6");
+  src: url("https://s.freecharge.in/mobile/fonts/sourcesanspro/SourceSansPro-Regular.eot?#iefix?v=6") format("embedded-opentype"),url("https://s.freecharge.in/mobile/fonts/sourcesanspro/SourceSansPro-Regular.woff?v=6") format("woff"),url("https://s.freecharge.in/mobile/fonts/sourcesanspro/SourceSansPro-Regular.ttf?v=6") format("truetype"),url("https://s.freecharge.in/mobile/fonts/sourcesanspro/SourceSansPro-Regular.svg?v=6") format("svg");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: sspLight;
+  src: url("https://s.freecharge.in/mobile/fonts/sourcesanspro/SourceSansPro-Light.eot?v=6");
+  src: url("https://s.freecharge.in/mobile/fonts/sourcesanspro/SourceSansPro-Light.eot?#iefix?v=6") format("embedded-opentype"),url("https://s.freecharge.in/mobile/fonts/sourcesanspro/SourceSansPro-Light.woff?v=6") format("woff"),url("https://s.freecharge.in/mobile/fonts/sourcesanspro/SourceSansPro-Light.ttf?v=6") format("truetype"),url("https://s.freecharge.in/mobile/fonts/sourcesanspro/SourceSansPro-Light.svg?v=6") format("svg");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: sspBold;
+  src: url("https://s.freecharge.in/mobile/fonts/sourcesanspro/SourceSansPro-Semibold.eot?v=6");
+  src: url("https://s.freecharge.in/mobile/fonts/sourcesanspro/SourceSansPro-Semibold.eot?#iefix?v=6") format("embedded-opentype"),url("https://s.freecharge.in/mobile/fonts/sourcesanspro/SourceSansPro-Semibold.woff?v=6") format("woff"),url("https://s.freecharge.in/mobile/fonts/sourcesanspro/SourceSansPro-Semibold.ttf?v=6") format("truetype"),url("https://s.freecharge.in/mobile/fonts/sourcesanspro/SourceSansPro-Semibold.svg?v=6") format("svg");
+  font-weight: 400;
+  font-style: normal;
+}
+
+#wrapper,
+body,
+html {
+  width: 100%;
+  overflow: auto;
+  font-family: sspRegular;
+  font-size: 12px;
+}
+
+b {
+  font-family: sspBold;
+}
+
+a,
+button,
+input,
+label {
+  -ms-touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+* {
+  text-shadow: 1px 1px 1px rgba(0,0,0,.004);
+}
+
+.rupee:before {
+  content: '\20B9';
+  vertical-align: baseline;
+  font-size: 14px;
+  line-height: 1.5;
+  position: relative;
+  top: 1px;
+  right: 1px;
+  font-family: sspLight;
+}
+
+.nav li.active,
+.notification,
+nav li.active {
+  font-family: sspBold;
+}
+
+@-webkit-keyframes loader {
+  0% {
+    -webkit-transform: rotateZ(0);
+  }
+
+  45% {
+    -webkit-transform: rotateZ(220deg);
+  }
+
+  100% {
+    -webkit-transform: rotateZ(360deg);
+  }
+}
+
+@-moz-keyframes loader {
+  0% {
+    -moz-transform: rotateZ(0);
+  }
+
+  45% {
+    -moz-transform: rotateZ(220deg);
+  }
+
+  100% {
+    -moz-transform: rotateZ(360deg);
+  }
+}
+
+@-o-keyframes loader {
+  0% {
+    -o-transform: rotateZ(0);
+  }
+
+  45% {
+    -o-transform: rotateZ(220deg);
+  }
+
+  100% {
+    -o-transform: rotateZ(360deg);
+  }
+}
+
+@-ms-keyframes loader {
+  0% {
+    -ms-transform: rotateZ(0);
+  }
+
+  45% {
+    -ms-transform: rotateZ(220deg);
+  }
+
+  100% {
+    -ms-transform: rotateZ(360deg);
+  }
+}
+
+@keyframes loader {
+  0% {
+    transform: rotateZ(0);
+  }
+
+  45% {
+    transform: rotateZ(220deg);
+  }
+
+  100% {
+    transform: rotateZ(360deg);
+  }
+}
+
+#loadMask {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,.7);
+  z-index: 1000;
+  visibility: hidden;
+}
+
+.f-bolt,
+.f-bolt span {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.f-bolt {
+  top: 50%;
+  left: 50%;
+  width: 75px;
+  height: 75px;
+  margin-left: -38px;
+  margin-top: -38px;
+  background: url("https://s.freecharge.in/mobile/images/f-loader2.png?v=6") center no-repeat;
+  background-size: auto 55%;
+}
+
+.f-bolt span {
+  width: 74px;
+  height: 74px;
+  left: -3px;
+  top: -3px;
+  border: 3px solid #fff;
+  border-right-color: transparent;
+  -webkit-transform: rotateZ(0);
+  -moz-transform: rotateZ(0);
+  -ms-transform: rotateZ(0);
+  -o-transform: rotateZ(0);
+  transform: rotateZ(0);
+  -webkit-animation: loader 1s infinite linear;
+  -moz-animation: loader 1s infinite linear;
+  -o-animation: loader 1s infinite linear;
+  -ms-animation: loader 1s infinite linear;
+  animation: loader 1s infinite linear;
+}
+
+.error-block {
+  display: none;
+  color: #f44336;
+  font-size: .85em;
+  margin: 15px 0;
+}
+
+.notification {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  font-size: .9em;
+  padding: 10px 35px 10px 10px;
+  background-color: rgba(0,0,0,.76);
+  color: #fff;
+  z-index: 99;
+  text-align: left;
+}
+
+.center-text,
+.dull-button,
+.footer-links p,
+.forgot-passwor {
+  text-align: center;
+}
+
+.notification.icon {
+  padding-left: 45px;
+  background-repeat: no-repeat;
+}
+
+.notification.error {
+  color: #E3714D;
+}
+
+.notification .close {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  height: 24px;
+  width: 24px;
+}
+
+.notification .close:after {
+  content: '×';
+  font-size: 2em;
+  height: 24px;
+  width: 24px;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  line-height: 24px;
+}
+
+.seo-content {
+  margin-top: 0;
+}
+
+.seo-content p {
+  color: #7a7a79;
+}
+
+.seo-content h1 {
+  font-size: 18px;
+}
+
+.seo-content h2 {
+  font-size: 16px;
+}
+
+body {
+  font-size: 12px;
+}
+
+.nav li,
+nav li {
+  text-transform: uppercase;
+  color: #868686;
+  padding-bottom: 3px;
+  position: static;
+  display: inline;
+}
+
+.nav li.active,
+nav li.active {
+  color: #191919;
+  border-bottom: 2px solid #68625E;
+}
+
+input[type=text],
+input[type=password],
+input[type=number],
+input[type=tel] {
+  width: 100%;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 12px;
+  padding: 17px 15px;
+  border: 1px solid #E6E6E6;
+  outline: 0;
+  color: #191919;
+  font-family: sspRegular;
+  margin-bottom: 0;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+input[type=checkbox] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+input[type=checkbox]+span,
+input[type=radio]+span {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #eaedef;
+  background-color: #fafafa;
+  vertical-align: middle;
+  margin-right: 8px;
+  position: relative;
+}
+
+input[type=checkbox]+span:after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 10px;
+  height: 9px;
+}
+
+input[type=checkbox]:checked+span {
+  border-color: #65c6bb;
+}
+
+input[type=checkbox]:checked+span:after {
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQAgMAAABrdreIAAAACVBMVEUAAABlxrtlxrv4c7DOAAAAAnRSTlMAhetBupcAAABESURBVAjXHcpBFcAwCATR7SERgRokVAdqIiI9BJXdCe8xhw9iXvJsOg+N29pwLw3NTkXCteD6zIo2+3bun5kzjaTD+wMENRDDjVLktgAAAABJRU5ErkJggg==") center center no-repeat;
+  background-size: 10px 8px;
+}
+
+.icon,
+.icon.password {
+  background-size: 20px;
+}
+
+.element-container {
+  position: relative;
+}
+
+.icon,
+.showPasswordText {
+  position: absolute;
+}
+
+input:-webkit-autofill,
+select:-webkit-autofill,
+textarea:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #fff inset;
+  -moz-box-shadow: 0 0 0 1000px #fff inset;
+  box-shadow: 0 0 0 1000px #fff inset;
+  -webkit-text-fill-color: #191919!important;
+  -moz-text-fill-color: #191919!important;
+  text-fill-color: #191919!important;
+  background-color: #191919!important;
+  color: #191919!important;
+}
+
+::-webkit-input-placeholder {
+  color: #868686;
+  font-size: 1.1em;
+  text-transform: uppercase;
+}
+
+:-moz-placeholder {
+  color: #868686;
+  font-size: 1.1em;
+  text-transform: uppercase;
+}
+
+::-moz-placeholder {
+  color: #868686;
+  font-size: 1.1em;
+  text-transform: uppercase;
+}
+
+:-ms-input-placeholder {
+  color: #868686;
+  font-size: 1.1em;
+  text-transform: uppercase;
+}
+
+form .element-container input {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 60px;
+  margin-top: 1px;
+  border-radius: 0;
+  margin-bottom: 0;
+}
+
+form .element-container:nth-child(1) input {
+  margin-top: 0;
+  border-radius: 5px 5px 0 0;
+}
+
+form .element-container:nth-last-child(2) {
+  margin-bottom: 35px;
+}
+
+.icon {
+  display: inline-block;
+  vertical-align: middle;
+  top: 10px;
+  left: 10px;
+  background-repeat: no-repeat;
+  background-image: url("https://s.freecharge.in/mobile/images/login-strip@2x.png?v=6");
+  width: 30px;
+  margin-top: 3px;
+}
+
+.icon.name {
+  background-position: 2px 2px;
+  height: 24px;
+}
+
+.icon.password {
+  background-position: 2px -63px;
+  height: 25px;
+}
+
+.icon.email {
+  background-position: 2px -21px;
+  height: 20px;
+  background-size: 21px;
+}
+
+.icon.phone {
+  background-position: 2px -37px;
+  height: 26px;
+}
+
+.footer-links {
+  margin-bottom: 50px;
+}
+
+.footer-links p {
+  color: #666;
+}
+
+.footer-links .dull-button {
+  padding: 15px 40px;
+}
+
+.footer-links .dull-button:nth-child(1) {
+  margin-right: 15px;
+}
+
+.login-wrap {
+  margin: 50px 15px 0;
+}
+
+.nav {
+  margin-bottom: 35px;
+  font-size: 12px;
+}
+
+.nav li {
+  margin-right: 20px;
+}
+
+.viewport {
+  overflow-x: scroll;
+}
+
+.viewport .reel {
+  width: 220%;
+  float: left;
+  -moz-transition: margin .5s ease-in-out;
+  -o-transition: margin .5s ease-in-out;
+  -ms-transition: margin .5s ease-in-out;
+  -webkit-transition: margin .5s ease-in-out;
+  transition: margin .5s ease-in-out;
+  margin-bottom: 7px;
+}
+
+.viewport .reel.signin {
+  margin-left: 0;
+}
+
+.viewport .reel.register {
+  margin-left: -120%;
+}
+
+.viewport .reel .slide {
+  width: 45.1%;
+  float: left;
+}
+
+.viewport .reel .slide.signup {
+  float: right;
+}
+
+.login-form .element-container label {
+  display: none;
+  text-transform: uppercase;
+  color: #7a7a79;
+  margin: 4px 0;
+}
+
+.forgot-password {
+  padding-top: 20px;
+}
+
+.forgot-password a {
+  text-decoration: underline;
+  color: #666;
+}
+
+.social-btn {
+  width: 100%;
+}
+
+.center-text {
+  min-width: 46.9%;
+}
+
+.social-login-form {
+  display: inline-block;
+  min-width: 46.9%;
+  max-width: 130px;
+}
+
+.footer-links .dull-button {
+  max-width: 100%;
+  min-width: 100%;
+}
+
+.dull-button {
+  background: center center no-repeat;
+  display: inline-block;
+  border: none;
+  color: transparent;
+  background-size: auto 90%;
+}
+
+.dull-button.fb-btn {
+  background-color: #3B5998;
+  background-image: url("https://s.freecharge.in/mobile/images/fb@2x.png?v=6");
+}
+
+.dull-button.gplus-btn {
+  background-color: #D73D32;
+  background-image: url("https://s.freecharge.in/mobile/images/gplus@2x.png?v=6");
+}
+
+.main-button {
+  background-color: #68625E;
+  color: #fff;
+  width: 100%;
+  padding: 11px;
+  font-size: 12px;
+  border: none;
+  text-transform: uppercase;
+  outline: 0;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+.showPasswordText {
+  right: 0;
+  top: 0;
+  padding: 14px;
+  color: #666;
+  z-index: 10;
+}
+
+.has-hint {
+  border-radius: 0;
+}
+
+.has-hint .hint-text {
+  color: #868686;
+  padding: 8px 13px;
+  margin: 0;
+  background: #fff;
+  line-height: 1.2;
+  font-size: 10px;
+}
+
+.has-hint .hint-text.bor-top-round {
+  border-radius: 5px 5px 0 0;
+}
+
+.has-hint .hint-text.bor-bot-round {
+  border-radius: 0 0 5px 5px;
+}
