@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,8 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.google.gson.Gson;
+
 import connection.connectionManager;
 import drive.DriveCommunications;
+import drive.Event;
 import user.UserDetails;
 import utilities.CommonTypes;
 
@@ -64,7 +68,16 @@ public class HandleAjaxCall extends HttpServlet {
 				break;
 				case ACTION_LODE_DRIVE_PHOTOS:
 					DriveCommunications obj = new DriveCommunications();
-					obj.fetchPhotosFromDrive();
+					List<Event> events = obj.fetchEventFolder();
+					
+					Gson gson = new Gson();
+					 // convert your list to json
+					 String eventJson = gson.toJson(events);
+					System.out.println(eventJson);
+					response.getOutputStream().println(eventJson);
+					response.getOutputStream().flush();
+					// list to json of objects
+					
 					break;
 				}
 				

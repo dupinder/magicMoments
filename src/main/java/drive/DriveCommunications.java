@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public class DriveCommunications {
@@ -28,8 +29,7 @@ public class DriveCommunications {
         "Drive API Java Quickstart";
 
     /** Directory to store user credentials for this application. */
-    private static final java.io.File DATA_STORE_DIR = new java.io.File(
-        System.getProperty("user.home"), ".credentials/drive-java-quickstart");
+    private static final java.io.File DATA_STORE_DIR = new java.io.File("../credentials/drive-java-quickstart");
 
     /** Global instance of the {@link FileDataStoreFactory}. */
     private static FileDataStoreFactory DATA_STORE_FACTORY;
@@ -49,6 +49,8 @@ public class DriveCommunications {
     private static final List<String> SCOPES =
         Arrays.asList(DriveScopes.DRIVE_METADATA_READONLY);
 
+   // private static Drive service = getGoogleDriveService();
+    
     static {
         try {
             HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
@@ -85,7 +87,18 @@ public class DriveCommunications {
         return credential;
     }
 
-    /**
+/*    private static Drive getGoogleDriveService() {
+    	Drive service = null; 
+		try {
+			service = getDriveService();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return service;
+	}*/
+
+	/**
      * Build and return an authorized Drive client service.
      * @return an authorized Drive client service
      * @throws IOException
@@ -98,14 +111,40 @@ public class DriveCommunications {
                 .build();
     }
 
+
+    public String getThumbnailLink(String fileId, Drive service) throws IOException{
+
+    	 File file = service.files().get(fileId).execute();
+    	 System.out.println(file.getThumbnailLink());
+    	 return file.getThumbnailLink();
+    }
+    
+    public List<Event> fetchEventFolder() throws IOException{
+    	Drive service = getDriveService();
+    	
+    	List<Event> events = new LinkedList<Event>();
+    	getEvents(service, events);
+    		
+    		return events;
+    }
+    
     public void fetchPhotosFromDrive() throws IOException{
         // Build a new authorized API client service.
-        Drive service = getDriveService();
+    	Drive service = getDriveService();
+    	
+    	List<Event> events = new LinkedList<Event>();
+    	
+    	// Get List of folders as Events
+    		getEvents(service, events);
 
+    		
+    		System.out.println(events);
         // Print the names and IDs for up to 10 files.
-        FileList result = service.files().list()
+/*        FileList result = service.files().list()
              .setPageSize(10)
-             .setFields("nextPageToken, files(id, name)")
+             .setQ("mimeType='application/vnd.google-apps.folder'")
+   			 .setSpaces("drive")
+             .setFields("nextPageToken, files(id, name, originalFilename, description, mimeType)")
              .execute();
         List<File> files = result.getFiles();
         if (files == null || files.size() == 0) {
@@ -113,29 +152,79 @@ public class DriveCommunications {
         } else {
             System.out.println("Files:");
             for (File file : files) {
-                System.out.printf("%s (%s)\n", file.getName(), file.getId());
+            	System.out.println(file.getName() +" : "+ file.getId() + ":" + file.getOriginalFilename() +  " : " + file.getDescription() + " : " + getThumbnailLink(file.getId(), service) + ":"+ file.getMimeType());
+            }
+        }*/
+    }
+    
+    private void getEvents(Drive service, List<Event> events) throws IOException {
+        FileList result = service.files().list()
+                .setPageSize(10)
+                .setQ("mimeType='application/vnd.google-apps.folder' and  trashed != true")
+      			.setSpaces("drive")
+                .setFields("nextPageToken, files(id, name, originalFilename, description, mimeType, createdTime)")
+                .execute();
+           List<File> files = result.getFiles();
+           if (files == null || files.size() == 0) {
+               //System.out.println("No files found.");
+           } else {
+               //System.out.println("Files:");
+               for (File file : files) {
+            	   Event event = new Event(file.getId(), file.getName(), getEventThumbnail(service, file.getId()), file.getDescription(), file.getCreatedTime().toString(), file.getCreatedTime().toString());
+            	   events.add(event);
+               }
+           }
+		
+	}
+
+	private String getEventThumbnail(Drive service, String folderId) throws IOException {
+		String EventThumbnail = "";
+		
+		FileList result = service.files().list()
+          .setPageSize(1)
+          .setQ("'"+folderId+"' in parents")
+          .setSpaces("drive")
+          .setFields("nextPageToken, files(id, name, originalFilename, description, mimeType)")
+          .execute();
+     List<File> files = result.getFiles();
+     if (files == null || files.size() == 0) {
+         //System.out.println("No files found.");
+     } else {
+    	 
+         for (File file : files) {
+        	 EventThumbnail = getImageThumbnail(file.getId());
+         }
+         
+     }
+		return EventThumbnail;
+	}
+
+	private String getImageThumbnail(String id) {
+		return "https://drive.google.com/thumbnail?sz=w300-h400&id="+id;
+	}
+
+	public void fetchAllFolders() throws IOException
+    {
+    	Drive service = getDriveService();
+
+        // Print the names and IDs for up to 10 files.
+        FileList result = service.files().list()
+	            .setQ("mimeType='application/vnd.google-apps.folder'")
+	            .setSpaces("drive")
+             	.setPageSize(10)
+             	.setFields("nextPageToken, files(id, name, originalFilename, description)")
+             	.execute();
+        List<File> files = result.getFiles();
+        if (files == null || files.size() == 0) {
+            System.out.println("No files found.");
+        } else {
+            System.out.println("Files:");
+            for (File file : files) {
+            	System.out.println(file.getName() +" : "+ file.getId() + ":" + file.getOriginalFilename() +  " : " + file.getDescription() + " : " + getThumbnailLink(file.getId(), service));
             }
         }
+    	
     }
-//    
-//    public static void main(String[] args) throws IOException {
-//        // Build a new authorized API client service.
-//        Drive service = getDriveService();
-//
-//        // Print the names and IDs for up to 10 files.
-//        FileList result = service.files().list()
-//             .setPageSize(10)
-//             .setFields("nextPageToken, files(id, name)")
-//             .execute();
-//        List<File> files = result.getFiles();
-//        if (files == null || files.size() == 0) {
-//            System.out.println("No files found.");
-//        } else {
-//            System.out.println("Files:");
-//            for (File file : files) {
-//                System.out.printf("%s (%s)\n", file.getName(), file.getId());
-//            }
-//        }
-//    }
+    
 
 }

@@ -4,10 +4,20 @@ public class Event {
 
 	private String eventId;
 	private String eventName;
-	private String eventThumnail;
+	private String eventThumbnailURL;
 	private String eventDiscription;
 	private String createdDate;
 	private String updatedDate;
+	
+	public Event(String eventId, String eventName, String eventThumbnailURL, String eventDiscription, String createdDate, String updatedDate) {
+		
+		this.eventId = eventId;
+		this.eventName = eventName;
+		this.eventThumbnailURL = eventThumbnailURL;
+		this.eventDiscription = eventDiscription;
+		this.createdDate = createdDate;
+		this.updatedDate = updatedDate;
+	}
 	
 	public String getEventId() {
 		return eventId;
@@ -33,11 +43,11 @@ public class Event {
 	public void setEventName(String eventName) {
 		this.eventName = eventName;
 	}
-	public String getEventThumnail() {
-		return eventThumnail;
+	public String getEventThumnailURL() {
+		return eventThumbnailURL;
 	}
-	public void setEventThumnail(String eventThumnail) {
-		this.eventThumnail = eventThumnail;
+	public void setEventThumnailURL(String eventThumnailURL) {
+		this.eventThumbnailURL = eventThumnailURL;
 	}
 	public String getEventDiscription() {
 		return eventDiscription;
