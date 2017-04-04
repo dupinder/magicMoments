@@ -8,6 +8,19 @@ public class Photos {
 	private String photoDiscription;
 	private String createdDate;
 	private String deletedDate;
+	private String photoPrice;
+	
+	public Photos(String photoId, String photoName, String photoUrl, String photoDiscription, String createdDate, String deletedDate, String photoPrice){
+		
+		this.photoId = photoId;
+		this.photoName = photoName;
+		this.photoUrl = photoUrl;
+		this.photoDiscription = photoDiscription;
+		this.createdDate = createdDate;
+		this.deletedDate = deletedDate;
+		this.photoPrice = photoPrice;
+	}
+	
 	public String getPhotoId() {
 		return photoId;
 	}

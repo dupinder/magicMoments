@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import connection.connectionManager;
 import drive.DriveCommunications;
 import drive.Event;
+import drive.Photos;
 import user.UserDetails;
 import utilities.CommonTypes;
 
@@ -28,7 +29,8 @@ public class HandleAjaxCall extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 	private static final int ACTION_LOGOUT_USER = 3;
-	private static final int ACTION_LODE_DRIVE_PHOTOS = 4;
+	private static final int ACTION_LODE_EVENTS = 4;
+	private static final int ACTION_LODE_EVENTS_PHOTOS = 5;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
@@ -39,6 +41,8 @@ public class HandleAjaxCall extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		DriveCommunications driveService = new DriveCommunications();
+
 		
 		int action = Integer.parseInt(request.getParameter("action"));
 
@@ -51,7 +55,7 @@ public class HandleAjaxCall extends HttpServlet {
 		System.out.println(request.getSession().getAttribute("UserPrimaryKey"));
 		try {
 			Connection conn = connectionManager.getConnection();
-			
+			Gson gson = new Gson();
 			try {
 				switch (action)
 				{
@@ -66,11 +70,10 @@ public class HandleAjaxCall extends HttpServlet {
 				case ACTION_LOGOUT_USER:
 					logouts_User(conn, mmUser, request);
 				break;
-				case ACTION_LODE_DRIVE_PHOTOS:
-					DriveCommunications obj = new DriveCommunications();
-					List<Event> events = obj.fetchEventFolder();
+				case ACTION_LODE_EVENTS:
+					List<Event> events = driveService.fetchEventFolder();
 					
-					Gson gson = new Gson();
+
 					 // convert your list to json
 					 String eventJson = gson.toJson(events);
 					System.out.println(eventJson);
@@ -78,6 +81,17 @@ public class HandleAjaxCall extends HttpServlet {
 					response.getOutputStream().flush();
 					// list to json of objects
 					
+					break;
+					
+				case ACTION_LODE_EVENTS_PHOTOS:
+					String folderId = request.getParameter("folderId");
+					List<Photos> photos = driveService.fetchEventPhotos(folderId);
+
+					 // convert your list to json
+					 String photoJson = gson.toJson(photos);
+					System.out.println(photoJson);
+					response.getOutputStream().println(photoJson);
+					response.getOutputStream().flush();
 					break;
 				}
 				

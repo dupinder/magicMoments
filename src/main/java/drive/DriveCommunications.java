@@ -19,12 +19,24 @@ import com.google.api.services.drive.Drive;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 public class DriveCommunications {
-    /** Application name. */
+	/**
+	 * Static Values;
+	 */
+	public static Drive SERVICE = null;
+	
+	
+	public DriveCommunications() throws IOException {
+		SERVICE = getDriveService();
+	}
+	
+	/** Application name. */
     private static final String APPLICATION_NAME =
         "Drive API Java Quickstart";
 
@@ -98,6 +110,8 @@ public class DriveCommunications {
 		return service;
 	}*/
 
+    
+    
 	/**
      * Build and return an authorized Drive client service.
      * @return an authorized Drive client service
@@ -112,6 +126,13 @@ public class DriveCommunications {
     }
 
 
+    /****
+     * 
+     * @param fileId
+     * @param service
+     * @return
+     * @throws IOException
+     */
     public String getThumbnailLink(String fileId, Drive service) throws IOException{
 
     	 File file = service.files().get(fileId).execute();
@@ -119,23 +140,32 @@ public class DriveCommunications {
     	 return file.getThumbnailLink();
     }
     
+    /***
+     * 
+     * @return
+     * @throws IOException
+     */
     public List<Event> fetchEventFolder() throws IOException{
-    	Drive service = getDriveService();
-    	
-    	List<Event> events = new LinkedList<Event>();
-    	getEvents(service, events);
+
+    	List<Event> events = new ArrayList<Event>();
+    	getEvents(SERVICE, events);
     		
     		return events;
     }
     
+    
+    /*****
+     * 
+     * @throws IOException
+     */
     public void fetchPhotosFromDrive() throws IOException{
         // Build a new authorized API client service.
-    	Drive service = getDriveService();
+    	
     	
     	List<Event> events = new LinkedList<Event>();
     	
     	// Get List of folders as Events
-    		getEvents(service, events);
+    		getEvents(SERVICE, events);
 
     		
     		System.out.println(events);
@@ -157,6 +187,44 @@ public class DriveCommunications {
         }*/
     }
     
+    /***
+     * 
+     * @param folderId
+     * @throws IOException
+     */
+    public List<Photos> fetchEventPhotos(String folderId) throws IOException{
+    	
+    	List<Photos> photos = new ArrayList<Photos>();
+		FileList result = SERVICE.files().list()
+		          .setQ("'"+folderId+"' in parents")
+		          .setSpaces("drive")
+		          .setFields("nextPageToken, files(id, name, originalFilename, description, mimeType, webContentLink, createdTime, webViewLink)")
+		          .execute();
+		     List<File> files = result.getFiles();
+		     if (files == null || files.size() == 0) {
+		         //System.out.println("No files found.");
+		     } else {
+		    	 
+		         for (File file : files) {
+		        	 System.out.println(file.getWebViewLink());
+		        	 photos.add(new Photos(file.getId(), file.getName(), getWebContentLink(file), file.getDescription(), file.getCreatedTime().toString(), file.getCreatedTime().toString(), "50")); 
+		         }
+		         
+		     }
+    	return photos;
+    }
+    
+    private String getWebContentLink(File file) {
+    	String[] wenContentLink = file.getWebContentLink().split("&");
+			return wenContentLink[0];
+	}
+
+	/****
+     * 
+     * @param service
+     * @param events
+     * @throws IOException
+     */
     private void getEvents(Drive service, List<Event> events) throws IOException {
         FileList result = service.files().list()
                 .setPageSize(10)
@@ -177,6 +245,13 @@ public class DriveCommunications {
 		
 	}
 
+/**
+ * 
+ * @param service
+ * @param folderId
+ * @return
+ * @throws IOException
+ */
 	private String getEventThumbnail(Drive service, String folderId) throws IOException {
 		String EventThumbnail = "";
 		
@@ -199,10 +274,21 @@ public class DriveCommunications {
 		return EventThumbnail;
 	}
 
+	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
 	private String getImageThumbnail(String id) {
 		return "https://drive.google.com/thumbnail?sz=w300-h400&id="+id;
 	}
 
+	
+	/***
+	 * 
+	 * @throws IOException
+	 */
 	public void fetchAllFolders() throws IOException
     {
     	Drive service = getDriveService();

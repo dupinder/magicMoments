@@ -58,7 +58,7 @@
 		});
 	}
 	
-	function fetchGoogleDrivesPhotos(){
+	function fetchGoogleDrivesEvents(){
 		var url = "http://"+IP_ADDRESS+"/"+APPLICATION_NAME+"/HandleAjaxCall"
 
 		$.ajax({
@@ -71,6 +71,21 @@
 		    }
 		});
 	  
+	}
+	
+	
+	function fetchGoogleDrivesPhotos(){
+		var url = "http://"+IP_ADDRESS+"/"+APPLICATION_NAME+"/HandleAjaxCall"
+
+		$.ajax({
+		    type: "POST",
+		    url: url+"?action=5&folderId=0B7Wj6yoVMr_VQjRESHlWTDh4ZG8",
+		    contentType: "application/json",
+		    data: {},
+		    success: function(response) {
+		    	console.log(response);
+		    }
+		});
 	}
 	
 </script>
@@ -103,7 +118,11 @@
 		</div>
 		
 		<div>
-			<input type="button" name="fetch photos" value="" id="fetch photos" onclick="fetchGoogleDrivesPhotos();"/>
+			<input type="button" name="fetch photos" value="fetch Events" id="fetch Events" onclick="fetchGoogleDrivesEvents();"/>
+			
+		</div>
+		<div>
+			<input type="button" name="fetch photos" value="fetch photos" id="fetch photos" onclick="fetchGoogleDrivesPhotos();"/>
 			
 		</div>
 	
