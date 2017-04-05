@@ -15,13 +15,19 @@
   	<servlet-name>HandleAjaxCall</servlet-name>
   	<display-name>HandleAjaxCall</display-name>
   	<description></description>
-  	<servlet-class>authentications.HandleAjaxCall</servlet-class>
+  	<servlet-class>HandleAjaxCall</servlet-class>
   </servlet>
   <servlet>
   	<servlet-name>UserSignup</servlet-name>
   	<display-name>UserSignup</display-name>
   	<description></description>
   	<servlet-class>authentications.UserSignup</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>VerifyEmail</servlet-name>
+  	<display-name>VerifyEmail</display-name>
+  	<description></description>
+  	<servlet-class>authentications.VerifyEmail</servlet-class>
   </servlet>
   <servlet-mapping>
   	<servlet-name>Bhaji</servlet-name>
@@ -35,13 +41,17 @@
   	<servlet-name>UserSignup</servlet-name>
   	<url-pattern>/UserSignup</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>VerifyEmail</servlet-name>
+  	<url-pattern>/VerifyEmail</url-pattern>
+  </servlet-mapping>
   
       <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-    <welcome-file>index.htm</welcome-file>
-    <welcome-file>default.html</welcome-file>
-    <welcome-file>default.htm</welcome-file>
-    <welcome-file>default.jsp</welcome-file>
-    <welcome-file>UserSignup.html</welcome-file>
+    <welcome-file>Login.html</welcome-file>
+<!--     <welcome-file>index.htm</welcome-file> -->
+<!--     <welcome-file>default.html</welcome-file> -->
+<!--     <welcome-file>default.htm</welcome-file> -->
+<!--     <welcome-file>default.jsp</welcome-file> -->
+<!--     <welcome-file>UserSignup.html</welcome-file> -->
   </welcome-file-list>
 </web-app>
