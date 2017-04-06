@@ -1,11 +1,15 @@
 package authentications;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.gson.Gson;
 
 import user.UserAuthentication;
 import utilities.StringTools;
@@ -16,31 +20,70 @@ import utilities.StringTools;
 public class UserSignup extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private UserAuthentication userAuthentication = new UserAuthentication();
-	
-    public UserSignup() {
-      
-    }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public UserSignup() {
+
+	}
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		return;
 	}
 
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		String email = request.getParameter("email");
 		String otp = request.getParameter("otp");
 		String password = request.getParameter("password");
 		String confirmPassword = request.getParameter("confirmPassword");
-		
-		if(StringTools.isValidString(email) && StringTools.isValidString(otp) &&StringTools.isValidString(password) &&StringTools.isValidString(confirmPassword))
-		{
-			if(userAuthentication.verifyOtp(email, otp))
-			{
-				response.getWriter().write("true");
-				return;
+
+		if (StringTools.isValidString(email) && StringTools.isValidString(otp) && StringTools.isValidString(password)
+				&& StringTools.isValidString(confirmPassword)) {
+			if (StringTools.isValidString(email)) {
+				try {
+					Map<String, String> userStatus = new HashMap<String, String>();
+					switch (UserAuthentication.IsExistingUser(email)) {
+					case UserAuthentication.ACTION_INVALID_USER:
+						userStatus.put("isValidUser", "false");
+						response.getWriter().write(new Gson().toJson(userStatus));
+						break;
+					case UserAuthentication.ACTION_VALID_EXSISTING_USER:
+						userStatus.put("isValidUser", "true");
+						userStatus.put("isNewUser", "false");
+						response.getWriter().write(new Gson().toJson(userStatus));
+						break;
+					case UserAuthentication.ACTION_VALID_NEW_USER:
+						if (userAuthentication.verifyOtp(email, otp)) {
+							if (password.equals(confirmPassword)) {
+								if(UserAuthentication.savePassword(email,password)){
+									userStatus.put("result", "true");
+								}
+								else{
+									userStatus.put("result", "false");
+									userStatus.put("cause", "something bad happened during saving");
+								}
+							} else {
+								userStatus.put("result", "false");
+								userStatus.put("cause", "Password and Confirm Password not matched");
+							}
+
+							response.getWriter().write(new Gson().toJson(userStatus));
+							response.getWriter().write("true");
+							return;
+						}
+						break;
+					default:
+						break;
+					}
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 			}
+
 		}
-		
+
 		response.getWriter().write("false");
 	}
 

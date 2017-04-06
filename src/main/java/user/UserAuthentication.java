@@ -9,8 +9,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.print.attribute.standard.PresentationDirection;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import connection.connectionManager;
+import utilities.CommonTypes;
 import utilities.EmailSender;
 
 public class UserAuthentication {
@@ -83,7 +86,7 @@ public class UserAuthentication {
 		return false;
 	}
 
-	private static boolean savePassword(String email, String password) throws ClassNotFoundException {
+	public static boolean savePassword(String email, String password) throws ClassNotFoundException {
 		boolean isPasswordUpdated = false;
 		String SavePassword = "UPDATE MM_USER SET USER_PASSWORD = " + password + " WHERE USER_EMAIL = " + email + "";
 		try {
@@ -93,12 +96,16 @@ public class UserAuthentication {
 				isPasswordUpdated = true;
 			else
 				isPasswordUpdated = false;
-
+			
+			conn.commit();
+			conn.close();
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
+		
 		return isPasswordUpdated;
 	}
 
@@ -138,5 +145,28 @@ public class UserAuthentication {
 		String email;
 		String otp;
 		long time;
+	}
+
+
+	public static boolean LoginCreateSession(String email, String password, HttpServletRequest request) throws ClassNotFoundException, SQLException {
+
+		boolean authenticationStatus = false;
+		Connection conn = connectionManager.getConnection();
+		String SQLSelectUser = "SELECT USER_EMAIL, USER_PASSWORD, ID FROM MM_USER WHERE USER_EMAIL = '"+email+"' AND USER_PASSWORD = '"+password+"'";
+		PreparedStatement pStmt = conn.prepareStatement(SQLSelectUser);
+		
+		ResultSet res = pStmt.executeQuery();
+		
+		while (res.next()) {
+			if(res.getString("USER_PASSWORD").toString().equals(password)){
+				HttpSession session = request.getSession();
+				session.setAttribute(CommonTypes.TOKKEN_NAME, res.getInt("ID"));
+				authenticationStatus = true;
+			}
+			else{
+				authenticationStatus = false;
+			}
+		}
+		return authenticationStatus;
 	}
 }
