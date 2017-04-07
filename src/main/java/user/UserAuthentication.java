@@ -125,7 +125,7 @@ public class UserAuthentication {
 				actionToTake = ACTION_INVALID_USER;
 			} else {
 				String password = resultSet.getString("USER_PASSWORD");
-				if (StringTools.isValidString(password)) {
+				if (!StringTools.isValidString(password)) {
 					actionToTake = ACTION_VALID_NEW_USER;
 				} else {
 					actionToTake = ACTION_VALID_EXSISTING_USER;
