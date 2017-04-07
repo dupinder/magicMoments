@@ -15,11 +15,11 @@ var folderData = {
 
 var photos = {
 	events: [ 
-	  { id: '1', url: '', thumbnailUrl: 'img/LPU fest/a.jpg' },
-	  { id: '2', url: '', thumbnailUrl: 'img/LPU fest/b.jpg' },
-	  { id: '3', url: '', thumbnailUrl: 'img/LPU fest/c.jpg' },
-	  { id: '4', url: '', thumbnailUrl: 'img/LPU fest/d.jpg' },
-	  { id: '5', url: '', thumbnailUrl: 'img/LPU fest/e.jpg' },
+	  { id: '1', url: '', thumbnailUrl: 'img/drive-download/DSC08271.jpg', name: 'David Guetta' },
+	  { id: '2', url: '', thumbnailUrl: 'img/drive-download/DSC08279.jpg', name: 'Meditation and menifest' },
+	  { id: '3', url: '', thumbnailUrl: 'img/drive-download/DSC08283.jpg', name: 'Jatta de putt'},
+	  { id: '4', url: '', thumbnailUrl: 'img/drive-download/DSC08289.jpg', name: 'DBNMSHFBRMsansaeWEDNDScccecc wdwdwdddwdwd'},
+	  { id: '5', url: '', thumbnailUrl: 'img/drive-download/mikka.jpg', name: 'Counting stars'},
 	]
 };
 
@@ -28,6 +28,9 @@ var compiledTemplates = new Object();
 var selectedImages = [];
 
 $('document').ready(function(){
+
+	setTimeout(showSpinner(true), 2000);
+	showSpinner(false);
 	compileAllTemplates();
 	/*jQuery.getJSON('').then(function(promiseObejct){
 		console.log(promiseObejct.stringify());
@@ -41,11 +44,11 @@ function showHome(){
 }		
 
 function navigateToPhotos(id){
-	$('div.parent-grid').not('#'+id).fadeOut();	
+	//$('div.parent-grid').not('#'+id).fadeOut();	
 	/*jQuery.getJSON('').then(function(promiseObejct){
 		console.log(promiseObejct.stringify());
 	});*/
-	loadTemplate(contentLoader, 'gallery-home', photos);
+	loadTemplate(contentLoader, 'gallery-home', folderData);
 }
 
 function compileAllTemplates(){
@@ -158,4 +161,11 @@ function closeImage(){
 
 function showLogoutOption(){
 	$('.logout-option').show();
+}
+
+function showSpinner(show){
+	if(show)
+		$('.spinner-main').css('width', '100%');
+	else
+		$('.spinner-main').css('width', '0');
 }

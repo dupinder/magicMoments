@@ -44,12 +44,13 @@ public class UserSignup extends HttpServlet {
 					Map<String, String> userStatus = new HashMap<String, String>();
 					switch (UserAuthentication.IsExistingUser(email)) {
 					case UserAuthentication.ACTION_INVALID_USER:
-						userStatus.put("isValidUser", "false");
+						userStatus.put("result", "false");
+						userStatus.put("cause", "You are not a valid user");
 						response.getWriter().write(new Gson().toJson(userStatus));
 						break;
 					case UserAuthentication.ACTION_VALID_EXSISTING_USER:
-						userStatus.put("isValidUser", "true");
-						userStatus.put("isNewUser", "false");
+						userStatus.put("result", "false");
+						userStatus.put("cause", "You are already registered with us");
 						response.getWriter().write(new Gson().toJson(userStatus));
 						break;
 					case UserAuthentication.ACTION_VALID_NEW_USER:
@@ -68,7 +69,6 @@ public class UserSignup extends HttpServlet {
 							}
 
 							response.getWriter().write(new Gson().toJson(userStatus));
-							response.getWriter().write("true");
 							return;
 						}
 						break;

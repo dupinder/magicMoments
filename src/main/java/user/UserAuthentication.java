@@ -87,29 +87,27 @@ public class UserAuthentication {
 		return false;
 	}
 
-	public static boolean savePassword(String email, String password) throws ClassNotFoundException {
-		boolean isPasswordUpdated = false;
+	public static boolean savePassword(String email, String password) throws ClassNotFoundException 
+	{
 		String SavePassword = "UPDATE MM_USER SET USER_PASSWORD = ? WHERE USER_EMAIL = ?";
-		try {
+		try 
+		{
 			Connection conn = connectionManager.getConnection();
 			PreparedStatement pStmt = conn.prepareStatement(SavePassword);
 			pStmt.setString(1, password);
 			pStmt.setString(2, email);
-			if (pStmt.execute())
-				isPasswordUpdated = true;
-			else
-				isPasswordUpdated = false;
-			
+			pStmt.executeUpdate();
 			conn.commit();
 			conn.close();
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (SQLException e) 
+		{
 			e.printStackTrace();
+			return false;
 		}
 		
 		
-		return isPasswordUpdated;
+		return true;
 	}
 
 	public static int IsExistingUser(String email) throws ClassNotFoundException {
