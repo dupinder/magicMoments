@@ -37,9 +37,9 @@ public class UserSignup extends HttpServlet {
 		String password = request.getParameter("password");
 		String confirmPassword = request.getParameter("confirmPassword");
 
-		if (StringTools.isValidString(email) && StringTools.isValidString(otp) && StringTools.isValidString(password)
+		if (StringTools.isValidEmail(email) && StringTools.isValidString(otp) && StringTools.isValidString(password)
 				&& StringTools.isValidString(confirmPassword)) {
-			if (StringTools.isValidString(email)) {
+			if (StringTools.isValidEmail(email)) {
 				try {
 					Map<String, String> userStatus = new HashMap<String, String>();
 					switch (UserAuthentication.IsExistingUser(email)) {

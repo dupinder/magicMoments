@@ -15,19 +15,20 @@ import javax.servlet.http.HttpSession;
 import connection.connectionManager;
 import utilities.CommonTypes;
 import utilities.EmailSender;
+import utilities.StringTools;
 
 public class UserAuthentication {
 	private static Map<String, OtpManager> otpManager = new HashMap<String, OtpManager>();
 	private EmailSender emailSender = new EmailSender();
-	private String emailValidationPattern = "^[a-zA-Z]{1,30}[_A-Za-z0-9-]{0,30}(\\.[A-Za-z0-9-_]{1,30})*@[a-zA-Z0-9-]{1,30}(\\.[A-Za-z0-9-]{1,30}){1,2}$";
 
 	
 	public static final int ACTION_INVALID_USER = 1;
 	public static final int ACTION_VALID_NEW_USER = 2;
 	public static final int ACTION_VALID_EXSISTING_USER = 3;
 
+	
 	public boolean generateOtpAndSendEmail(String email) {
-		if (!email.matches(emailValidationPattern))
+		if (!StringTools.isValidEmail(email))
 			return false;
 
 		String otp = utilities.StringTools.getRandomString(6);
@@ -41,7 +42,7 @@ public class UserAuthentication {
 	}
 
 	public boolean verifyOtp(String email, String otp) {
-		if (!email.matches(emailValidationPattern))
+		if (!StringTools.isValidEmail(email))
 			return false;
 
 		if (otpManager.containsKey(email)) {
@@ -88,10 +89,12 @@ public class UserAuthentication {
 
 	public static boolean savePassword(String email, String password) throws ClassNotFoundException {
 		boolean isPasswordUpdated = false;
-		String SavePassword = "UPDATE MM_USER SET USER_PASSWORD = " + password + " WHERE USER_EMAIL = " + email + "";
+		String SavePassword = "UPDATE MM_USER SET USER_PASSWORD = ? WHERE USER_EMAIL = ?";
 		try {
 			Connection conn = connectionManager.getConnection();
 			PreparedStatement pStmt = conn.prepareStatement(SavePassword);
+			pStmt.setString(1, password);
+			pStmt.setString(2, email);
 			if (pStmt.execute())
 				isPasswordUpdated = true;
 			else
@@ -113,22 +116,20 @@ public class UserAuthentication {
 
 		int actionToTake = 0;
 
-		String SqlIsExistingUser = "SELECT USER_EMAIL, USER_PASSWORD FROM MM_USER WHERE USER_EMAIL = '"+email+"'";
+		String SqlIsExistingUser = "SELECT USER_EMAIL, USER_PASSWORD FROM MM_USER WHERE USER_EMAIL = ?";
 
 		Connection conn = connectionManager.getConnection();
 		try {
 			PreparedStatement pStmt = conn.prepareStatement(SqlIsExistingUser);
+			pStmt.setString(1, email);
 			ResultSet resultSet = pStmt.executeQuery();
 			if (!resultSet.next()) {
-				//System.out.println("User Not allowed to access Magic Moments");
 				actionToTake = ACTION_INVALID_USER;
 			} else {
 				String password = resultSet.getString("USER_PASSWORD");
-				if (password == null) {
-					//System.out.println("new User");
+				if (StringTools.isValidString(password)) {
 					actionToTake = ACTION_VALID_NEW_USER;
 				} else {
-					//System.out.println("Exsisting User");
 					actionToTake = ACTION_VALID_EXSISTING_USER;
 				}
 			}
@@ -152,9 +153,10 @@ public class UserAuthentication {
 
 		boolean authenticationStatus = false;
 		Connection conn = connectionManager.getConnection();
-		String SQLSelectUser = "SELECT USER_EMAIL, USER_PASSWORD, ID FROM MM_USER WHERE USER_EMAIL = '"+email+"' AND USER_PASSWORD = '"+password+"'";
+		String SQLSelectUser = "SELECT USER_EMAIL, USER_PASSWORD, ID FROM MM_USER WHERE USER_EMAIL = ? AND USER_PASSWORD = ?";
 		PreparedStatement pStmt = conn.prepareStatement(SQLSelectUser);
-		
+		pStmt.setString(1, email);
+		pStmt.setString(2, password);
 		ResultSet res = pStmt.executeQuery();
 		
 		while (res.next()) {

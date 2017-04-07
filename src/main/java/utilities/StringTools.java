@@ -6,7 +6,8 @@ public class StringTools
 {
 	private static String sLegalCharsForIdentifier = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 	private static Random randomGenerator = new Random(System.currentTimeMillis());
-	
+	private static String emailValidationPattern = "^[a-zA-Z]{1,30}[_A-Za-z0-9-]{0,30}(\\.[A-Za-z0-9-_]{1,30})*@[a-zA-Z0-9-]{1,30}(\\.[A-Za-z0-9-]{1,30}){1,2}$";
+ 
 	/**
 	* Returns a random generated string
 	* The new string has a fixed length defined by the user
@@ -70,4 +71,14 @@ public class StringTools
 
 		return bolValid;
 	}
+	
+
+	public static boolean isValidEmail(String email){
+		boolean isValidEmail = false;
+		if (StringTools.isValidString(email) && email.matches(emailValidationPattern))
+			isValidEmail = true;
+		
+		return isValidEmail;
+	}
+	
 }
