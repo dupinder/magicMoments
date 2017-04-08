@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -204,8 +206,7 @@ private class OtpManager {
 				if(res.getString("PASSWORD").toString().equals(password)){
 		
 					HttpSession session = request.getSession();
-					
-				session.setAttribute(CommonTypes.USER_DETAILS_SESSION_KEY, res.getInt("ID"));
+				session.setAttribute(CommonTypes.USER_DETAILS_SESSION_KEY, getUserDetails(Integer.parseInt(SQLSelectUser, res.getInt("ID"))));
 					authenticationStatus = true;
 				}
 				else{
@@ -227,17 +228,17 @@ private class OtpManager {
 		if(session.getAttribute(CommonTypes.USER_DETAILS_SESSION_KEY) != null)
 		{
 			try 
-			{
-				userDetails = getUserDetails(Integer.parseInt((String)session.getAttribute(CommonTypes.USER_DETAILS_SESSION_KEY)));
+			{				
+				userDetails = (UserDetails) session.getAttribute(CommonTypes.USER_DETAILS_SESSION_KEY); 
 			} 
-			catch (NumberFormatException | ClassNotFoundException | SQLException e) 
+			catch (NumberFormatException e) 
 			{
 				e.printStackTrace();
 			}
 		}
 		else
 		{
-			System.out.println("not valid user");
+			userDetails.setIsLogedInUser(false);
 		}
 		
 		return userDetails;
@@ -245,7 +246,6 @@ private class OtpManager {
 
 	private static UserDetails getUserDetails(int userId) throws ClassNotFoundException, SQLException 
 	{
-
 		UserDetails userDetails = null;
 		Connection conn = ConnectionManager.getConnection();
 		String SQLSelectUser = "SELECT * FROM MM_USER WHERE ID = ?";
@@ -261,11 +261,32 @@ private class OtpManager {
 		{
 			while (res.next()) 
 			{
-				userDetails = new UserDetails(res.getInt("ID"), res.getString("USER_NAME"), res.getString("USER_EMAIL"), res.getString("FOLDER_ID"), res.getInt("COLLAGE_ID"));
+				Set<String> folderIds = getFolderIds(res.getInt("ID"));
+				userDetails = new UserDetails(res.getInt("ID"), res.getString("USER_NAME"), res.getString("USER_EMAIL"), folderIds, res.getInt("COLLAGE_ID"));
 				userDetails.setIsLogedInUser(true);
 			}
 		}
 		return userDetails;
+	}
+
+	private static Set<String> getFolderIds(int userId) {
+		
+		String SqlSelectUserFolders = "SELECT FOLDER_ID FROM MM_FOLDER WHERE USER_ID = ?";
+		Set<String> userFolderIds = null;
+		try {
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement pStmt = conn.prepareStatement(SqlSelectUserFolders);
+			pStmt.setInt(1, userId);
+			ResultSet res = pStmt.executeQuery();
+			while (res.next()) {
+				userFolderIds.add(res.getString("FOLDER_ID"));
+			}
+			
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return userFolderIds;
 	}
 	
 }

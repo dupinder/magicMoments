@@ -54,6 +54,12 @@
   	<description></description>
   	<servlet-class>authentications.admin.AdminSignin</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>CreateCollages</servlet-name>
+  	<display-name>CreateCollages</display-name>
+  	<description></description>
+  	<servlet-class>admin.CreateCollages</servlet-class>
+  </servlet>
   <servlet-mapping>
   	<servlet-name>Bhaji</servlet-name>
   	<url-pattern>/Bhaji</url-pattern>
@@ -86,6 +92,10 @@
   <servlet-mapping>
   	<servlet-name>AdminSignin</servlet-name>
   	<url-pattern>/AdminSignin</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>CreateCollages</servlet-name>
+  	<url-pattern>/CreateCollages</url-pattern>
   </servlet-mapping>
   
       <welcome-file-list>

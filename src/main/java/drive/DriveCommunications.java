@@ -22,8 +22,12 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class DriveCommunications {
 	/**
@@ -192,26 +196,33 @@ public class DriveCommunications {
      * @param folderId
      * @throws IOException
      */
-    public List<Photos> fetchEventPhotos(String folderId) throws IOException{
+    public Map<String, List<Photos>> fetchEventPhotos(Set<String> folderIds) throws IOException{
     	
-    	List<Photos> photos = new ArrayList<Photos>();
-		FileList result = SERVICE.files().list()
-		          .setQ("'"+folderId+"' in parents")
-		          .setSpaces("drive")
-		          .setFields("nextPageToken, files(id, name, originalFilename, description, mimeType, webContentLink, createdTime, webViewLink)")
-		          .execute();
-		     List<File> files = result.getFiles();
-		     if (files == null || files.size() == 0) {
-		         //System.out.println("No files found.");
-		     } else {
-		    	 
-		         for (File file : files) {
-		        	 System.out.println(file.getWebViewLink());
-		        	 photos.add(new Photos(file.getId(), file.getName(), getWebContentLink(file), file.getDescription(), file.getCreatedTime().toString(), file.getCreatedTime().toString(), "50")); 
-		         }
-		         
-		     }
-    	return photos;
+    	Map<String, List<Photos>> ListOfFolder = new HashMap<String, List<Photos>>();
+    	
+    	for (String folderId : folderIds) {
+        	
+        	List<Photos> photos = new ArrayList<Photos>();
+    		FileList result = SERVICE.files().list()
+    		          .setQ("'"+folderId+"' in parents")
+    		          .setSpaces("drive")
+    		          .setFields("nextPageToken, files(id, name, originalFilename, description, mimeType, webContentLink, createdTime, webViewLink)")
+    		          .execute();
+    		     List<File> files = result.getFiles();
+    		     if (files == null || files.size() == 0) {
+    		         //System.out.println("No files found.");
+    		     } else {
+    		    	 
+    		         for (File file : files) {
+    		        	 System.out.println(file.getWebViewLink());
+    		        	 photos.add(new Photos(file.getId(), file.getName(), getWebContentLink(file), file.getDescription(), file.getCreatedTime().toString(), file.getCreatedTime().toString(), "50")); 
+    		         }
+    		         
+    		     }
+    		    	ListOfFolder.put(folderId, photos);
+		}
+    	
+		return ListOfFolder;
     }
     
     private String getWebContentLink(File file) {

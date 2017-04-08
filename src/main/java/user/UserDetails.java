@@ -1,5 +1,7 @@
 package user;
 
+import java.util.Set;
+
 public class UserDetails {
 
 	private int Id;
@@ -8,12 +10,12 @@ public class UserDetails {
 	private String Password;
 	private String Address;
 	private String PhoneNumber;
-	private String FolderId;
+	private Set<String> FolderId;
 	private int CollageId;
 	private boolean isLogedInUser;
 
 	
-	public UserDetails(int id, String name, String email, String folderId, int collageId)
+	public UserDetails(int id, String name, String email, Set<String> folderId, int collageId)
 	{
 		this.Id = id;
 		this.Name = name;
@@ -34,11 +36,11 @@ public class UserDetails {
 		Id = id;
 	}
 
-	public String getFolderId() {
+	public Set<String> getFolderId() {
 		return FolderId;
 	}
 
-	public void setFolderId(String folderId) {
+	public void setFolderId(Set<String> folderId) {
 		this.FolderId = folderId;
 	}
 

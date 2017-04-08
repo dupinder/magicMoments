@@ -84,14 +84,14 @@ public class HandleAjaxCall extends HttpServlet {
 					break;
 					
 				case ACTION_LODE_EVENTS_PHOTOS:
-					String folderId = request.getParameter("folderId");
-					List<Photos> photos = driveService.fetchEventPhotos(folderId);
-
-					 // convert your list to json
-					 String photoJson = gson.toJson(photos);
-					System.out.println(photoJson);
-					response.getOutputStream().println(photoJson);
-					response.getOutputStream().flush();
+//					String folderId = request.getParameter("folderId");
+//					List<Photos> photos = driveService.fetchEventPhotos(folderId);
+//
+//					 // convert your list to json
+//					 String photoJson = gson.toJson(photos);
+//					System.out.println(photoJson);
+//					response.getOutputStream().println(photoJson);
+//					response.getOutputStream().flush();
 					break;
 				}
 				

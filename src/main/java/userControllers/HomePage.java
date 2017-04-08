@@ -2,6 +2,7 @@ package userControllers;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -12,6 +13,8 @@ import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
+import drive.DriveCommunications;
+import drive.Photos;
 import user.UserAuthentication;
 import user.UserDetails;
 
@@ -32,14 +35,18 @@ public class HomePage extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
+		DriveCommunications driveService = new DriveCommunications();
+
 		HttpSession session = request.getSession();
 		UserDetails userDetails = UserAuthentication.getCurrentUser(session);
 		Map<String, String> userStatus = new HashMap<String, String>();
 
 		if(userDetails.getIsLogedInUser())
 		{
+			Map<String, List<Photos>> photos = driveService.fetchEventPhotos(userDetails.getFolderId());			
 			userStatus.put("result", "true");
 			userStatus.put("data", new Gson().toJson(userDetails));
+			userStatus.put("photosData", new Gson().toJson(photos));
 			response.getWriter().write(new Gson().toJson(userDetails));
 		}
 		else
