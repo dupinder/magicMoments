@@ -35,6 +35,12 @@
   	<description></description>
   	<servlet-class>authentications.UserSignin</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>HomePage</servlet-name>
+  	<display-name>HomePage</display-name>
+  	<description></description>
+  	<servlet-class>userControllers.HomePage</servlet-class>
+  </servlet>
   <servlet-mapping>
   	<servlet-name>Bhaji</servlet-name>
   	<url-pattern>/Bhaji</url-pattern>
@@ -54,6 +60,10 @@
   <servlet-mapping>
   	<servlet-name>UserSignin</servlet-name>
   	<url-pattern>/UserSignin</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>HomePage</servlet-name>
+  	<url-pattern>/HomePage</url-pattern>
   </servlet-mapping>
   
       <welcome-file-list>

@@ -1,44 +1,104 @@
 package user;
 
 public class UserDetails {
-	
-	
+
+	private int Id;
 	private String Name;
 	private String EmailId;
 	private String Password;
 	private String Address;
 	private String PhoneNumber;
+	private String FolderId;
+	private int CollageId;
+	private boolean isLogedInUser;
+
+	
+	public UserDetails(int id, String name, String email, String folderId, int collageId)
+	{
+		this.Id = id;
+		this.Name = name;
+		this.EmailId = email;
+		this.FolderId = folderId;
+		this.CollageId	= collageId;
+	}
+	
+	public UserDetails(){
+		super();
+	}
+	
+	public int getId() {
+		return Id;
+	}
+
+	public void setId(int id) {
+		Id = id;
+	}
+
+	public String getFolderId() {
+		return FolderId;
+	}
+
+	public void setFolderId(String folderId) {
+		this.FolderId = folderId;
+	}
+
+	public int getCollageId() {
+		return CollageId;
+	}
+
+	/**
+	 * @param collageId the collageId to set
+	 */
+	public void setCollageId(int collageId) {
+		this.CollageId = collageId;
+	}
+
 	public String getName() {
 		return Name;
 	}
+
 	public void setName(String name) {
 		Name = name;
 	}
+
 	public String getEmailId() {
 		return EmailId;
 	}
+
 	public void setEmailId(String emailId) {
 		EmailId = emailId;
 	}
+
 	public String getPassword() {
 		return Password;
 	}
+
 	public void setPassword(String password) {
 		Password = password;
 	}
+
 	public String getAddress() {
 		return Address;
 	}
+
 	public void setAddress(String address) {
 		Address = address;
 	}
+
 	public String getPhoneNumber() {
 		return PhoneNumber;
 	}
+
 	public void setPhoneNumber(String phoneNumber) {
 		PhoneNumber = phoneNumber;
 	}
-	
-	
-	
+
+	public boolean getIsLogedInUser() {
+		return isLogedInUser;
+	}
+
+	public void setIsLogedInUser(boolean isLogedInUser) {
+		this.isLogedInUser = isLogedInUser;
+	}
+
 }

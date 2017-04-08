@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
-import connection.connectionManager;
+import connection.ConnectionManager;
 import drive.DriveCommunications;
 import drive.Event;
 import drive.Photos;
@@ -54,7 +54,7 @@ public class HandleAjaxCall extends HttpServlet {
 		mmUser.setPassword(request.getParameter("password"));
 		System.out.println(request.getSession().getAttribute("UserPrimaryKey"));
 		try {
-			Connection conn = connectionManager.getConnection();
+			Connection conn = ConnectionManager.getConnection();
 			Gson gson = new Gson();
 			try {
 				switch (action)

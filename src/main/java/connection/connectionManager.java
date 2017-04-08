@@ -3,7 +3,7 @@ package connection;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-public class connectionManager {
+public class ConnectionManager {
 
 	public static Connection conn = null;
 
