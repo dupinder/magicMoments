@@ -36,10 +36,23 @@
   	<servlet-class>authentications.UserSignin</servlet-class>
   </servlet>
   <servlet>
+  	<servlet-name>AdminSigninView</servlet-name>
+  	<display-name>AdminSigninView</display-name>
+  	<description></description>
+  	<servlet-class>authentications.admin.AdminSigninView</servlet-class>
+  </servlet>
+    <servlet>
   	<servlet-name>HomePage</servlet-name>
   	<display-name>HomePage</display-name>
   	<description></description>
   	<servlet-class>userControllers.HomePage</servlet-class>
+  </servlet>
+
+  <servlet>
+  	<servlet-name>AdminSignin</servlet-name>
+  	<display-name>AdminSignin</display-name>
+  	<description></description>
+  	<servlet-class>authentications.admin.AdminSignin</servlet-class>
   </servlet>
   <servlet-mapping>
   	<servlet-name>Bhaji</servlet-name>
@@ -62,8 +75,17 @@
   	<url-pattern>/UserSignin</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
+  	<servlet-name>AdminSigninView</servlet-name>
+  	<url-pattern>/AdminSigninView</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
   	<servlet-name>HomePage</servlet-name>
   	<url-pattern>/HomePage</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+  	<servlet-name>AdminSignin</servlet-name>
+  	<url-pattern>/AdminSignin</url-pattern>
   </servlet-mapping>
   
       <welcome-file-list>

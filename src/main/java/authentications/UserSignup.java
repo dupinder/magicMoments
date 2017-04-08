@@ -54,7 +54,8 @@ public class UserSignup extends HttpServlet {
 						response.getWriter().write(new Gson().toJson(userStatus));
 						break;
 					case UserAuthentication.ACTION_VALID_NEW_USER:
-						if (userAuthentication.verifyOtp(email, otp)) {
+						if (userAuthentication.verifyOtp(email, otp)) 
+						{
 							if (password.equals(confirmPassword)) {
 								if(UserAuthentication.savePassword(email,password)){
 									userStatus.put("result", "true");
@@ -71,6 +72,12 @@ public class UserSignup extends HttpServlet {
 							response.getWriter().write(new Gson().toJson(userStatus));
 							return;
 						}
+						else
+						{
+							userStatus.put("result", "false");
+							userStatus.put("cause", "Invalid OTP..!!");
+							response.getWriter().write(new Gson().toJson(userStatus));
+						}
 						break;
 					default:
 						break;
@@ -83,8 +90,6 @@ public class UserSignup extends HttpServlet {
 			}
 
 		}
-
-		response.getWriter().write("false");
 	}
 
 }

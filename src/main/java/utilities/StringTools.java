@@ -7,6 +7,7 @@ public class StringTools
 	private static String sLegalCharsForIdentifier = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 	private static Random randomGenerator = new Random(System.currentTimeMillis());
 	private static String emailValidationPattern = "^[a-zA-Z]{1,30}[_A-Za-z0-9-]{0,30}(\\.[A-Za-z0-9-_]{1,30})*@[a-zA-Z0-9-]{1,30}(\\.[A-Za-z0-9-]{1,30}){1,2}$";
+	private static String passwordValidationPattern = "^((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,})$";
  
 	/**
 	* Returns a random generated string
@@ -79,6 +80,13 @@ public class StringTools
 			isValidEmail = true;
 		
 		return isValidEmail;
+	}
+	
+	public static boolean isValidPassword(String password)
+	{
+		if (StringTools.isValidString(password) && password.matches(passwordValidationPattern))
+			return true;
+		return false;
 	}
 	
 }

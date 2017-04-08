@@ -50,12 +50,28 @@
 			data:{email: signinBlock.find('.email').val().trim(), otp: signinBlock.find('.otp').val().trim(), password: signinBlock.find('.password').val().trim(), confirmPassword: signinBlock.find('.confirm-password').val().trim()},
 			type: 'POST',
 			success: function(response){
-				//showHome();
-				if("true" == response)
+				var response = JSON.parse(response);
+				var result = response['result'];
+				let message;
+				if("true" == result)
 				{
-					var contentText = "You have signed up successfully. <span style='cursor:pointer;' onclick='showSignin()'> Click here </span> to login";
-					$('.result .result-content:visible').innerHtml(contentText).addClass('alert alert-warning');
+					showSignin();
+					message = "You have signed up successfully. Signin now..!!";
+					$('.signin-block .result .result-content').text(failureCause).addClass('alert alert-denger');
+					$('.signin-block .result').removeClass('hide');
 				}
+				else if(result == "false")
+				{
+					let cause = response['cause'];
+					if(cause !== undefined)
+						message = cause;
+					else
+						message = "Whoahh..Something went wrong..!!";
+					
+					signinBlock.find('.result .result-content').html(message).addClass('alert alert-warning');
+					signinBlock.find('.result').removeClass('hide');
+				}
+				
 			},
 			failure: function(error){}
 		});
@@ -108,7 +124,7 @@
 		var password = $('.signin-block .password').val();
 		showSpinner(true);
 		$.ajax({
-			url: 'User',
+			url: 'UserSignin',
 			data: {email: email, password: password},
 			type: 'POST',
 			success: function(response){
@@ -116,7 +132,7 @@
 				var result = response['result'];
 				if(result == "true")
 				{
-					showSignin();
+					showHome();
 				}
 				else if(result == "false")
 				{
@@ -141,4 +157,8 @@
 			$('.spinner-main').css('width', '100%');
 		else
 			$('.spinner-main').css('width', '0');
+	}
+	
+	function showHome(){
+		window.location.href = "Gallery.html";
 	}

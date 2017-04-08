@@ -11,10 +11,14 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import connection.ConnectionManager;
 import utilities.CommonTypes;
 import utilities.EmailSender;
 import utilities.StringTools;
+import admin.Admin;
+
+import com.google.api.services.drive.model.User;
+
+import connection.ConnectionManager;
 
 public class UserAuthentication 
 {
@@ -122,6 +126,8 @@ public class UserAuthentication
 	public static int IsExistingUser(String email) throws ClassNotFoundException {
 
 		int actionToTake = 0;
+		if(!StringTools.isValidEmail(email))
+			return actionToTake;
 
 		String SqlIsExistingUser = "SELECT USER_EMAIL, USER_PASSWORD FROM MM_USER WHERE USER_EMAIL = ?";
 
@@ -155,40 +161,64 @@ public class UserAuthentication
 
 		return actionToTake;
 	}
-
-	private class OtpManager 
+	
+	public static boolean LoginCreateSession(String email, String password, String classType, HttpServletRequest request) throws ClassNotFoundException 
 	{
+		if(!StringTools.isValidEmail(email) || !StringTools.isValidPassword(password))
+			return false;
+		
+		String tableName = null;
+		if(Admin.class.getName().equals(classType))
+		{
+			tableName = "MM_ADMINS";
+		}
+		else if(User.class.getName().equals(classType))
+		{
+			tableName = "MM_USER";
+		}
+		
+		return LoginCreateSession(email, password, request, tableName);
+	}
+
+private class OtpManager {
+
 		String email;
 		String otp;
 		long time;
 	}
 
 
-	public static boolean LoginCreateSession(String email, String password, HttpServletRequest request) throws ClassNotFoundException, SQLException 
+	private static boolean LoginCreateSession(String email, String password, HttpServletRequest request, String tableName) 
 	{
-
 		boolean authenticationStatus = false;
-		Connection conn = ConnectionManager.getConnection();
-		String SQLSelectUser = "SELECT USER_EMAIL, USER_PASSWORD, ID FROM MM_USER WHERE USER_EMAIL = ? AND USER_PASSWORD = ?";
-		PreparedStatement pStmt = conn.prepareStatement(SQLSelectUser);
-		pStmt.setString(1, email);
-		pStmt.setString(2, password);
-		ResultSet res = pStmt.executeQuery();
-		
-		while (res.next()) 
+		try
 		{
-			if(res.getString("USER_PASSWORD").toString().equals(password))
-			{
-				HttpSession session = request.getSession();
+			Connection conn = ConnectionManager.getConnection();
+			String SQLSelectUser = "SELECT EMAIL, PASSWORD, ID FROM "+ tableName +" WHERE EMAIL = ? AND PASSWORD = ?";
+			PreparedStatement pStmt = conn.prepareStatement(SQLSelectUser);
+			pStmt.setString(1, email);
+			pStmt.setString(2, password);
+			ResultSet res = pStmt.executeQuery();
+			
+			while (res.next()) {
+				if(res.getString("PASSWORD").toString().equals(password)){
+		
+					HttpSession session = request.getSession();
+					
 				session.setAttribute(CommonTypes.USER_DETAILS_SESSION_KEY, res.getInt("ID"));
-				authenticationStatus = true;
+					authenticationStatus = true;
+				}
+				else{
+					authenticationStatus = false;
+				}
 			}
-			else
-			{
-				authenticationStatus = false;
-			}
+			return authenticationStatus;
+	
 		}
-		return authenticationStatus;
+		catch(Exception e)
+		{
+			return false;
+		}
 	}
 	
 	public static UserDetails getCurrentUser(HttpSession session)
