@@ -4,9 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 import connection.ConnectionManager;
+import user.Branches;
 import user.CollageInfo;
 
 public class AdminUtilites {
@@ -61,6 +65,54 @@ public class AdminUtilites {
 		
 		
 		return collages;
+	}
+
+	public static boolean createBranches(Branches branch) {
+
+		try 
+		{
+			List<Branches> branches = new LinkedList<Branches>();
+			Connection conn = ConnectionManager.getConnection();
+			String SqlInsertBranches = "INSERT INTO MM_BRANCH (COLLAGE_ID, BRANCH_NAME, BRANCH_ABBRIVATION) VALUES(?, ?, ?)";
+			
+			PreparedStatement pStmt = conn.prepareStatement(SqlInsertBranches);
+			pStmt.setInt(1, branch.getCollageId());
+			pStmt.setString(2, branch.getBranchName());
+			pStmt.setString(3, branch.getBranchAbbrivation());
+			
+			pStmt.executeUpdate();
+
+			return true;
+			
+		} 
+		catch (ClassNotFoundException | SQLException e) 
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public static List<Branches> getAllBranches() {
+		List<Branches> branches = new LinkedList<Branches>();
+		
+		try 
+		{
+			Connection conn = ConnectionManager.getConnection();
+			String SqlSelectAllBranches = "SELECT * FROM MM_BRANCH"; 
+			PreparedStatement pStmt = conn.prepareStatement(SqlSelectAllBranches);
+			ResultSet res = pStmt.executeQuery();
+			while (res.next()) 
+			{
+				Branches branch = new Branches(res.getInt("ID"), res.getInt("COLLAGE_ID"), res.getString("BRANCH_NAME"), res.getString("BRANCH_ABBRIVATION"));
+				branches.add(branch);
+			}
+			
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return branches;
 	}
 	
 	

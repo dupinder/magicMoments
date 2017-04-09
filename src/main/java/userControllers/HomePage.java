@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
+import admin.AdminUtilites;
 import drive.DriveCommunications;
 import drive.Photos;
 import user.UserAuthentication;
@@ -46,7 +47,9 @@ public class HomePage extends HttpServlet {
 			Map<String, List<Photos>> photos = driveService.fetchEventPhotos(userDetails.getFolderId());			
 			userStatus.put("result", "true");
 			userStatus.put("data", new Gson().toJson(userDetails));
-			userStatus.put("photosData", new Gson().toJson(photos));
+			userStatus.put("dataPhotoList", new Gson().toJson(photos));
+			userStatus.put("dataCollageList", new Gson().toJson(AdminUtilites.getAllCollageList()));
+			userStatus.put("dataBranchList", new Gson().toJson(AdminUtilites.getAllBranches()));
 			response.getWriter().write(new Gson().toJson(userDetails));
 		}
 		else
