@@ -24,7 +24,6 @@ var photos = {
 };
 
 var contentLoader = $('#content-loader');
-var compiledTemplates = new Object();
 var selectedImages = [];
 
 $('document').ready(function(){
@@ -51,28 +50,28 @@ function navigateToPhotos(id){
 	loadTemplate(contentLoader, 'gallery-home', folderData);
 }
 
-function compileAllTemplates(){
-	var templates = $('script[type="text/x-handlebar-template"]');
-	for(template of templates)
-	{
-		let compiledTemplate = Handlebars.compile($(template).html());
-		compiledTemplates[$(template).attr('id')] = compiledTemplate;
-	}
-}
+//function compileAllTemplates(){
+//	var templates = $('script[type="text/x-handlebar-template"]');
+//	for(template of templates)
+//	{
+//		let compiledTemplate = Handlebars.compile($(template).html());
+//		compiledTemplates[$(template).attr('id')] = compiledTemplate;
+//	}
+//}
 
 /*
 	container: Element into which content will be loaded
 	templateId: Id of templated to be loaded
 	context: data to be loaded for template
 */
-function loadTemplate(container, templateId, context, method){
-	let template = compiledTemplates[templateId];
-	if(template != undefined)
-	{
-		var html = template(context);
-		container.html(html);
-	}
-}
+//function loadTemplate(container, templateId, context, method){
+//	let template = compiledTemplates[templateId];
+//	if(template != undefined)
+//	{
+//		var html = template(context);
+//		container.html(html);
+//	}
+//}
 
 function addToCart(imageId){
 
@@ -82,7 +81,6 @@ function addToCart(imageId){
 	var selectedImageElement = $('#' + imageId + ' .addImageIcon');
 	if(selectedImageElement.hasClass('fa-plus'))
 	{
-
 		selectedImageElement.removeClass('fa-plus').addClass('fa-check');	
 	}	
 	else

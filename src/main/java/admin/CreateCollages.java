@@ -30,7 +30,7 @@ public class CreateCollages extends HttpServlet {
 	{
 		CollageInfo collage = new CollageInfo();
 		collage.setName(request.getParameter("collageName"));
-		collage.setAbbrevation(request.getParameter("collageAbbrevation"));
+		collage.setAbbreviation(request.getParameter("collageAbbrevation"));
 		collage.setLocation(request.getParameter("location"));
 		collage.setPincode(request.getParameter("pincode"));
 		collage.setAddress(request.getParameter("address"));

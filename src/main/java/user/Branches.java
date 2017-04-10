@@ -3,7 +3,7 @@ package user;
 public class Branches {
 	
 	private int id;
-	private int collageId;
+	private int collegeId;
 	private String branchName;
 	private String branchAbbrevation;
 	
@@ -13,7 +13,7 @@ public class Branches {
 	public Branches(int id, int collageId, String branchName, String branchAbbrevation) 
 	{
 		this.id = id;
-		this.collageId = collageId;
+		this.collegeId = collageId;
 		this.branchName = branchName;
 		this.branchAbbrevation = branchAbbrevation;
 	}
@@ -40,10 +40,10 @@ public class Branches {
 		this.id = id;
 	}
 	public int getCollageId() {
-		return collageId;
+		return collegeId;
 	}
 	public void setCollageId(int collageId) {
-		this.collageId = collageId;
+		this.collegeId = collageId;
 	}
 	public String getBranchName() {
 		return branchName;

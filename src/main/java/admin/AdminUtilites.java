@@ -5,17 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.poi.ss.formula.ptg.Ptg;
-
-import connection.ConnectionManager;
 import user.Branches;
 import user.CollageInfo;
 import user.Event;
+import connection.ConnectionManager;
 
 public class AdminUtilites {
 
@@ -32,9 +28,9 @@ public class AdminUtilites {
 			 pStmt.setString(2, collage.getLocation() == null ? "" : collage.getLocation());
 			 pStmt.setString(3, collage.getAddress());
 			 pStmt.setString(4, collage.getPincode());
-			 pStmt.setString(5, collage.getAbbrevation());
+			 pStmt.setString(5, collage.getAbbreviation());
 
-			 pStmt.executeUpdate();
+			 pStmt.execute();
 			 
 			 return true;
 			 
@@ -56,8 +52,9 @@ public class AdminUtilites {
 			String SqlSelectAllCollages = "SELECT * FROM MM_COLLAGE";
 			PreparedStatement pStmt = conn.prepareStatement(SqlSelectAllCollages);
 			ResultSet res = pStmt.executeQuery();
+			collages = new LinkedList<CollageInfo>();
 			while (res.next()) {
-				CollageInfo collage = new CollageInfo(res.getString("COLLAGE_NAME"), res.getString("COLLAGE_LOCATION"), res.getInt("ID"), res.getString("COLLAGE_PINCODE"), res.getString("COLLAGE_ABBRIVATION"), res.getString("COLLAGE_ADDRESS"));
+				CollageInfo collage = new CollageInfo(res.getString("COLLAGE_NAME"), res.getString("COLLAGE_LOCATION"), res.getInt("ID"), res.getString("COLLAGE_PINCODE"), res.getString("COLLAGE_ABBREVATION"), res.getString("COLLAGE_ADDRESS"));
 				collages.add(collage);				
 			}
 			
@@ -71,7 +68,7 @@ public class AdminUtilites {
 		return collages;
 	}
 
-	public static boolean createBranches(Branches branch) {
+	public static boolean createBranch(Branches branch) {
 
 		try 
 		{
@@ -145,8 +142,33 @@ public class AdminUtilites {
 		}
 	}
 	
+	public static List<Branches> getAllBranches(int collegeId) {
+		List<Branches> branches = getAllBranches();
+		List<Branches> selectedBranches = new LinkedList<Branches>();
+		
+		for(Branches branch: branches)
+			if(collegeId == branch.getCollageId())
+				selectedBranches.add(branch);
+		
+		return selectedBranches;
+	}
 	
+	public static boolean isCollegeExisting(String collegeName)
+	{
+		for(CollageInfo ci: getAllCollageList())
+			if(ci.getName() != null && ci.getName().equals(collegeName))
+				return true;
+		
+		return false;
+	}
 	
-	
+	public static boolean isBranchExisting(String branchName)
+	{
+		for(Branches branch: getAllBranches())
+			if(branch.getBranchName() != null && branch.getBranchName().equals(branchName))
+				return true;
+		
+		return false;
+	}	
 
 }

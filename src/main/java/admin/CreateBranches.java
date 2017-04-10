@@ -33,14 +33,14 @@ public class CreateBranches extends HttpServlet {
 		branch.setBranchAbbrivation(request.getParameter("branchAbbrevation"));
 		Map<String, String> branchStatus = new HashMap<String, String>();
 
-		if((branch.getCollageId() == 0)|| StringTools.isValidString(branch.getBranchName()))
+		if((branch.getCollageId() == 0)|| !StringTools.isValidString(branch.getBranchName()))
 		{
 			branchStatus.put("result", "false");
 			response.getWriter().write(new Gson().toJson(branchStatus));
 		}
 		else
 		{
-			if(AdminUtilites.createBranches(branch))
+			if(AdminUtilites.createBranch(branch))
 			{
 				List<Branches> branches = AdminUtilites.getAllBranches();
 				branchStatus.put("result", "true");

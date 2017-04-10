@@ -7,6 +7,7 @@
 		<link rel="stylesheet" type="text/css" href="css/global.css" />
 		<link rel="stylesheet" type="text/css" href="css/HoverEffects.css" />
 		<link rel="stylesheet" type="text/css" href="css/Spinner.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.min.css" />
 		<link href="https://fonts.googleapis.com/css?family=Josefin+Slab" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Baloo+Bhaina" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Handlee" rel="stylesheet">
@@ -15,10 +16,12 @@
 
 		<script type="text/javascript" src="js/bootstrap.js"></script>
 		<script src="js/jquery-3.1.1.min.js"> </script>
+		<script src="js/ManageTemplates.js"> </script>
 		<script src="js/AdminHome.js"> </script>
 		<script src="https://use.fontawesome.com/2b35d850ab.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
 		<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>	
+		<script src="js/bootstrap-datetimepicker.min.js"></script>	
 		
 	</head>
 
@@ -48,8 +51,8 @@
 								  		<i class="fa fa-tasks" aria-hidden="true" style="font-size: 3vh;"></i>
 								  		<div class="dropdown-option" style="display: none;"> 
 								  			<div class="more-options">
-									  			<div>Add event</div>
-									  			<div>Orders</div>
+									  			<div onclick="showCreateEventView()">Add event</div>
+									  			<div onclick="">Orders</div>
 									  		</div>	
 								  		</div>
 									</a>
@@ -101,7 +104,7 @@
 		<div class="container" style="margin-top: 100px;">			
 			<div class="main-container row">
 				<div class="col-xs-12">
-					<div class="row content-holder" id="content-loader">						
+					<div class="row content-holder" id="content-loader" style="padding:10px;">						
 							<!-- images will be shown here -->						
 					</div>
 				</div>
@@ -110,8 +113,195 @@
 	</body>
 </html>
 
-<!-- <script type="text/x-handlebar-template" id="create-event"> -->
-	<div class="col-xs-12">
+  <script type="text/x-handlebar-template" id="create-event">   
+	<style>
+		.content-loader{
+			font-size: 16px;
+		}
+		.padding-bottom10{
+			padding-bottom: 10px;
+		}
 		
-	</div>
-<!-- </script> -->
+		.padding-left5{
+			padding-left: 5px;
+		}
+
+		.form-control{height: 45px;font-size:16px;letter-spacing:1px;}
+		
+		input[type=checkbox]{
+			height: 20px;
+			width: 20px;
+		}
+		
+		.expandable-panel{
+    		margin-bottom: 5px;
+			 border-radius: 6px;
+		}
+	</style>
+		<div class="panel panel-default create-event-parent">
+	  		<div class="panel-heading">
+	  			<div class="row">
+					<div class="col-xs-12 page-header-text" style="padding-top: 10px;">
+						<span class="text-muted">Create new event</span>
+					</div>
+				</div>
+			</div>	
+	  		<div class="panel-body">
+	  			<div class="row" style="padding-top:10px;">
+					<div class="col-xs-12 col-sm-6 col-md-4 padding-bottom10">
+						<input type="text" class="form-control eventname" placeholder="Enter event name"/>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-md-4 padding-bottom10">
+						<input type="text" class="form-control event-desc" placeholder="Provide some description about event..."/>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-md-4 padding-bottom10">
+						<div class="input-append date form_datetime" style="position: relative;">
+					    	<input class="form-control" size="16" type="text" value="" readonly placeholder="Select validity date of event">
+					    	<span class="add-on calender-span"><i class="fa fa-calendar icon-th"></i></span>
+						</div>
+					</div>
+				</div>		
+				<div class="row">
+					<div class="col-xs-8 col-sm-6 padding-bottom10">
+						<select class="form-control college-list" onchange="showBranchesForSelectedCollege(this)">
+							{{#if allColleges}}
+								<option value="-1"> Select college </option>	
+								{{#each allColleges}}
+									<option value="{{id}}"> {{name}} &nbsp&nbsp <span class="parenthesis"> {{abbreviation}} </span></option>
+								{{/each}}	
+							{{else}}
+								<option value="-1"> No college available </option>	
+							{{/if}}	
+						</select>
+					</div>	
+					<div class="col-xs-12 col-sm-3 padding-bottom10">
+						<input type="checkbox" class="showCollege" onchange="showPanel(('.college-panel'), this, [('.college-list'), ('.branch-list')])"/>
+						<span class="padding-left5">Create new college</span>
+					</div>
+				</div>	
+				<div class="panel panel-default college-panel" style="display: none;">
+			  		<div class="panel-heading">
+			  			<div class="row">
+							<div class="col-xs-12"> <span class="text-muted">Create college panel</span></div>
+						</div>	  
+			 		</div>
+				  	<div class="panel-body">
+				  		<div class="row">
+					  		<div class="col-xs-10 college-panel xexpandable-panel padding-bottom10 col-offset-xs-1" xstyle="display: none;">
+								<div class="row" style="padding-top: 5px;">
+									<div class="col-xs-12 col-sm-6 padding-bottom10">
+										<input type="text" class="form-control college-name" placeholder="Enter college name"/>
+									</div>
+									<div class="col-xs-12 col-sm-6 padding-bottom10">
+										<input type="text" class="form-control college-abbreviation" placeholder="Provide abbreviation for e.g. DU"/>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-12 col-sm-6 padding-bottom10">
+										<textarea rows="4" cols="50" class="form-control college-address" placeholder="Provide full college address here..." style="resize: none;"></textarea>
+									</div>
+									<div class="col-xs-12 col-sm-6 padding-bottom10">
+										<input type="text" class="form-control pincode" placeholder="Enter pincode" maxlength="6"/>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-xs-12 col-sm-3 padding-bottom10">
+										<input type="button" class="form-control reset-fields-button btn-success save-college" value="Save college" onclick="createCollege()"/>
+									</div>
+									<div class="col-xs-12 col-sm-3 padding-bottom10">
+										<input type="button" class="form-control reset-fields-button btn-default cancel-create-college" value="Cancel" onclick="resetPanelData($('.college-panel'), $('.showCollege'), [$('select.college-list'), $('select.branch-list')])"/>
+									</div>
+								</div>
+							</div>
+				  		</div>
+					</div>
+				</div>	
+		
+				<div class="row">
+					<div class="col-xs-8 col-sm-4 padding-bottom10">
+						<select class="form-control branch-list disabled">
+							<option value="-1"> Select branch </option>
+							<option value="-1"> No department/branch available </option>
+						</select>
+					</div>	
+					<div class="col-xs-12 col-sm-3 padding-bottom10">
+						<input type="checkbox" onchange="showPanel(('.branch-panel'), this, ('.branch-list'))" class="show-branch-list-checkbox"/>
+				  		<span class="padding-left5">Add new department/branch </span>
+					</div>
+				</div>
+				
+				<div class="panel panel-default branch-panel" style="display: none;">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-xs-12 text-muted"">Create branch panel</div>
+						</div>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-xs-10 branch-panel expandable-panel padding-bottom10 col-offset-xs-1">
+								<div class="row" style="padding-top: 5px;">
+									<div class="col-xs-12 col-sm-6 padding-bottom10">
+										<input type="text" class="form-control branch-name" placeholder="Enter branch name"/>
+									</div>
+									<div class="col-xs-12 col-sm-6 padding-bottom10">
+										<input type="text" class="form-control branch-abbreviation" placeholder="Provide abbreviation for e.g. CSE"/>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-xs-12 col-sm-3 padding-bottom10">
+										<input type="button" class="form-control reset-fields-button btn-success save-branch" value="Save branch" onclick="createBranch()"/>
+									</div>
+									<div class="col-xs-12 col-sm-3 padding-bottom10">
+										<input type="button" class="form-control reset-fields-button btn-default cancel-create-branch" value="Cancel" onclick="resetPanelData($('.branch-panel'), $('.show-branch-list-checkbox'), $('select.branch-list'))"/>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12 col-sm-3 padding-bottom10">
+						<input type="checkbox" onchange="showPanel(('.import-invities-panel'), this)"/>
+				  		<span class="padding-left5"> Import invities/students details? </span>
+					</div>
+				</div>
+				
+				<div class="panel panel-default import-invities-panel" style="display: none;">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-xs-12">
+								Import invities/students details
+							</div>
+						</div>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-xs-9 padding-bottom10">
+								<input type="text" class="form-control import-inviters" placeholder="Select excel/csv file to import data" disabled/>
+							</div>		
+							<div class="col-xs-3 padding-bottom10">
+								<label for="importfile" type="button" class="form-control import-inviters-button btn btn-info">Import invities</label>
+				  				<input type="file" class="sr-only" style="display:none;" id="importfile" name="file" accept=".xlsx, .csv" onchange="updateFilePath()">
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row">	
+					<div class="col-xs-7 col-sm-3 padding-bottom10">
+						<input type="button" class="form-control create-event-button btn-success create-event" value="Create event"/>
+					</div>		
+					<div class="col-xs-5 col-sm-3 padding-bottom10">
+						<input type="button" class="form-control reset-fields-button btn-default reset-event" value="Reset" onclick="resetCreateEventFields()"/>
+					</div>
+				</div>			
+	  		</div>
+		</div>
+</script> 

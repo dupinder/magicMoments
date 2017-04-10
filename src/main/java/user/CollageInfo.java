@@ -1,63 +1,63 @@
 package user;
 public class CollageInfo {
 
-	private String Name;
-	private String Location;
-	private int CollageId;
-	private String Pincode;
-	private String Abbrevation;
-	private String Address;
+	private String name;
+	private String location;
+	private int id;
+	private String pincode;
+	private String abbreviation;
+	private String address;
 	
 
 	public CollageInfo() {
 		super();
 	}
-	public CollageInfo(String name, String location, int collageId, String pincode, String abbrevation, String Address) {
-		this.Name = name;
-		this.Location = location;
-		this.CollageId = collageId;
-		this.Pincode = pincode;
-		this.Abbrevation = abbrevation;
-		this.Address = Address;
+	public CollageInfo(String name, String location, int collageId, String pincode, String abbreviation, String Address) {
+		this.name = name;
+		this.location = location;
+		this.id = collageId;
+		this.pincode = pincode;
+		this.abbreviation = abbreviation;
+		this.address = Address;
 	}
 	
 	
 	public String getAddress() {
-		return Address;
+		return address;
 	}
 	public void setAddress(String address) {
-		Address = address;
+		this.address = address;
 	}
 	
 	public String getName() {
-		return Name;
+		return name;
 	}
 	public void setName(String name) {
-		Name = name;
+		this.name = name;
 	}
 	public String getLocation() {
-		return Location;
+		return location;
 	}
 	public void setLocation(String location) {
-		Location = location;
+		this.location = location;
 	}
 	public int getCollageId() {
-		return CollageId;
+		return id;
 	}
 	public void setCollageId(int collageId) {
-		CollageId = collageId;
+		id = collageId;
 	}
 	public String getPincode() {
-		return Pincode;
+		return pincode;
 	}
 	public void setPincode(String pincode) {
-		Pincode = pincode;
+		this.pincode = pincode;
 	}
-	public String getAbbrevation() {
-		return Abbrevation;
+	public String getAbbreviation() {
+		return abbreviation;
 	}
-	public void setAbbrevation(String abbrevation) {
-		Abbrevation = abbrevation;
+	public void setAbbreviation(String abbrivation) {
+		this.abbreviation = abbrivation;
 	}
 	
 	

@@ -55,10 +55,10 @@
   	<servlet-class>authentications.admin.AdminSignin</servlet-class>
   </servlet>
   <servlet>
-  	<servlet-name>CreateCollages</servlet-name>
-  	<display-name>CreateCollages</display-name>
+  	<servlet-name>CreateCollege</servlet-name>
+  	<display-name>CreateCollege</display-name>
   	<description></description>
-  	<servlet-class>admin.CreateCollages</servlet-class>
+  	<servlet-class>admin.CreateCollege</servlet-class>
   </servlet>
   <servlet>
   	<servlet-name>CreateBranches</servlet-name>
@@ -67,10 +67,23 @@
   	<servlet-class>admin.CreateBranches</servlet-class>
   </servlet>
   <servlet>
+  	<servlet-name>GetAllRequiredDataForEvents</servlet-name>
+  	<display-name>GetAllRequiredDataForEvents</display-name>
+  	<description></description>
+  	<servlet-class>admin.GetAllRequiredDataForEvents</servlet-class>
+  </servlet>
+    <servlet>
   	<servlet-name>CreateEvents</servlet-name>
   	<display-name>CreateEvents</display-name>
   	<description></description>
   	<servlet-class>admin.CreateEvents</servlet-class>
+  </servlet>
+
+  <servlet>
+  	<servlet-name>CreateBranch</servlet-name>
+  	<display-name>CreateBranch</display-name>
+  	<description></description>
+  	<servlet-class>admin.CreateBranch</servlet-class>
   </servlet>
   <servlet-mapping>
   	<servlet-name>Bhaji</servlet-name>
@@ -106,16 +119,25 @@
   	<url-pattern>/AdminSignin</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-  	<servlet-name>CreateCollages</servlet-name>
-  	<url-pattern>/CreateCollages</url-pattern>
+  	<servlet-name>CreateCollege</servlet-name>
+  	<url-pattern>/CreateCollege</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
   	<servlet-name>CreateBranches</servlet-name>
   	<url-pattern>/CreateBranches</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
+  	<servlet-name>GetAllRequiredDataForEvents</servlet-name>
+  	<url-pattern>/GetAllRequiredDataForEvents</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
   	<servlet-name>CreateEvents</servlet-name>
   	<url-pattern>/CreateEvents</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+  	<servlet-name>CreateBranch</servlet-name>
+  	<url-pattern>/CreateBranch</url-pattern>
   </servlet-mapping>
   
       <welcome-file-list>
