@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 
 import user.CollageInfo;
+import utilities.StringTools;
 
 /**
  * Servlet implementation class CreateCollages
@@ -20,9 +21,8 @@ import user.CollageInfo;
 public class CreateCollages extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doPost(request, response);
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	{
 	
 	}
 
@@ -30,24 +30,33 @@ public class CreateCollages extends HttpServlet {
 	{
 		CollageInfo collage = new CollageInfo();
 		collage.setName(request.getParameter("collageName"));
-		collage.setAbbrivation(request.getParameter("collageAbbrivation"));
+		collage.setAbbrevation(request.getParameter("collageAbbrevation"));
 		collage.setLocation(request.getParameter("location"));
 		collage.setPincode(request.getParameter("pincode"));
 		collage.setAddress(request.getParameter("address"));
 		Map<String, String> collagesStatus = new HashMap<String, String>();
-		
-		if(AdminUtilites.createCollage(collage))
-		{
-			List<CollageInfo> collages = AdminUtilites.getAllCollageList();
-			collagesStatus.put("result", "true");
-			collagesStatus.put("dataCollageList", new Gson().toJson(collages));
-			response.getWriter().write(new Gson().toJson(collagesStatus));
-		}
-		else
+
+		if(StringTools.isValidString(collage.getName()) || StringTools.isValidString(collage.getPincode()) || StringTools.isValidString(collage.getAddress()))
 		{
 			collagesStatus.put("result", "false");
 			response.getWriter().write(new Gson().toJson(collagesStatus));
 		}
+		else
+		{
+			if(AdminUtilites.createCollage(collage))
+			{
+				List<CollageInfo> collages = AdminUtilites.getAllCollageList();
+				collagesStatus.put("result", "true");
+				collagesStatus.put("dataCollageList", new Gson().toJson(collages));
+				response.getWriter().write(new Gson().toJson(collagesStatus));
+			}
+			else
+			{
+				collagesStatus.put("result", "false");
+				response.getWriter().write(new Gson().toJson(collagesStatus));
+			}
+		}
+
 	}
 
 }

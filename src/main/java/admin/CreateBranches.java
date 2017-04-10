@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 
 import user.Branches;
+import utilities.StringTools;
 
 /**
  * Servlet implementation class CreateBranches
@@ -27,26 +28,32 @@ public class CreateBranches extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		Branches branch = new Branches();
-		branch.setCollageId(Integer.parseInt(request.getParameter("collageId")));
+		branch.setCollageId(request.getParameter("collageId") == null ? 0 : Integer.parseInt(request.getParameter("collageId")));
 		branch.setBranchName(request.getParameter("branchName"));
-		branch.setBranchAbbrivation(request.getParameter("branchAbbrivation"));
+		branch.setBranchAbbrivation(request.getParameter("branchAbbrevation"));
 		Map<String, String> branchStatus = new HashMap<String, String>();
 
-		
-		if(AdminUtilites.createBranches(branch))
+		if((branch.getCollageId() == 0)|| StringTools.isValidString(branch.getBranchName()))
 		{
-			List<Branches> branches = AdminUtilites.getAllBranches();
-			branchStatus.put("result", "true");
-			branchStatus.put("dataBranchList", new Gson().toJson(branches));
+			branchStatus.put("result", "false");
 			response.getWriter().write(new Gson().toJson(branchStatus));
 		}
 		else
 		{
-			branchStatus.put("result", "false");
-			branchStatus.put("cause", "Due to some reasons branch not created");
-			response.getWriter().write(new Gson().toJson(branchStatus));
+			if(AdminUtilites.createBranches(branch))
+			{
+				List<Branches> branches = AdminUtilites.getAllBranches();
+				branchStatus.put("result", "true");
+				branchStatus.put("dataBranchList", new Gson().toJson(branches));
+				response.getWriter().write(new Gson().toJson(branchStatus));
+			}
+			else
+			{
+				branchStatus.put("result", "false");
+				branchStatus.put("cause", "Due to some reasons branch not created");
+				response.getWriter().write(new Gson().toJson(branchStatus));
+			}
 		}
-		
 	}
 
 }

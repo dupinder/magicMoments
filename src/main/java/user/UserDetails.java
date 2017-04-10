@@ -12,16 +12,32 @@ public class UserDetails {
 	private String PhoneNumber;
 	private Set<String> FolderId;
 	private int CollageId;
+	private int branchId;
+	
+	
+	public int getBranchId() {
+		return branchId;
+	}
+
+	public void setBranchId(int branchId) {
+		this.branchId = branchId;
+	}
+
+	public void setLogedInUser(boolean isLogedInUser) {
+		this.isLogedInUser = isLogedInUser;
+	}
+
 	private boolean isLogedInUser;
 
 	
-	public UserDetails(int id, String name, String email, Set<String> folderId, int collageId)
+	public UserDetails(int id, String name, String email, Set<String> folderId, int collageId, int branchId)
 	{
 		this.Id = id;
 		this.Name = name;
 		this.EmailId = email;
 		this.FolderId = folderId;
 		this.CollageId	= collageId;
+		this.branchId = branchId;
 	}
 	
 	public UserDetails(){

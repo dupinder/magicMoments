@@ -1,5 +1,9 @@
 package utilities;
 
+import java.util.Date;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Random;
 
 public class StringTools
@@ -73,6 +77,30 @@ public class StringTools
 		return bolValid;
 	}
 	
+	  public static Timestamp convertStringToTimestamp(String str_date) 
+	  {	
+		  if(str_date != null){
+		    try 
+		    {
+		      DateFormat formatter;
+		      formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		       // you can change format of date
+		      Date date = formatter.parse(str_date);
+		      java.sql.Timestamp timeStampDate = new Timestamp(date.getTime());
+
+		      return timeStampDate;
+		    } 
+		    catch (Exception e) 
+		    {
+		      System.out.println("Exception :" + e);
+		      return null;
+		    }
+		  }
+		  else
+		  {
+			  return null;
+		  }
+	  }
 
 	public static boolean isValidEmail(String email){
 		boolean isValidEmail = false;

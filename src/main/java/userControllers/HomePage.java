@@ -46,10 +46,8 @@ public class HomePage extends HttpServlet {
 		{
 			Map<String, List<Photos>> photos = driveService.fetchEventPhotos(userDetails.getFolderId());			
 			userStatus.put("result", "true");
-			userStatus.put("data", new Gson().toJson(userDetails));
+			userStatus.put("dataUser", new Gson().toJson(userDetails));
 			userStatus.put("dataPhotoList", new Gson().toJson(photos));
-			userStatus.put("dataCollageList", new Gson().toJson(AdminUtilites.getAllCollageList()));
-			userStatus.put("dataBranchList", new Gson().toJson(AdminUtilites.getAllBranches()));
 			response.getWriter().write(new Gson().toJson(userDetails));
 		}
 		else

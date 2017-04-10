@@ -261,22 +261,23 @@ private class OtpManager {
 		{
 			while (res.next()) 
 			{
-				Set<String> folderIds = getFolderIds(res.getInt("ID"));
-				userDetails = new UserDetails(res.getInt("ID"), res.getString("USER_NAME"), res.getString("USER_EMAIL"), folderIds, res.getInt("COLLAGE_ID"));
+				Set<String> folderIds = getFolderIds(res.getInt("COLLAGE_ID"), res.getInt("BRANCH_ID"));
+				userDetails = new UserDetails(res.getInt("ID"), res.getString("USER_NAME"), res.getString("USER_EMAIL"), folderIds, res.getInt("COLLAGE_ID"), res.getInt("BRANCH_ID"));
 				userDetails.setIsLogedInUser(true);
 			}
 		}
 		return userDetails;
 	}
 
-	private static Set<String> getFolderIds(int userId) {
+	private static Set<String> getFolderIds(int collegeId, int branchId) {
 		
-		String SqlSelectUserFolders = "SELECT FOLDER_ID FROM MM_FOLDER WHERE USER_ID = ?";
+		String SqlSelectUserFolders = "SELECT FOLDER_ID FROM MM_EVENT WHERE COLLAGE_ID = ? AND BRANCH_ID = ?";
 		Set<String> userFolderIds = null;
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement pStmt = conn.prepareStatement(SqlSelectUserFolders);
-			pStmt.setInt(1, userId);
+			pStmt.setInt(1, collegeId);
+			pStmt.setInt(2, branchId);
 			ResultSet res = pStmt.executeQuery();
 			while (res.next()) {
 				userFolderIds.add(res.getString("FOLDER_ID"));

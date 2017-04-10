@@ -90,6 +90,12 @@ public class UserSignup extends HttpServlet {
 			}
 
 		}
+		else{
+			Map<String, String> userStatus = new HashMap<String, String>();
+			userStatus.put("result", "false");
+			response.getWriter().write(new Gson().toJson(userStatus));
+
+		}
 	}
 
 }

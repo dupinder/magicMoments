@@ -5,19 +5,19 @@ public class CollageInfo {
 	private String Location;
 	private int CollageId;
 	private String Pincode;
-	private String Abbrivation;
+	private String Abbrevation;
 	private String Address;
 	
 
 	public CollageInfo() {
 		super();
 	}
-	public CollageInfo(String name, String location, int collageId, String pincode, String abbrivation, String Address) {
+	public CollageInfo(String name, String location, int collageId, String pincode, String abbrevation, String Address) {
 		this.Name = name;
 		this.Location = location;
 		this.CollageId = collageId;
 		this.Pincode = pincode;
-		this.Abbrivation = abbrivation;
+		this.Abbrevation = abbrevation;
 		this.Address = Address;
 	}
 	
@@ -53,11 +53,11 @@ public class CollageInfo {
 	public void setPincode(String pincode) {
 		Pincode = pincode;
 	}
-	public String getAbbrivation() {
-		return Abbrivation;
+	public String getAbbrevation() {
+		return Abbrevation;
 	}
-	public void setAbbrivation(String abbrivation) {
-		Abbrivation = abbrivation;
+	public void setAbbrevation(String abbrevation) {
+		Abbrevation = abbrevation;
 	}
 	
 	

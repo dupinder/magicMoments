@@ -162,6 +162,7 @@ public class DriveCommunications {
      * 
      * @throws IOException
      */
+    @Deprecated
     public void fetchPhotosFromDrive() throws IOException{
         // Build a new authorized API client service.
     	

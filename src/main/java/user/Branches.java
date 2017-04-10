@@ -5,17 +5,17 @@ public class Branches {
 	private int id;
 	private int collageId;
 	private String branchName;
-	private String branchAbbrivation;
+	private String branchAbbrevation;
 	
 	
 
 
-	public Branches(int id, int collageId, String branchName, String branchAbbrivation) 
+	public Branches(int id, int collageId, String branchName, String branchAbbrevation) 
 	{
 		this.id = id;
 		this.collageId = collageId;
 		this.branchName = branchName;
-		this.branchAbbrivation = branchAbbrivation;
+		this.branchAbbrevation = branchAbbrevation;
 	}
 	
 	public Branches()
@@ -26,12 +26,12 @@ public class Branches {
 	
 	
 	
-	public String getBranchAbbrivation() {
-		return branchAbbrivation;
+	public String getBranchAbbrevation() {
+		return branchAbbrevation;
 	}
 
 	public void setBranchAbbrivation(String branchAbbrivation) {
-		this.branchAbbrivation = branchAbbrivation;
+		this.branchAbbrevation = branchAbbrivation;
 	}
 	public int getId() {
 		return id;

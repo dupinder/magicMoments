@@ -4,14 +4,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.poi.ss.formula.ptg.Ptg;
+
 import connection.ConnectionManager;
 import user.Branches;
 import user.CollageInfo;
+import user.Event;
 
 public class AdminUtilites {
 
@@ -28,7 +32,7 @@ public class AdminUtilites {
 			 pStmt.setString(2, collage.getLocation() == null ? "" : collage.getLocation());
 			 pStmt.setString(3, collage.getAddress());
 			 pStmt.setString(4, collage.getPincode());
-			 pStmt.setString(5, collage.getAbbrivation());
+			 pStmt.setString(5, collage.getAbbrevation());
 
 			 pStmt.executeUpdate();
 			 
@@ -71,14 +75,13 @@ public class AdminUtilites {
 
 		try 
 		{
-			List<Branches> branches = new LinkedList<Branches>();
 			Connection conn = ConnectionManager.getConnection();
 			String SqlInsertBranches = "INSERT INTO MM_BRANCH (COLLAGE_ID, BRANCH_NAME, BRANCH_ABBRIVATION) VALUES(?, ?, ?)";
 			
 			PreparedStatement pStmt = conn.prepareStatement(SqlInsertBranches);
 			pStmt.setInt(1, branch.getCollageId());
 			pStmt.setString(2, branch.getBranchName());
-			pStmt.setString(3, branch.getBranchAbbrivation());
+			pStmt.setString(3, branch.getBranchAbbrevation());
 			
 			pStmt.executeUpdate();
 
@@ -113,6 +116,33 @@ public class AdminUtilites {
 		}
 		
 		return branches;
+	}
+
+	public static boolean createEvent(Event event) {
+	
+		try {
+			Connection conn	= ConnectionManager.getConnection();
+			
+			String SqlCreateEvent = "INSERT INTO MM_EVENT (EVENT_NAME, EVENT_DISCRIPTION, EVENT_START, EVENT_END, EVENT_DATA_DELETE, COLLAGE_ID, BRANCH_ID, MODIFIED_BY, MODIFIED_ON, FOLDER_ID) VALUES (?, ?, ?, ?,?, ?, ?,?,?,?)";
+			PreparedStatement pStmt = conn.prepareStatement(SqlCreateEvent);
+			pStmt.setString(1, event.getName());
+			pStmt.setString(2, event.getDiscription());
+			pStmt.setTimestamp(3, event.getStartDate());
+			pStmt.setTimestamp(4, event.getEndDate());
+			pStmt.setTimestamp(5, event.getDataDelete());
+			pStmt.setInt(6, event.getCollageId());
+			pStmt.setInt(7, event.getBranchId());
+			pStmt.setTimestamp(8, new Timestamp(System.currentTimeMillis()));
+			pStmt.setTimestamp(9, new Timestamp(System.currentTimeMillis()));
+			pStmt.setString(10, event.getFolderId());
+			
+			return pStmt.execute();
+			
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 	
