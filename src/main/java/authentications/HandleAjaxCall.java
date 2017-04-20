@@ -1,6 +1,8 @@
 package authentications;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,6 +24,7 @@ import drive.Photos;
 import user.UserDetails;
 import utilities.CommonTypes;
 
+
 public class HandleAjaxCall extends HttpServlet {
 	
 	public static final int ACTION_CREATE_USER = 1;
@@ -37,9 +40,6 @@ public class HandleAjaxCall extends HttpServlet {
 		doPost(request, response);
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DriveCommunications driveService = new DriveCommunications();
 
@@ -93,6 +93,15 @@ public class HandleAjaxCall extends HttpServlet {
 //					response.getOutputStream().println(photoJson);
 //					response.getOutputStream().flush();
 					break;
+					
+				case 69:
+					    boolean isMultipart;
+					    String filePath;
+					    int maxFileSize = 50 * 1024;
+					    int maxMemSize = 4 * 1024;
+					    File file ;
+
+					break;
 				}
 				
 			} catch (SQLException e) {
@@ -118,17 +127,17 @@ public class HandleAjaxCall extends HttpServlet {
 
 	private void authenticate_MM_User(Connection conn, UserDetails mmUser, HttpServletRequest request) throws SQLException {
 		
-		String SelectUser = "SELECT * FROM MM_USERDATA WHERE USER_EMAILID = ?";
+		String SelectUser = "SELECT * FROM MM_USER WHERE EMAIL = ?";
 		PreparedStatement pStmt = conn.prepareStatement(SelectUser);
 		pStmt.setString(1, mmUser.getEmailId());
 		
 		ResultSet res = pStmt.executeQuery();
 		
 		while (res.next()) {
-			if(res.getString("USER_PASSWORD").toString().equals(mmUser.getPassword()))
+			if(res.getString("PASSWORD").toString().equals(mmUser.getPassword()))
 			{
 				HttpSession session = request.getSession();
-				session.setAttribute(CommonTypes.TOKKEN_NAME, res.getInt("USER_ID"));
+				session.setAttribute(CommonTypes.TOKKEN_NAME, res.getInt("ID"));
 				System.out.println(session.getAttribute(CommonTypes.TOKKEN_NAME));
 			}
 			else
@@ -142,7 +151,7 @@ public class HandleAjaxCall extends HttpServlet {
 
 	private void insert_MM_UserDetails(Connection conn, UserDetails mmUser) throws SQLException {
 		
-		String InserQuery = "INSERT INTO MM_USERDATA (USER_NAME, USER_EMAILID, USER_PASSWORD, USER_ADDRESS, USER_PHONENUMBER) VALUES (?, ?, ?, ?, ?)";
+		String InserQuery = "INSERT INTO MM_USER (NAME, EMAIL, PASSWORD, ADDRESS, PHONENUMBER) VALUES (?, ?, ?, ?, ?)";
 		
 		PreparedStatement pStmt = conn.prepareStatement(InserQuery);
 		pStmt.setString(1, mmUser.getName());

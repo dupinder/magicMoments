@@ -85,6 +85,18 @@
   	<description></description>
   	<servlet-class>admin.CreateBranch</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>ImportUserForEvent</servlet-name>
+  	<display-name>ImportUserForEvent</display-name>
+  	<description></description>
+  	<servlet-class>admin.ImportUserForEvent</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>AddToCartOrWishlist</servlet-name>
+  	<display-name>AddToCartOrWishlist</display-name>
+  	<description></description>
+  	<servlet-class>userAccountManagment.AddToCartOrWishlist</servlet-class>
+  </servlet>
   <servlet-mapping>
   	<servlet-name>Bhaji</servlet-name>
   	<url-pattern>/Bhaji</url-pattern>
@@ -134,10 +146,18 @@
   	<servlet-name>CreateEvents</servlet-name>
   	<url-pattern>/CreateEvents</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>ImportUserForEvent</servlet-name>
+  	<url-pattern>/ImportUserForEvent</url-pattern>
+  </servlet-mapping>
 
   <servlet-mapping>
   	<servlet-name>CreateBranch</servlet-name>
   	<url-pattern>/CreateBranch</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>AddToCartOrWishlist</servlet-name>
+  	<url-pattern>/AddToCartOrWishlist</url-pattern>
   </servlet-mapping>
   
       <welcome-file-list>

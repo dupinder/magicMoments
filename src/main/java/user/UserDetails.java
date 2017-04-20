@@ -4,14 +4,14 @@ import java.util.Set;
 
 public class UserDetails {
 
-	private int Id;
-	private String Name;
-	private String EmailId;
-	private String Password;
-	private String Address;
-	private String PhoneNumber;
-	private Set<String> FolderId;
-	private int CollageId;
+	private int id;
+	private String name;
+	private String emailId;
+	private String password;
+	private String address;
+	private String phoneNumber;
+	private Set<String> folderId;
+	private int collageId;
 	private int branchId;
 	
 	
@@ -32,11 +32,11 @@ public class UserDetails {
 	
 	public UserDetails(int id, String name, String email, Set<String> folderId, int collageId, int branchId)
 	{
-		this.Id = id;
-		this.Name = name;
-		this.EmailId = email;
-		this.FolderId = folderId;
-		this.CollageId	= collageId;
+		this.id = id;
+		this.name = name;
+		this.emailId = email;
+		this.folderId = folderId;
+		this.collageId	= collageId;
 		this.branchId = branchId;
 	}
 	
@@ -45,70 +45,70 @@ public class UserDetails {
 	}
 	
 	public int getId() {
-		return Id;
+		return id;
 	}
 
 	public void setId(int id) {
-		Id = id;
+		this.id = id;
 	}
 
 	public Set<String> getFolderId() {
-		return FolderId;
+		return folderId;
 	}
 
 	public void setFolderId(Set<String> folderId) {
-		this.FolderId = folderId;
+		this.folderId = folderId;
 	}
 
 	public int getCollageId() {
-		return CollageId;
+		return collageId;
 	}
 
 	/**
 	 * @param collageId the collageId to set
 	 */
 	public void setCollageId(int collageId) {
-		this.CollageId = collageId;
+		this.collageId = collageId;
 	}
 
 	public String getName() {
-		return Name;
+		return name;
 	}
 
 	public void setName(String name) {
-		Name = name;
+		this.name = name;
 	}
 
 	public String getEmailId() {
-		return EmailId;
+		return emailId;
 	}
 
 	public void setEmailId(String emailId) {
-		EmailId = emailId;
+		this.emailId = emailId;
 	}
 
 	public String getPassword() {
-		return Password;
+		return password;
 	}
 
 	public void setPassword(String password) {
-		Password = password;
+		this.password = password;
 	}
 
 	public String getAddress() {
-		return Address;
+		return address;
 	}
 
 	public void setAddress(String address) {
-		Address = address;
+		this.address = address;
 	}
 
 	public String getPhoneNumber() {
-		return PhoneNumber;
+		return phoneNumber;
 	}
 
 	public void setPhoneNumber(String phoneNumber) {
-		PhoneNumber = phoneNumber;
+		this.phoneNumber = phoneNumber;
 	}
 
 	public boolean getIsLogedInUser() {

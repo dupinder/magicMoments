@@ -4,6 +4,14 @@ public class PhotosBag {
 
 	private String PhotoId;
 	private int userId;
+	private int type; 	
+	
+	public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
+	}
 	public String getPhotoId() {
 		return PhotoId;
 	}

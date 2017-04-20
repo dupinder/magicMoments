@@ -104,7 +104,7 @@ public class UserAuthentication
 
 	public static boolean savePassword(String email, String password) throws ClassNotFoundException 
 	{
-		String SavePassword = "UPDATE MM_USER SET USER_PASSWORD = ? WHERE USER_EMAIL = ?";
+		String SavePassword = "UPDATE MM_USER SET PASSWORD = ? WHERE EMAIL = ?";
 		try
 		{
 			Connection conn = ConnectionManager.getConnection();
@@ -131,7 +131,7 @@ public class UserAuthentication
 		if(!StringTools.isValidEmail(email))
 			return actionToTake;
 
-		String SqlIsExistingUser = "SELECT USER_EMAIL, USER_PASSWORD FROM MM_USER WHERE USER_EMAIL = ?";
+		String SqlIsExistingUser = "SELECT EMAIL, PASSWORD FROM MM_USER WHERE EMAIL = ?";
 
 		Connection conn = ConnectionManager.getConnection();
 		try {
@@ -143,7 +143,7 @@ public class UserAuthentication
 			} 
 			else 
 			{
-				String password = resultSet.getString("USER_PASSWORD");
+				String password = resultSet.getString("PASSWORD");
 				if (!StringTools.isValidString(password)) 
 				{
 					actionToTake = ACTION_VALID_NEW_USER;
@@ -206,7 +206,7 @@ private class OtpManager {
 				if(res.getString("PASSWORD").toString().equals(password)){
 		
 					HttpSession session = request.getSession();
-				session.setAttribute(CommonTypes.USER_DETAILS_SESSION_KEY, getUserDetails(Integer.parseInt(SQLSelectUser, res.getInt("ID"))));
+				session.setAttribute(CommonTypes.USER_DETAILS_SESSION_KEY, getUserDetails(res.getInt("ID")));
 					authenticationStatus = true;
 				}
 				else{
@@ -262,7 +262,7 @@ private class OtpManager {
 			while (res.next()) 
 			{
 				Set<String> folderIds = getFolderIds(res.getInt("COLLAGE_ID"), res.getInt("BRANCH_ID"));
-				userDetails = new UserDetails(res.getInt("ID"), res.getString("USER_NAME"), res.getString("USER_EMAIL"), folderIds, res.getInt("COLLAGE_ID"), res.getInt("BRANCH_ID"));
+				userDetails = new UserDetails(res.getInt("ID"), res.getString("NAME"), res.getString("EMAIL"), folderIds, res.getInt("COLLAGE_ID"), res.getInt("BRANCH_ID"));
 				userDetails.setIsLogedInUser(true);
 			}
 		}

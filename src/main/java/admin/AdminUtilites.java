@@ -1,17 +1,29 @@
 package admin;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.InputMismatchException;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import user.Branches;
 import user.CollageInfo;
 import user.Event;
+import user.UserDetails;
 import connection.ConnectionManager;
+import utilities.StringTools;
 
 public class AdminUtilites {
 
@@ -140,6 +152,92 @@ public class AdminUtilites {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	public static List<UserDetails> getUsersFromExcel(FileInputStream inputStream, int collegeId, int branchId) 
+	{
+		Workbook workbook = null;
+		try {
+			workbook = new XSSFWorkbook(inputStream);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Sheet firstSheet = workbook.getSheetAt(0);
+		Iterator<Row> iterator = firstSheet.iterator();
+		List<UserDetails> users = new LinkedList<UserDetails>(); 
+		while (iterator.hasNext()) {
+			Row nextRow = iterator.next();
+			if(nextRow.getRowNum() == 0)
+				nextRow = iterator.next();
+			
+			Iterator<Cell> cellIterator = nextRow.cellIterator();
+
+			UserDetails user = new UserDetails();
+			while (cellIterator.hasNext()) {
+				Cell cell = cellIterator.next();
+				cell.getColumnIndex();
+				
+				switch (cell.getColumnIndex()) {
+				case 0:
+					user.setName(cell.getStringCellValue());
+				break;
+
+				case 1:
+					String email = cell.getStringCellValue();
+					if(StringTools.isValidEmail(email))
+						user.setEmailId(cell.getStringCellValue());
+					else
+						throw new InputMismatchException();
+				break;
+				case 2:
+					user.setPhoneNumber(new String(""+new java.text.DecimalFormat("0").format(cell.getNumericCellValue())+""));
+				break;
+				default:
+					break;
+				}
+			}
+			
+			user.setCollageId(collegeId);
+			user.setBranchId(branchId);
+			
+			users.add(user);
+		}
+		try {
+			workbook.close();
+			inputStream.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return users;
+	}
+
+	public static boolean InsertUsers(List<UserDetails> users) 
+	{
+		boolean isAllOk = false;
+		for (UserDetails userDetails : users) {
+			String SqlInsertUsers = "INSERT INTO MM_USER(NAME,EMAIL,PHONE,PASSWORD,COLLAGE_ID,BRANCH_ID)VALUES(?,?,?,?,?,?)";
+			Connection conn;
+			try {
+				conn = ConnectionManager.getConnection();
+				PreparedStatement pStmt = conn.prepareStatement(SqlInsertUsers);
+				pStmt.setString(1, userDetails.getName());
+				pStmt.setString(2, userDetails.getEmailId());
+				pStmt.setString(3, userDetails.getPhoneNumber());
+				pStmt.setInt(4, userDetails.getCollageId());
+				pStmt.setInt(5, userDetails.getBranchId());
+				pStmt.executeUpdate();
+				isAllOk = true;
+			} catch (ClassNotFoundException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				isAllOk = false;
+			}
+			
+		}
+		return isAllOk;
 	}
 	
 	public static List<Branches> getAllBranches(int collegeId) {

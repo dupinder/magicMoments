@@ -18,6 +18,7 @@ import drive.DriveCommunications;
 import drive.Photos;
 import user.UserAuthentication;
 import user.UserDetails;
+import userAccountManagment.AccountManagmentUtility;
 
 /**
  * Servlet implementation class HomePage
@@ -48,6 +49,7 @@ public class HomePage extends HttpServlet {
 			userStatus.put("result", "true");
 			userStatus.put("dataUser", new Gson().toJson(userDetails));
 			userStatus.put("dataPhotoList", new Gson().toJson(photos));
+			userStatus.put("dataItemCountsBasedOnType", new Gson().toJson(AccountManagmentUtility.getCountBasedOnType(AccountManagmentUtility.getPhotosInBag(request.getSession()))));
 			response.getWriter().write(new Gson().toJson(userDetails));
 		}
 		else

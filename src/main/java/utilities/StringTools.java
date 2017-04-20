@@ -103,11 +103,10 @@ public class StringTools
 	  }
 
 	public static boolean isValidEmail(String email){
-		boolean isValidEmail = false;
 		if (StringTools.isValidString(email) && email.matches(emailValidationPattern))
-			isValidEmail = true;
+			return true;
 		
-		return isValidEmail;
+		return false;
 	}
 	
 	public static boolean isValidPassword(String password)
