@@ -2,7 +2,6 @@ package authentications;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,7 +19,6 @@ import com.google.gson.Gson;
 import connection.ConnectionManager;
 import drive.DriveCommunications;
 import drive.Event;
-import drive.Photos;
 import user.UserDetails;
 import utilities.CommonTypes;
 

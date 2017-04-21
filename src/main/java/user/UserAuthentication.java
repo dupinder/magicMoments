@@ -8,19 +8,17 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.google.api.services.drive.model.User;
+
+import admin.Admin;
+import connection.ConnectionManager;
 import utilities.CommonTypes;
 import utilities.EmailSender;
 import utilities.StringTools;
-import admin.Admin;
-
-import com.google.api.services.drive.model.User;
-
-import connection.ConnectionManager;
 
 public class UserAuthentication 
 {

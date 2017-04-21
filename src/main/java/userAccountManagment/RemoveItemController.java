@@ -2,8 +2,6 @@ package userAccountManagment;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -20,19 +18,17 @@ import user.UserDetails;
 import utilities.CommonTypes;
 
 /**
- * Servlet implementation class AddToCartOrWishlist
+ * Servlet implementation class RemoveItemController
  */
- 
- @WebServlet(urlPatterns = "/AddItemController", name = "AddItemController")
- 
- 
-public class AddItemController extends HttpServlet {
+@WebServlet(urlPatterns = "/RemoveItemController", name = "RemoveItemController")
+
+public class RemoveItemController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AddItemController() {
+    public RemoveItemController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -41,8 +37,12 @@ public class AddItemController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
 	}
 
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		HttpSession session = request.getSession();
@@ -56,24 +56,18 @@ public class AddItemController extends HttpServlet {
 		photoBag.setPhotoId(photoId);
 		photoBag.setUserId(userId);
 		photoBag.setType(type);
+		Map<String, String> deleteItem = new HashMap<String, String>();
 		
-		Map<String, String> ItemAddStatus = new HashMap<String, String>();
-		if(AccountManagmentUtility.SaveAddToCartPhotos(photoBag))
+		if(AccountManagmentUtility.removeItem(photoBag))
 		{
-			List<PhotosBag> photosBag = AccountManagmentUtility.getPhotosInBag(request.getSession());
-			ItemAddStatus.put("result", "true");
-			ItemAddStatus.put("dataItemsInBag", new Gson().toJson(photosBag));		
-			ItemAddStatus.put("dataItemCountsBasedOnType", new Gson().toJson(AccountManagmentUtility.getCountBasedOnType(photosBag)));
+			deleteItem.put("result", "true");
 		}
 		else
 		{
-			ItemAddStatus.put("result", "false");
+			deleteItem.put("result", "false");
 		}
-		
-		response.getWriter().write(new Gson().toJson(ItemAddStatus));	
-
-		
+	
+		response.getWriter().write(new Gson().toJson(deleteItem));	
 	}
-
 
 }

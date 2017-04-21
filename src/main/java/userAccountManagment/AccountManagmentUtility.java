@@ -132,6 +132,29 @@ public class AccountManagmentUtility {
 	}
 
 
+	public static boolean removeItem(PhotosBag photoBag) {
+		String DeleteItem = "DELETE * FROM MM_PHOTO_BAG WHERE USER_ID = ?, PHOTO_ID = ?, TYPE = ?";
+		
+		try {
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement pStmt = conn.prepareStatement(DeleteItem);
+			pStmt.setInt(1, photoBag.getUserId());
+			pStmt.setString(2, photoBag.getPhotoId());
+			pStmt.setInt(3, photoBag.getType());
+			
+			pStmt.execute();
+			
+			return true;
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		
+		
+	}
+
+
 	
 	
 	

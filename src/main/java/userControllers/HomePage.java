@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,7 +14,6 @@ import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
-import admin.AdminUtilites;
 import drive.DriveCommunications;
 import drive.Photos;
 import user.UserAuthentication;
@@ -23,6 +23,8 @@ import userAccountManagment.AccountManagmentUtility;
 /**
  * Servlet implementation class HomePage
  */
+@WebServlet(urlPatterns = "/HomePage", name = "HomePage")
+
 public class HomePage extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -43,7 +45,7 @@ public class HomePage extends HttpServlet {
 		UserDetails userDetails = UserAuthentication.getCurrentUser(session);
 		Map<String, String> userStatus = new HashMap<String, String>();
 
-		if(userDetails.getIsLogedInUser())
+		if(userDetails.getIsLogedInUser() && userDetails.getFolderId() != null)
 		{
 			Map<String, List<Photos>> photos = driveService.fetchEventPhotos(userDetails.getFolderId());			
 			userStatus.put("result", "true");
@@ -56,7 +58,7 @@ public class HomePage extends HttpServlet {
 		{
 			userStatus.put("result", "false");
 			userStatus.put("data", null);
-			userStatus.put("cause", "No Loggedin user available for this session");
+			userStatus.put("cause", "No Loggedin user available for this session Or G-Drive folder not assigned");
 			response.getWriter().write(new Gson().toJson(userStatus));
 		}
 		
