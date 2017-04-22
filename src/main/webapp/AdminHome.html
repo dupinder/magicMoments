@@ -7,7 +7,7 @@
 		<link rel="stylesheet" type="text/css" href="css/global.css" />
 		<link rel="stylesheet" type="text/css" href="css/HoverEffects.css" />
 		<link rel="stylesheet" type="text/css" href="css/Spinner.css" />
-		<link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker.css" />
 		<link href="https://fonts.googleapis.com/css?family=Josefin+Slab" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Baloo+Bhaina" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Handlee" rel="stylesheet">
@@ -21,7 +21,7 @@
 		<script src="https://use.fontawesome.com/2b35d850ab.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
 		<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>	
-		<script src="js/bootstrap-datetimepicker.min.js"></script>	
+		<script src="js/bootstrap-datepicker.js"></script>	
 		
 	</head>
 
@@ -138,6 +138,7 @@
 			 border-radius: 6px;
 		}
 	</style>
+	<form action="CreateEvents" method="POST" enctype="multipart/form-data" id="createEventForm" >
 		<div class="panel panel-default create-event-parent">
 	  		<div class="panel-heading">
 	  			<div class="row">
@@ -149,25 +150,53 @@
 	  		<div class="panel-body">
 	  			<div class="row" style="padding-top:10px;">
 					<div class="col-xs-12 col-sm-6 col-md-4 padding-bottom10">
-						<input type="text" class="form-control eventname" placeholder="Enter event name"/>
+						<input type="text" class="form-control eventname" name="eventName" placeholder="Enter event name"/>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-xs-12 col-sm-6 col-md-4 padding-bottom10">
-						<input type="text" class="form-control event-desc" placeholder="Provide some description about event..."/>
+						<input type="text" class="form-control event-desc" placeholder="Provide some description about event..." name="eventDiscription"/>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-xs-12 col-sm-6 col-md-4 padding-bottom10">
-						<div class="input-append date form_datetime" style="position: relative;">
-					    	<input class="form-control" size="16" type="text" value="" readonly placeholder="Select validity date of event">
-					    	<span class="add-on calender-span"><i class="fa fa-calendar icon-th"></i></span>
+						<div class="input-group date">
+						    <input type="text" class="form-control start-date form_datetime" name="eventStartDate" placeholder="Select start date of event">
+						    <div class="input-group-addon">
+						        <span class="glyphicon glyphicon-th"></span>
+						    </div>
 						</div>
 					</div>
 				</div>		
 				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-md-4 padding-bottom10">
+						<div class="input-group date">
+						    <input class="form-control end-date form_datetime" size="16" type="text" value="" placeholder="Select end date of event" name="eventEndDate">
+						    <div class="input-group-addon">
+						        <span class="glyphicon glyphicon-th"></span>
+						    </div>
+						</div>
+					</div>
+				</div>		
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-md-4 padding-bottom10">
+						<div class="input-group date">
+						    <input class="form-control validity-period form_datetime" type="text" value="" placeholder="Select validity date of event" name="validityPeriod">
+						    <div class="input-group-addon">
+						        <span class="glyphicon glyphicon-th"></span>
+						    </div>
+						</div>
+					</div>
+				</div>
+				<div class="row" style="padding-top:10px;">
+					<div class="col-xs-12 col-sm-6 col-md-4 padding-bottom10">
+						<input type="text" class="form-control event-picture-folder-id" name="folderId" placeholder="Enter picture folder ID to link with event"/>
+						<label style="padding: 5px;"> Provide ID of a folder you have created on google drive to link pictures to this event</label>
+					</div>
+				</div>		
+				<div class="row">
 					<div class="col-xs-8 col-sm-6 padding-bottom10">
-						<select class="form-control college-list" onchange="showBranchesForSelectedCollege(this)">
+						<select class="form-control college-list" onchange="showBranchesForSelectedCollege(this)" name="selectedCollege">
 							{{#if allColleges}}
 								<option value="-1"> Select college </option>	
 								{{#each allColleges}}
@@ -224,9 +253,9 @@
 		
 				<div class="row">
 					<div class="col-xs-8 col-sm-4 padding-bottom10">
-						<select class="form-control branch-list disabled">
+						<select class="form-control branch-list disabled" name="selectedBranch">
 							<option value="-1"> Select branch </option>
-							<option value="-1"> No department/branch available </option>
+<!-- 							<option value="-1"> No department/branch available </option> -->
 						</select>
 					</div>	
 					<div class="col-xs-12 col-sm-3 padding-bottom10">
@@ -288,7 +317,7 @@
 							</div>		
 							<div class="col-xs-3 padding-bottom10">
 								<label for="importfile" type="button" class="form-control import-inviters-button btn btn-info">Import invities</label>
-				  				<input type="file" class="sr-only" style="display:none;" id="importfile" name="file" accept=".xlsx, .csv" onchange="updateFilePath()">
+			  					<input type="file" xclass="sr-only" style="display:none;" id="importfile" xaccept=".xlsx, .csv" onchange="updateFilePath()" name="mf">
 							</div>
 						</div>
 					</div>
@@ -296,12 +325,13 @@
 				
 				<div class="row">	
 					<div class="col-xs-7 col-sm-3 padding-bottom10">
-						<input type="button" class="form-control create-event-button btn-success create-event" value="Create event"/>
+						<input type="button" class="form-control create-event-button btn-success create-event" value="Create event" onclick="createEventM()" />
 					</div>		
 					<div class="col-xs-5 col-sm-3 padding-bottom10">
-						<input type="button" class="form-control reset-fields-button btn-default reset-event" value="Reset" onclick="resetCreateEventFields()"/>
+						<input type="button" class="econtrol reset-fields-button btn-default reset-event" value="Reset" onclick="resetCreateEventFields()"/>
 					</div>
 				</div>			
 	  		</div>
 		</div>
+	</form>
 </script> 

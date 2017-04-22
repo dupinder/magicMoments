@@ -183,26 +183,23 @@ function createBranch(){
 	});
 }
 
-function createEvent(){
-	var parent = $('.create-event-parent');
-	var eventName = parent.find('.eventname').val();
-	var eventDesc = parent.find('.event-desc').val();
+function createEventM(){
+//	User below commented code when UI side validations are applied
+//	var parent = $('.create-event-parent');
+//	var eventName = parent.find('.eventname').val();
+//	var eventDesc = parent.find('.event-desc').val();
+//	var eventPictureFolderId = parent.find('.event-picture-folder-id').val();
+//	
+//	var eventStartDate = parent.find('.form_datetime.start-date input').val();
+//	var eventEndDate = parent.find('.form_datetime.end-date input').val();
+//	var validityPeriod = parent.find('.form_datetime.validity-date input').val();
+//	
+//	var selectedCollege = parent.find('select.college-list').val();
+//	var selectedBranch = parent.find('select.branch-list').val();
+//	
+//	var file = document.getElementById('importfile').files[0];
 	
-	var validityPeriod = parent.find('.form-datetime input').val();
-	var selectedCollege = parent.find('select.college-list').val();
-	var selectedBranch = parent.find('select.branch-list').val();
-//	var importFile = parent.find('#importfile').val();
-	
-	
-	$.ajax({
-		url: 'CreateEvent',
-		type: 'POST',
-		data: {eventName: eventName, eventDesc: eventDesc, selectedCollege: selectedCollege, selectedBranch: selectedBranch, validityPeriod: validityPeriod},
-		success: function(response){
-			
-		},
-		failure: function(error){},
-	});
+	$('#createEventForm').submit();
 }
 
 var eventData;
@@ -240,9 +237,7 @@ function getAllRequiredData(){
 			eventData = new EventData(allCollegesProto, allBranchesProto);
 			loadTemplate(contentLoader, 'create-event', JSON.parse(eventData.jsonData()));
 			$('select.branch-list').prop('disabled', true);
-			 $(".form_datetime").datetimepicker({
-			        format: "dd MM yyyy - hh:ii"
-		    });
+			$(".form_datetime").datepicker({'autoclose': true, 'format': 'dd/mm/yyyy'});
 		},
 		failure: function(error){
 			showSpinner(false);

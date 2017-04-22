@@ -45,7 +45,7 @@ public class UserSignup extends HttpServlet {
 			if (StringTools.isValidEmail(email)) {
 				try {
 					Map<String, String> userStatus = new HashMap<String, String>();
-					switch (UserAuthentication.IsExistingUser(email)) {
+					switch (UserAuthentication.getExistingUser(email)) {
 					case UserAuthentication.ACTION_INVALID_USER:
 						userStatus.put("result", "false");
 						userStatus.put("cause", "You are not a valid user");

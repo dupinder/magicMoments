@@ -79,11 +79,16 @@ public class StringTools
 	
 	  public static Timestamp convertStringToTimestamp(String str_date) 
 	  {	
+		  return convertStringToTimestamp(str_date, "yyyy-MM-dd hh:mm:ss");
+	  }
+	  
+	  public static Timestamp convertStringToTimestamp(String str_date, String dateFormat) 
+	  {	
 		  if(str_date != null){
 		    try 
 		    {
 		      DateFormat formatter;
-		      formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		      formatter = new SimpleDateFormat(dateFormat);
 		       // you can change format of date
 		      Date date = formatter.parse(str_date);
 		      java.sql.Timestamp timeStampDate = new Timestamp(date.getTime());
@@ -115,5 +120,4 @@ public class StringTools
 			return true;
 		return false;
 	}
-	
 }

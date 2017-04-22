@@ -36,7 +36,7 @@ public class UserSignin extends HttpServlet {
 		String Password = request.getParameter("password");
 		try 
 		{
-			if(StringTools.isValidString(email) && StringTools.isValidString(Password) && (UserAuthentication.IsExistingUser(email) == 1 ? false : true))
+			if(StringTools.isValidString(email) && StringTools.isValidString(Password) && (UserAuthentication.getExistingUser(email) == 1 ? false : true))
 			{
 				if(UserAuthentication.LoginCreateSession(email, Password, User.class.getName(), request)){
 					Map<String, String> userStatus = new HashMap<String, String>();

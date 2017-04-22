@@ -12,13 +12,14 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.google.api.services.drive.model.User;
-
-import admin.Admin;
-import connection.ConnectionManager;
 import utilities.CommonTypes;
 import utilities.EmailSender;
 import utilities.StringTools;
+import admin.Admin;
+
+import com.google.api.services.drive.model.User;
+
+import connection.ConnectionManager;
 
 public class UserAuthentication 
 {
@@ -72,7 +73,7 @@ public class UserAuthentication
 
 		try 
 		{
-			int actionToTake = IsExistingUser(email);
+			int actionToTake = getExistingUser(email);
 
 			switch (actionToTake) 
 			{
@@ -118,24 +119,73 @@ public class UserAuthentication
 			e.printStackTrace();
 			return false;
 		}
-		
-		
 		return true;
 	}
 
-	public static int IsExistingUser(String email) throws ClassNotFoundException {
+	public static Boolean isUserExisting(String email)
+	{
+		ResultSet rs = isExistingUser(email);
+		try
+		{
+			if(rs == null || rs.next())
+				return true;
+		} 
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public static ResultSet isExistingUser(String email)
+	{
+		if(!StringTools.isValidEmail(email))
+			return null;
+
+		String SqlIsExistingUser = "SELECT EMAIL, PASSWORD FROM MM_USER WHERE EMAIL = ?";
+
+		ResultSet resultSet = null;
+		Connection conn = null;
+		try {
+			conn = ConnectionManager.getConnection();
+			PreparedStatement pStmt = conn.prepareStatement(SqlIsExistingUser);
+			pStmt.setString(1, email);
+			resultSet = pStmt.executeQuery();
+		} 
+		catch (SQLException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally
+		{
+			if(conn != null)
+				try
+				{
+					conn.close();
+				} catch (SQLException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+
+		return resultSet;
+		
+	}
+	
+	public static int getExistingUser(String email) throws ClassNotFoundException {
 
 		int actionToTake = 0;
 		if(!StringTools.isValidEmail(email))
 			return actionToTake;
 
-		String SqlIsExistingUser = "SELECT EMAIL, PASSWORD FROM MM_USER WHERE EMAIL = ?";
-
-		Connection conn = ConnectionManager.getConnection();
 		try {
-			PreparedStatement pStmt = conn.prepareStatement(SqlIsExistingUser);
-			pStmt.setString(1, email);
-			ResultSet resultSet = pStmt.executeQuery();
+			ResultSet resultSet = isExistingUser(email);
 			if (!resultSet.next()) {
 				actionToTake = ACTION_INVALID_USER;
 			} 

@@ -21,6 +21,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import user.Branches;
 import user.CollageInfo;
 import user.Event;
+import user.UserAuthentication;
 import user.UserDetails;
 import utilities.StringTools;
 import connection.ConnectionManager;
@@ -141,11 +142,12 @@ public class AdminUtilites {
 			pStmt.setTimestamp(5, event.getDataDelete());
 			pStmt.setInt(6, event.getCollageId());
 			pStmt.setInt(7, event.getBranchId());
-			pStmt.setTimestamp(8, new Timestamp(System.currentTimeMillis()));
+			pStmt.setInt(8, 0);
 			pStmt.setTimestamp(9, new Timestamp(System.currentTimeMillis()));
 			pStmt.setString(10, event.getFolderId());
 			
-			return pStmt.execute();
+			pStmt.execute();
+			return true;
 			
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
@@ -216,24 +218,28 @@ public class AdminUtilites {
 
 	public static boolean InsertUsers(List<UserDetails> users) 
 	{
-		boolean isAllOk = false;
-		for (UserDetails userDetails : users) {
+		boolean isAllOk = true;
+		for (UserDetails user : users) {
+			if(UserAuthentication.isUserExisting(user.getEmailId()))
+				continue;
+			
 			String SqlInsertUsers = "INSERT INTO MM_USER(NAME,EMAIL,PHONE,PASSWORD,COLLAGE_ID,BRANCH_ID)VALUES(?,?,?,?,?,?)";
 			Connection conn;
 			try {
 				conn = ConnectionManager.getConnection();
 				PreparedStatement pStmt = conn.prepareStatement(SqlInsertUsers);
-				pStmt.setString(1, userDetails.getName());
-				pStmt.setString(2, userDetails.getEmailId());
-				pStmt.setString(3, userDetails.getPhoneNumber());
-				pStmt.setInt(4, userDetails.getCollageId());
-				pStmt.setInt(5, userDetails.getBranchId());
+				pStmt.setString(1, user.getName());
+				pStmt.setString(2, user.getEmailId());
+				pStmt.setString(3, user.getPhoneNumber());
+				pStmt.setString(4, null);
+				pStmt.setInt(5, user.getCollageId());
+				pStmt.setInt(6, user.getBranchId());
 				pStmt.executeUpdate();
-				isAllOk = true;
 			} catch (ClassNotFoundException | SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				isAllOk = false;
+				System.out.println("User with email: " + user.getEmailId() + " failed to save");
 			}
 			
 		}

@@ -53,7 +53,7 @@ public class VerifyEmail extends HttpServlet {
 			try {
 
 				Map<String, String> userStatus = new HashMap<String, String>();
-				switch (UserAuthentication.IsExistingUser(email)) {
+				switch (UserAuthentication.getExistingUser(email)) {
 				case UserAuthentication.ACTION_INVALID_USER:					
 					userStatus.put("isValidUser", "false");
 					response.getWriter().write(new Gson().toJson(userStatus));
