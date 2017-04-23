@@ -280,15 +280,18 @@ public class AdminUtilites {
 	public static CollageInfo getCollegeDetail(int id)
 	{		
 		String selectCollageDetail = "SELECT * FROM MM_COLLAGE WHERE ID = ?";
-		
+		CollageInfo college = null;
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement pStmt = conn.prepareStatement(selectCollageDetail);
 			pStmt.setInt(1, id);
 			ResultSet rs = pStmt.executeQuery();
+			while (rs.next()) 
+			{
+				college = new CollageInfo(rs.getString("COLLAGE_NAME"), rs.getString("COLLAGE_LOCATION"), id , rs.getString("COLLAGE_PINCODE"), rs.getString("COLLAGE_ABBREVATION"), rs.getString("COLLAGE_ADDRESS"));
+			}
 			
-			return new CollageInfo(rs.getString("COLLAGE_NAME"), rs.getString("COLLAGE_LOCATION"), id , rs.getString("COLLAGE_PINCODE"), rs.getString("COLLAGE_ABBREVATION"), rs.getString("COLLAGE_ADDRESS")); 			
-			
+			return college;			
 		}
 		catch (ClassNotFoundException | SQLException e) 
 		{
@@ -304,14 +307,17 @@ public class AdminUtilites {
 	{		
 		String selectBranchDetail = "SELECT * FROM MM_BRANCH WHERE ID = ?";
 		
+		Branches branch = null;
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement pStmt = conn.prepareStatement(selectBranchDetail);
 			pStmt.setInt(1, id);
 			ResultSet rs = pStmt.executeQuery();
-			
-			return new Branches(id, rs.getInt("COLLAGE_ID"), rs.getString("BRANCH_NAME"), rs.getString("BRANCH_ABBRIVATION "));
-			
+			while (rs.next()) 
+			{
+				branch = new Branches(id, rs.getInt("COLLAGE_ID"), rs.getString("BRANCH_NAME"), rs.getString("BRANCH_ABBRIVATION "));
+			}
+			return branch;
 		}
 		catch (ClassNotFoundException | SQLException e) 
 		{
