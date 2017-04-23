@@ -20,7 +20,7 @@ import utilities.CommonTypes;
 /**
  * Servlet implementation class RemoveItemController
  */
-@WebServlet(urlPatterns = "/RemoveItemController", name = "RemoveItemController")
+@WebServlet(urlPatterns = "/user/RemoveItemController", name = "RemoveItemController")
 
 public class RemoveItemController extends HttpServlet {
 	private static final long serialVersionUID = 1L;

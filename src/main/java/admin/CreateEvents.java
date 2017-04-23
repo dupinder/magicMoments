@@ -29,7 +29,7 @@ import com.google.gson.Gson;
 /**
  * Servlet implementation class CreateEvents
  */
-@WebServlet(urlPatterns = "/CreateEvents", name = "CreateEvents")
+@WebServlet(urlPatterns = "/admin/CreateEvents", name = "CreateEvents")
 @MultipartConfig(fileSizeThreshold=1024*1024*2, // 2MB
 maxFileSize=1024*1024*10,      // 10MB
 maxRequestSize=1024*1024*50)

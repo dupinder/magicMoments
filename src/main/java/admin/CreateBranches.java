@@ -19,7 +19,7 @@ import utilities.StringTools;
 /**
  * Servlet implementation class CreateBranches
  */
-@WebServlet(urlPatterns = "/CreateBranches", name = "CreateBranches")
+@WebServlet(urlPatterns = "/admin/CreateBranches", name = "CreateBranches")
 public class CreateBranches extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

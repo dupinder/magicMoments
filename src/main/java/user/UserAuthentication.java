@@ -124,20 +124,13 @@ public class UserAuthentication
 
 	public static Boolean isUserExisting(String email)
 	{
-		ResultSet rs = isExistingUser(email);
-		try
-		{
-			if(rs == null || rs.next())
-				return true;
-		} 
-		catch (SQLException e)
-		{
-			e.printStackTrace();
-		}
-		return false;
+		UserDetails userDetail = isExistingUser(email);
+		if(userDetail == null)
+			return false;
+		return true;
 	}
 	
-	public static ResultSet isExistingUser(String email)
+	public static UserDetails isExistingUser(String email)
 	{
 		if(!StringTools.isValidEmail(email))
 			return null;
@@ -151,6 +144,14 @@ public class UserAuthentication
 			PreparedStatement pStmt = conn.prepareStatement(SqlIsExistingUser);
 			pStmt.setString(1, email);
 			resultSet = pStmt.executeQuery();
+			if(!resultSet.next())
+				return null;
+			
+			UserDetails ud = new UserDetails();
+			ud.setEmailId(resultSet.getString("EMAIL"));
+			ud.setPassword(resultSet.getString("PASSWORD"));
+			
+			return ud;
 		} 
 		catch (SQLException e) 
 		{
@@ -174,7 +175,7 @@ public class UserAuthentication
 				}
 		}
 
-		return resultSet;
+		return null;
 		
 	}
 	
@@ -184,29 +185,21 @@ public class UserAuthentication
 		if(!StringTools.isValidEmail(email))
 			return actionToTake;
 
-		try {
-			ResultSet resultSet = isExistingUser(email);
-			if (!resultSet.next()) {
-				actionToTake = ACTION_INVALID_USER;
-			} 
-			else 
-			{
-				String password = resultSet.getString("PASSWORD");
-				if (!StringTools.isValidString(password)) 
-				{
-					actionToTake = ACTION_VALID_NEW_USER;
-				} 
-				else
-				{
-					actionToTake = ACTION_VALID_EXSISTING_USER;
-				}
-			}
-
+		UserDetails userDetail = isExistingUser(email);
+		if (userDetail == null) {
+			actionToTake = ACTION_INVALID_USER;
 		} 
-		catch (SQLException e) 
+		else 
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			String password = userDetail.getPassword();
+			if (!StringTools.isValidString(password)) 
+			{
+				actionToTake = ACTION_VALID_NEW_USER;
+			} 
+			else
+			{
+				actionToTake = ACTION_VALID_EXSISTING_USER;
+			}
 		}
 
 		return actionToTake;
@@ -250,19 +243,30 @@ private class OtpManager {
 			pStmt.setString(2, password);
 			ResultSet res = pStmt.executeQuery();
 			
+			if(!res.isBeforeFirst())
+				return false;
+			
 			while (res.next()) {
-				if(res.getString("PASSWORD").toString().equals(password)){
 		
-					HttpSession session = request.getSession();
-				session.setAttribute(CommonTypes.USER_DETAILS_SESSION_KEY, getUserDetails(res.getInt("ID")));
-					authenticationStatus = true;
+				HttpSession session = request.getSession();
+				authenticationStatus = true;
+				
+				if("MM_USER".equals(tableName))
+				{
+					UserDetails ud = getUserDetails(res.getInt("ID"));
+					ud.setLogedInUser(true);
+					session.setAttribute(CommonTypes.USER_DETAILS_SESSION_KEY, ud);
 				}
-				else{
-					authenticationStatus = false;
+				else if("MM_ADMINS".equals(tableName))
+				{
+					Admin admin = new Admin(email, password);
+					session.setAttribute(CommonTypes.AMDIN_SESSION_KEY, admin);
 				}
+				
+				break;
 			}
+			
 			return authenticationStatus;
-	
 		}
 		catch(Exception e)
 		{
@@ -302,19 +306,49 @@ private class OtpManager {
 		ResultSet res = pStmt.executeQuery();
 		if (!res.isBeforeFirst()) 
 		{    
-		    userDetails = new UserDetails();
-		    userDetails.setIsLogedInUser(false);
+			return null;
 		}
 		else
 		{
-			while (res.next()) 
+			while(res.next()) 
 			{
 				Set<String> folderIds = getFolderIds(res.getInt("COLLAGE_ID"), res.getInt("BRANCH_ID"));
 				userDetails = new UserDetails(res.getInt("ID"), res.getString("NAME"), res.getString("EMAIL"), folderIds, res.getInt("COLLAGE_ID"), res.getInt("BRANCH_ID"));
 				userDetails.setIsLogedInUser(true);
+				break;
 			}
 		}
 		return userDetails;
+	}
+	
+	private static Admin getAdminDetails(String adminEmail)
+	{
+		Admin admin = null;
+		try
+		{
+			Connection conn = ConnectionManager.getConnection();
+			String query = "SELECT * FROM MM_ADMIN WHERE EMAIL = ?";
+			PreparedStatement pStmt = conn.prepareStatement(query);
+			pStmt.setString(1, adminEmail);
+			ResultSet res = pStmt.executeQuery();
+			if (!res.isBeforeFirst()) 
+			{    
+				return null;
+			}
+			else
+			{
+				while (res.next()) 
+				{
+					admin = new Admin(res.getString("NAME"), res.getString("PASSWORD"));
+					break;
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return admin;
 	}
 
 	private static Set<String> getFolderIds(int collegeId, int branchId) {

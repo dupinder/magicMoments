@@ -94,14 +94,12 @@
 		</div>	
 	</nav>
 		<div class="container" style="margin-top: 100px;">			
-			<div class="main-container row">
-				<div class="col-xs-12 page-header-text" style="padding-top: 10px;">
-						<span class="text-muted">Welcome, ujjisss@gmail.com</span>
-				</div>
+			<div class="main-container row admin-home-container">
+				
 			</div>
 		</div>
 		
-		<div class="container" style="margin-top: 100px;">			
+		<div class="container" style="margin-top: 20px;">			
 			<div class="main-container row">
 				<div class="col-xs-12">
 					<div class="row content-holder" id="content-loader" style="padding:10px;">						
@@ -113,6 +111,19 @@
 	</body>
 </html>
 
+	<script type="text/x-handlebar-template" id="admin-home">
+		<div class="col-xs-12 page-header-text" style="padding-top: 10px;">
+			<span class="text-muted">Welcome, {{email}}</span>
+		</div>
+		
+		<div class="col-xs-12 page-header-text" style="padding-top: 10px;">
+			<span class="text-muted">Total number of orders: {{totalOders}} worth Rs. {{totalAmount}}</span>
+		</div>
+		
+		<div class="col-xs-12 page-header-text" style="padding-top: 10px;">
+			<span class="text-muted">Total number of Events: {{totalEvents}}</span>
+		</div>
+	</script>
   <script type="text/x-handlebar-template" id="create-event">   
 	<style>
 		.content-loader{
@@ -138,7 +149,7 @@
 			 border-radius: 6px;
 		}
 	</style>
-	<form action="CreateEvents" method="POST" enctype="multipart/form-data" id="createEventForm" >
+	<form action="admin/CreateEvents" method="POST" enctype="multipart/form-data" id="createEventForm" >
 		<div class="panel panel-default create-event-parent">
 	  		<div class="panel-heading">
 	  			<div class="row">
@@ -328,7 +339,7 @@
 						<input type="button" class="form-control create-event-button btn-success create-event" value="Create event" onclick="createEventM()" />
 					</div>		
 					<div class="col-xs-5 col-sm-3 padding-bottom10">
-						<input type="button" class="econtrol reset-fields-button btn-default reset-event" value="Reset" onclick="resetCreateEventFields()"/>
+						<input type="button" class="form-control reset-fields-button btn-default reset-event" value="Reset" onclick="resetCreateEventFields()"/>
 					</div>
 				</div>			
 	  		</div>

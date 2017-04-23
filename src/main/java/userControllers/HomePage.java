@@ -23,7 +23,7 @@ import userAccountManagment.AccountManagmentUtility;
 /**
  * Servlet implementation class HomePage
  */
-@WebServlet(urlPatterns = "/HomePage", name = "HomePage")
+@WebServlet(urlPatterns = "/user/HomePage", name = "HomePage")
 
 public class HomePage extends HttpServlet {
 	private static final long serialVersionUID = 1L;

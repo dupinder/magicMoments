@@ -1,10 +1,41 @@
 
 $(document).ready(function(){
 	showSpinner(true);
+	getAdminHomeData();
 	contentLoader = $('.content-holder');
 	compileAllTemplates();
+	showSpinner(false);
 });
 
+function AdminData(email, totalOders, totalAmount, totalEvents){
+	this.email = email;
+	this.totalOrders = totalOders;
+	this.totalAmount = totalAmount;
+	this.totalEvents = totalEvents;
+	this.jsonData = () => JSON.stringify(this);
+}
+
+function getAdminHomeData(){
+	$.ajax({
+		url: 'admin/adminHomeData',
+		type: 'GET',
+		success: function(response){
+			if(response == "")
+			{
+				windoe.location.href = "AdminLogin.html";
+			}	
+			else
+			{
+				var adminData = JSON.parse(response);
+				var ad = new AdminData(adminData.email, adminData.totalOrders, adminData.totalOderAmount, adminData.totalEvents);
+				loadTemplate($('.admin-home-container'), 'admin-home', JSON.parse(ad.jsonData()));
+			}
+		},
+		failure: function(error){
+			
+		}
+	});
+}
 function showSpinner(show){
 	if(show)
 		$('.spinner-main').css('width', '100%');
@@ -18,7 +49,9 @@ function showDropdownOptions(selector){
 }
 
 function showCreateEventView(){
+	showSpinner(true);
 	getAllRequiredData();
+	showSpinner(false);
 }
 
 function showPanel(target, source, itemToDisable){
@@ -89,9 +122,9 @@ function createCollege(){
 	var address = parent.find('.college-address').val();
 	var abbreviation = parent.find('.college-abbreviation').val();
 	var pincode = parent.find('.pincode').val();
-	
+	showSpinner(true);
 	$.ajax({
-		url: 'CreateCollege',
+		url: 'admin/CreateCollege',
 		type: 'POST',
 		data: {collegeName: name, address: address, abbreviation: abbreviation, pincode: pincode},
 		success: function(response){
@@ -127,9 +160,10 @@ function createCollege(){
 			{
 				var cause = response['cause'];
 			}
+			showSpinner(false);
 		},
 		failure: function(error){
-			
+			showSpinner(false);
 		},
 	});
 }
@@ -139,11 +173,14 @@ function createBranch(){
 	var name = parent.find('.branch-name').val();
 	var abbreviation = parent.find('.branch-abbreviation').val();
 	var collegeId = $('select.college-list').val();
+	
+	showSpinner(true);
 	$.ajax({
-		url: 'CreateBranch',
+		url: 'admin/CreateBranch',
 		type: 'POST',
 		data: {name: name, abbreviation: abbreviation, collegeId: collegeId},
 		success: function(response){
+			showSpinner(false);
 			response = JSON.parse(response);
 			var result = response['result'];
 			if(result == "true")
@@ -178,7 +215,7 @@ function createBranch(){
 			}
 		},
 		failure: function(error){
-			
+			showSpinner(false);
 		},
 	});
 }
@@ -207,7 +244,7 @@ var eventData;
 function getAllRequiredData(){
 	showSpinner(true);
 	$.ajax({
-		url: 'GetAllRequiredDataForEvents',
+		url: 'admin/GetAllRequiredDataForEvents',
 		type: 'GET',
 		success: function(response){
 			showSpinner(false);

@@ -19,7 +19,7 @@ import utilities.StringTools;
 /**
  * Servlet implementation class CreateCollages
  */
-@WebServlet(urlPatterns = "/CreateCollages", name = "CreateCollages")
+@WebServlet(urlPatterns = "/admin/CreateCollages", name = "CreateCollages")
 public class CreateCollages extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

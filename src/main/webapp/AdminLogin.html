@@ -147,20 +147,30 @@
 			</div>
 	</body>
 	
+	<div class="spinner-main" style="width: 0;">
+		<div class="spinner">
+			<div class="double-bounce1"></div>
+		 	<div class="double-bounce2"></div>
+		</div>	
+	</div>
+	
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$('.signin').click(function(){
+				showSpinner(true);
 				$.ajax({
 					url: 'AdminSignin',
 					data: {email: $('input.email').val().trim(), password: $('input.password').val().trim()},
 					type: 'POST',
 					success: function(response){
+						showSpinner(false);
 						if(response == "true")
 							showAdminHome();
 						else
 							showError("Whoah..Something went wrong..!!");
 					},
 					failure: function(error){
+						showSpinner(false);
 						showError("Whoah..Something went wrong..!!");
 					}
 				});

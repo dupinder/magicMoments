@@ -18,7 +18,7 @@ import user.CollageInfo;
 /**
  * Servlet implementation class CreateCollages
  */
-@WebServlet(urlPatterns = "/CreateCollage", name = "CreateCollage")
+@WebServlet(urlPatterns = "/admin/CreateCollage", name = "CreateCollage")
 public class CreateCollege extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

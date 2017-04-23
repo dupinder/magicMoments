@@ -23,7 +23,7 @@ import utilities.CommonTypes;
  * Servlet implementation class AddToCartOrWishlist
  */
  
- @WebServlet(urlPatterns = "/AddItemController", name = "AddItemController")
+ @WebServlet(urlPatterns = "/user/AddItemController", name = "AddItemController")
  
  
 public class AddItemController extends HttpServlet {

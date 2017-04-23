@@ -18,7 +18,7 @@ import com.google.gson.Gson;
 /**
  * Servlet implementation class CreateBranch
  */
-@WebServlet(urlPatterns = "/CreateBranch", name = "CreateBranch")
+@WebServlet(urlPatterns = "/admin/CreateBranch", name = "CreateBranch")
 public class CreateBranch extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
