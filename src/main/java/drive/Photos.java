@@ -5,12 +5,13 @@ public class Photos {
 	private String photoId;
 	private String photoName;
 	private String photoUrl;
+	private String photoThumbnailUrl;
 	private String photoDiscription;
 	private String createdDate;
 	private String deletedDate;
 	private String photoPrice;
 	
-	public Photos(String photoId, String photoName, String photoUrl, String photoDiscription, String createdDate, String deletedDate, String photoPrice){
+	public Photos(String photoId, String photoName, String photoUrl, String photoDiscription, String createdDate, String deletedDate, String photoPrice, String photoThumbnailUrl){
 		
 		this.photoId = photoId;
 		this.photoName = photoName;
@@ -18,7 +19,8 @@ public class Photos {
 		this.photoDiscription = photoDiscription;
 		this.createdDate = createdDate;
 		this.deletedDate = deletedDate;
-		this.photoPrice = photoPrice;
+		this.setPhotoPrice(photoPrice);
+		this.setPhotoThumbnailUrl(photoThumbnailUrl);
 	}
 	
 	public String getPhotoId() {
@@ -56,6 +58,22 @@ public class Photos {
 	}
 	public void setDeletedDate(String deletedDate) {
 		this.deletedDate = deletedDate;
+	}
+
+	public String getPhotoPrice() {
+		return photoPrice;
+	}
+
+	public void setPhotoPrice(String photoPrice) {
+		this.photoPrice = photoPrice;
+	}
+
+	public String getPhotoThumbnailUrl() {
+		return photoThumbnailUrl;
+	}
+
+	public void setPhotoThumbnailUrl(String photoThumbnailUrl) {
+		this.photoThumbnailUrl = photoThumbnailUrl;
 	}
 
 

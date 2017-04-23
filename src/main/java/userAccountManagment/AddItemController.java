@@ -50,12 +50,13 @@ public class AddItemController extends HttpServlet {
 		int userId = user.getId();
 		int type = Integer.parseInt(request.getParameter("photoType"));
 		String photoId = request.getParameter("photoId");
-
+		int quantity = Integer.parseInt(request.getParameter("photoQuantity"));
 		PhotosBag photoBag = new PhotosBag();
 		
 		photoBag.setPhotoId(photoId);
 		photoBag.setUserId(userId);
 		photoBag.setType(type);
+		photoBag.setQuantity(quantity);
 		
 		Map<String, String> ItemAddStatus = new HashMap<String, String>();
 		if(AccountManagmentUtility.SaveAddToCartPhotos(photoBag))

@@ -195,7 +195,7 @@ public class DriveCommunications {
      * @param folderId
      * @throws IOException
      */
-    public Map<String, List<Photos>> fetchEventPhotos(Set<String> folderIds) throws IOException{
+    public Map<String, List<Photos>> fetchEventPhotosMap(Set<String> folderIds) throws IOException{
     	
     	Map<String, List<Photos>> ListOfFolder = new HashMap<String, List<Photos>>();
     	
@@ -214,7 +214,7 @@ public class DriveCommunications {
     		    	 
     		         for (File file : files) {
     		        	 System.out.println(file.getWebViewLink());
-    		        	 photos.add(new Photos(file.getId(), file.getName(), getWebContentLink(file), file.getDescription(), file.getCreatedTime().toString(), file.getCreatedTime().toString(), "50")); 
+    		        	 photos.add(new Photos(file.getId(), file.getName(), getWebContentLink(file), file.getDescription(), file.getCreatedTime().toString(), file.getCreatedTime().toString(), "50", getImageThumbnail(file.getId()))); 
     		         }
     		         
     		     }
@@ -222,6 +222,30 @@ public class DriveCommunications {
 		}
     	
 		return ListOfFolder;
+    }
+   
+ public List<Photos> fetchEventPhotos(Set<String> folderIds) throws IOException{
+    	
+    	List<Photos> ListOfPhotos = new LinkedList<Photos>();
+    	for (String folderId : folderIds) {
+    		FileList result = SERVICE.files().list()
+    		          .setQ("'"+folderId+"' in parents")
+    		          .setSpaces("drive")
+    		          .setFields("nextPageToken, files(id, name, originalFilename, description, mimeType, webContentLink, createdTime, webViewLink)")
+    		          .execute();
+    		     List<File> files = result.getFiles();
+    		     if (files == null || files.size() == 0) {
+    		         //System.out.println("No files found.");
+    		     } else {
+    		    	 
+    		         for (File file : files) {
+    		        	 System.out.println(file.getWebViewLink());
+    		        	 ListOfPhotos.add(new Photos(file.getId(), file.getName(), getWebContentLink(file), file.getDescription(), file.getCreatedTime().toString(), file.getCreatedTime().toString(), "50", getImageThumbnail(file.getId()))); 
+    		         }
+    		     }
+		}
+    	
+		return ListOfPhotos;
     }
     
     private String getWebContentLink(File file) {
@@ -262,7 +286,7 @@ public class DriveCommunications {
  * @return
  * @throws IOException
  */
-	private String getEventThumbnail(Drive service, String folderId) throws IOException {
+	public static String getEventThumbnail(Drive service, String folderId) throws IOException {
 		String EventThumbnail = "";
 		
 		FileList result = service.files().list()
@@ -290,7 +314,7 @@ public class DriveCommunications {
 	 * @param id
 	 * @return
 	 */
-	private String getImageThumbnail(String id) {
+	public static String getImageThumbnail(String id) {
 		return "https://drive.google.com/thumbnail?sz=w300-h400&id="+id;
 	}
 

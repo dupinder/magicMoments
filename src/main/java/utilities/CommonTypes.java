@@ -1,5 +1,7 @@
 package utilities;
 
+import javax.servlet.http.HttpSession;
+
 public class CommonTypes {
 	
 	public static final int NOT_VALID_USER = -1;
@@ -11,4 +13,8 @@ public class CommonTypes {
 	public static final int BAG_TYPE_WISHLIST = 0;
 	public static final int BAG_TYPE_FAVOURIT = 1;
 	public static final int BAG_TYPE_CART = 2;
+	public static final String CONFIGURATION_PHOTO_PRICE_KEY = "photoPrice";
+	public static final String CONFIGURATION_PHOTO_DAYS_TO_DELIVER = "photoDaysToDeliver";
+	
+
 }

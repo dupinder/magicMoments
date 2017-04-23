@@ -47,12 +47,12 @@ public class HomePage extends HttpServlet {
 
 		if(userDetails.getIsLogedInUser() && userDetails.getFolderId() != null)
 		{
-			Map<String, List<Photos>> photos = driveService.fetchEventPhotos(userDetails.getFolderId());			
+			Map<String, List<Photos>> photos = driveService.fetchEventPhotosMap(userDetails.getFolderId());			
 			userStatus.put("result", "true");
 			userStatus.put("dataUser", new Gson().toJson(userDetails));
 			userStatus.put("dataPhotoList", new Gson().toJson(photos));
 			userStatus.put("dataItemCountsBasedOnType", new Gson().toJson(AccountManagmentUtility.getCountBasedOnType(AccountManagmentUtility.getPhotosInBag(request.getSession()))));
-			response.getWriter().write(new Gson().toJson(userDetails));
+			response.getWriter().write(new Gson().toJson(userStatus));
 		}
 		else
 		{

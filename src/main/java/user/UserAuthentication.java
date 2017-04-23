@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -296,7 +297,7 @@ private class OtpManager {
 		return userDetails;
 	}
 
-	private static UserDetails getUserDetails(int userId) throws ClassNotFoundException, SQLException 
+	public static UserDetails getUserDetails(int userId) throws ClassNotFoundException, SQLException 
 	{
 		UserDetails userDetails = null;
 		Connection conn = ConnectionManager.getConnection();
@@ -354,7 +355,7 @@ private class OtpManager {
 	private static Set<String> getFolderIds(int collegeId, int branchId) {
 		
 		String SqlSelectUserFolders = "SELECT FOLDER_ID FROM MM_EVENT WHERE COLLAGE_ID = ? AND BRANCH_ID = ?";
-		Set<String> userFolderIds = null;
+		Set<String> userFolderIds = new HashSet<String>();
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement pStmt = conn.prepareStatement(SqlSelectUserFolders);
