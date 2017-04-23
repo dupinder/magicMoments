@@ -272,7 +272,7 @@ public class DriveCommunications {
            } else {
                //System.out.println("Files:");
                for (File file : files) {
-            	   Event event = new Event(file.getId(), file.getName(), getEventThumbnail(service, file.getId()), file.getDescription(), file.getCreatedTime().toString(), file.getCreatedTime().toString());
+            	   Event event = new Event(file.getId(), file.getName(), getEventThumbnail(file.getId()), file.getDescription(), file.getCreatedTime().toString(), file.getCreatedTime().toString());
             	   events.add(event);
                }
            }
@@ -286,10 +286,10 @@ public class DriveCommunications {
  * @return
  * @throws IOException
  */
-	public static String getEventThumbnail(Drive service, String folderId) throws IOException {
+	public static String getEventThumbnail(String folderId) throws IOException {
 		String EventThumbnail = "";
 		
-		FileList result = service.files().list()
+		FileList result = SERVICE.files().list()
           .setPageSize(1)
           .setQ("'"+folderId+"' in parents")
           .setSpaces("drive")

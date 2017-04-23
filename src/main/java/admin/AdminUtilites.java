@@ -25,6 +25,7 @@ import user.UserAuthentication;
 import user.UserDetails;
 import utilities.StringTools;
 import connection.ConnectionManager;
+import drive.DriveCommunications;
 
 public class AdminUtilites {
 
@@ -273,6 +274,81 @@ public class AdminUtilites {
 				return true;
 		
 		return false;
-	}	
+	}
+	
+	
+	public static CollageInfo getCollegeDetail(int id)
+	{		
+		String selectCollageDetail = "SELECT * FROM MM_COLLAGE WHERE ID = ?";
+		
+		try {
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement pStmt = conn.prepareStatement(selectCollageDetail);
+			pStmt.setInt(1, id);
+			ResultSet rs = pStmt.executeQuery();
+			
+			return new CollageInfo(rs.getString("COLLAGE_NAME"), rs.getString("COLLAGE_LOCATION"), id , rs.getString("COLLAGE_PINCODE"), rs.getString("COLLAGE_ABBREVATION"), rs.getString("COLLAGE_ADDRESS")); 			
+			
+		}
+		catch (ClassNotFoundException | SQLException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
+
+	}
+	
+	public static Branches getBranchDetail(int id)
+	{		
+		String selectBranchDetail = "SELECT * FROM MM_BRANCH WHERE ID = ?";
+		
+		try {
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement pStmt = conn.prepareStatement(selectBranchDetail);
+			pStmt.setInt(1, id);
+			ResultSet rs = pStmt.executeQuery();
+			
+			return new Branches(id, rs.getInt("COLLAGE_ID"), rs.getString("BRANCH_NAME"), rs.getString("BRANCH_ABBRIVATION "));
+			
+		}
+		catch (ClassNotFoundException | SQLException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}		
+
+	}
+	
+	
+	public static Event getEventDetail(int collegeId, int branchId)
+	{		
+		String selectEventDetail = "SELECT * FROM MM_BRANCH WHERE COLLAGE_ID = ? AND BRANCH_ID = ?";
+		
+		try 
+		{
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement pStmt = conn.prepareStatement(selectEventDetail);
+			pStmt.setInt(1, collegeId);
+			pStmt.setInt(2, branchId);
+			
+			ResultSet rs = pStmt.executeQuery();
+	
+			return new Event(rs.getString("EVENT_NAME"), rs.getString("EVENT_DISCRIPTION"), rs.getTimestamp("EVENT_START"), rs.getTimestamp("EVENT_END"), rs.getTimestamp("EVENT_DATA_DELETE"), collegeId, branchId, rs.getString("FOLDER_ID"), rs.getInt("ID"), DriveCommunications.getEventThumbnail(rs.getString("FOLDER_ID")));
+		
+		}
+		catch (ClassNotFoundException | SQLException | IOException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}		
+
+	}
+	
+	
+	
 
 }

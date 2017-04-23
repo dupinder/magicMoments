@@ -12,11 +12,12 @@ public class Event {
 	private int collageId;
 	private int branchId;
 	private String folderId;
+	private String eventThumbnailURL;
 	private int id;
 	
 	
 	public Event(String name, String discription, Timestamp startDate, Timestamp endDate, Timestamp dataDelete,
-			int collageId, int branchId, String folderId, int id) 
+			int collageId, int branchId, String folderId, int id, String eventThumbnailURL) 
 	{
 		this.name = name;
 		this.discription = discription;
@@ -27,12 +28,13 @@ public class Event {
 		this.branchId = branchId;
 		this.folderId = folderId;
 		this.id = id;
+		this.eventThumbnailURL = eventThumbnailURL;
 	}
+	
 	public Event()
 	{
 		super();
 	}
-	
 
 	public int getId() 
 	{
@@ -103,5 +105,11 @@ public class Event {
 	}
 	public void setFolderId(String folderId) {
 		this.folderId = folderId;
+	}
+	public String getEventThumbnailURL() {
+		return eventThumbnailURL;
+	}
+	public void setEventThumbnailURL(String eventThumbnailURL) {
+		this.eventThumbnailURL = eventThumbnailURL;
 	}	
 }
