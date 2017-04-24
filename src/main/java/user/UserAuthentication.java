@@ -277,7 +277,7 @@ private class OtpManager {
 	
 	public static UserDetails getCurrentUser(HttpSession session)
 	{
-		UserDetails userDetails = new UserDetails();
+		UserDetails userDetails = null;
 		if(session.getAttribute(CommonTypes.USER_DETAILS_SESSION_KEY) != null)
 		{
 			try 
@@ -291,7 +291,7 @@ private class OtpManager {
 		}
 		else
 		{
-			userDetails.setIsLogedInUser(false);
+			return null;
 		}
 		
 		return userDetails;

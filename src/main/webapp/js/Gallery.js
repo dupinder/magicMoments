@@ -27,26 +27,85 @@ var contentLoader = $('#content-loader');
 var selectedImages = [];
 
 $('document').ready(function(){
-
-	setTimeout(showSpinner(true), 2000);
-	showSpinner(false);
 	compileAllTemplates();
-	/*jQuery.getJSON('').then(function(promiseObejct){
-		console.log(promiseObejct.stringify());
-	});*/
-	
 	showHome();
 });	
 
+
+function Photo(photoId, photoName, photoUrl, photoDiscription, createdDate, deletedDate, photoPrice, photoThumbnailUrl){
+	this.id = photoId;
+	this.name = photoName;
+	this.url = photoUrl;
+	this.thumbnailUrl = photoThumbnailUrl;
+	this.desc = photoDiscription;
+	this.createDate = createdDate;
+	this.deleteDate = deletedDate;
+	this.price = photoPrice;
+	this.jsonData = () => JSON.stringify(this);
+}
+
+function Event(id, eventThumbnailURL, folderId, branchName, collegeName, dataDelete, endDate, startDate, discription, name){
+	this.id = id;
+	this.eventThumbnailURL = eventThumbnailURL;
+	this.folderId = folderId;
+	this.branchName = branchName;
+	this.collegeName = collegeName;
+	this.dataDelete = dataDelete;
+	this.endDate = endDate;
+	this.startDate = startDate;
+	this.discription = discription;
+	this.name = name;
+}
+
+function UserData(events){
+	this.events = events;
+	this.jsonData = () => JSON.stringify(this);
+}
+
 function showHome(){
-	loadTemplate(contentLoader, 'folders', folderData);
+	showSpinner(true);
+	$.ajax({
+		url: 'user/HomePage',
+		type: 'POST',
+		success: function(response){
+			if(response != "")
+			{
+				response = JSON.parse(response);
+				var result = response.result;
+				
+				var userData = JSON.parse(response.dataUser);
+				var events = JSON.parse(response.events);
+				var dataItemCountsBasedOnType = response.dataItemCountsBasedOnType;
+				
+				var allEvents = [];
+				if(Array.isArray(events))
+				{
+					for(event of events)
+					{
+						var ev = new Event(event.id, event.eventThumbnailURL, event.folderId, userData.branchName, userData.collegeName, event.dataDelete, event.endDate, event.startDate, event.discription, event.name);
+						allEvents.push(ev);
+					}
+				}	
+				
+				var ud = new UserData(allEvents);
+				loadTemplate(contentLoader, 'folders', JSON.parse(ud.jsonData()));
+			}	
+			else
+			{
+				var homeData = JSON.parse(response);
+			}
+			showSpinner(false);
+		},
+		failure: function(error){
+			showSpinner(false);
+		}
+	});
 }		
 
 function navigateToPhotos(id){
-	//$('div.parent-grid').not('#'+id).fadeOut();	
-	/*jQuery.getJSON('').then(function(promiseObejct){
+	jQuery.getJSON('').then(function(promiseObejct){
 		console.log(promiseObejct.stringify());
-	});*/
+	});
 	loadTemplate(contentLoader, 'gallery-home', folderData);
 }
 

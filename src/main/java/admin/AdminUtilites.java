@@ -315,7 +315,7 @@ public class AdminUtilites {
 			ResultSet rs = pStmt.executeQuery();
 			while (rs.next()) 
 			{
-				branch = new Branches(id, rs.getInt("COLLAGE_ID"), rs.getString("BRANCH_NAME"), rs.getString("BRANCH_ABBRIVATION "));
+				branch = new Branches(id, rs.getInt("COLLAGE_ID"), rs.getString("BRANCH_NAME"), rs.getString("BRANCH_ABBRIVATION"));
 			}
 			return branch;
 		}
@@ -329,9 +329,9 @@ public class AdminUtilites {
 	}
 	
 	
-	public static Event getEventDetail(int collegeId, int branchId)
+	public static List<Event> getEventDetail(int collegeId, int branchId)
 	{		
-		String selectEventDetail = "SELECT * FROM MM_BRANCH WHERE COLLAGE_ID = ? AND BRANCH_ID = ?";
+		String selectEventDetail = "SELECT * FROM MM_EVENT WHERE COLLAGE_ID = ? AND BRANCH_ID = ?";
 		
 		try 
 		{
@@ -341,9 +341,14 @@ public class AdminUtilites {
 			pStmt.setInt(2, branchId);
 			
 			ResultSet rs = pStmt.executeQuery();
-	
-			return new Event(rs.getString("EVENT_NAME"), rs.getString("EVENT_DISCRIPTION"), rs.getTimestamp("EVENT_START"), rs.getTimestamp("EVENT_END"), rs.getTimestamp("EVENT_DATA_DELETE"), collegeId, branchId, rs.getString("FOLDER_ID"), rs.getInt("ID"), DriveCommunications.getEventThumbnail(DriveCommunications.getDriveService(), rs.getString("FOLDER_ID")));
-		
+			List<Event> events = new LinkedList<Event>();
+			while(rs.next())
+			{
+				Event event = new Event(rs.getString("EVENT_NAME"), rs.getString("EVENT_DISCRIPTION"), rs.getTimestamp("EVENT_START"), rs.getTimestamp("EVENT_END"), rs.getTimestamp("EVENT_DATA_DELETE"), collegeId, branchId, rs.getString("FOLDER_ID"), rs.getInt("ID"), DriveCommunications.getEventThumbnail(DriveCommunications.getDriveService(), rs.getString("FOLDER_ID")));
+				events.add(event);
+			}
+			
+			return events;
 		}
 		catch (ClassNotFoundException | SQLException | IOException e) 
 		{
@@ -353,14 +358,4 @@ public class AdminUtilites {
 		}		
 
 	}
-
-	public static List<Eventpresenter> getListOfAllEvents() {
-
-		
-		return null;
-	}
-	
-	
-	
-
 }
