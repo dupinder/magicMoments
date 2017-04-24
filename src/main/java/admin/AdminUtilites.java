@@ -342,7 +342,7 @@ public class AdminUtilites {
 			
 			ResultSet rs = pStmt.executeQuery();
 	
-			return new Event(rs.getString("EVENT_NAME"), rs.getString("EVENT_DISCRIPTION"), rs.getTimestamp("EVENT_START"), rs.getTimestamp("EVENT_END"), rs.getTimestamp("EVENT_DATA_DELETE"), collegeId, branchId, rs.getString("FOLDER_ID"), rs.getInt("ID"), DriveCommunications.getEventThumbnail(rs.getString("FOLDER_ID")));
+			return new Event(rs.getString("EVENT_NAME"), rs.getString("EVENT_DISCRIPTION"), rs.getTimestamp("EVENT_START"), rs.getTimestamp("EVENT_END"), rs.getTimestamp("EVENT_DATA_DELETE"), collegeId, branchId, rs.getString("FOLDER_ID"), rs.getInt("ID"), DriveCommunications.getEventThumbnail(DriveCommunications.getDriveService(), rs.getString("FOLDER_ID")));
 		
 		}
 		catch (ClassNotFoundException | SQLException | IOException e) 
@@ -352,6 +352,12 @@ public class AdminUtilites {
 			return null;
 		}		
 
+	}
+
+	public static List<Eventpresenter> getListOfAllEvents() {
+
+		
+		return null;
 	}
 	
 	

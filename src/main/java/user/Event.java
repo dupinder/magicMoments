@@ -4,16 +4,16 @@ import java.sql.Timestamp;
 
 public class Event {
 
-	private String name;
-	private String discription;
-	private Timestamp startDate;
-	private Timestamp endDate;
-	private Timestamp dataDelete;
-	private int collageId;
-	private int branchId;
-	private String folderId;
-	private String eventThumbnailURL;
-	private int id;
+	protected String name;
+	protected String discription;
+	protected Timestamp startDate;
+	protected Timestamp endDate;
+	protected Timestamp dataDelete;
+	protected int collageId;
+	protected int branchId;
+	protected String folderId;
+	protected String eventThumbnailURL;
+	protected int id;
 	
 	
 	public Event(String name, String discription, Timestamp startDate, Timestamp endDate, Timestamp dataDelete,
@@ -112,4 +112,7 @@ public class Event {
 	public void setEventThumbnailURL(String eventThumbnailURL) {
 		this.eventThumbnailURL = eventThumbnailURL;
 	}	
+	
 }
+ 
+
