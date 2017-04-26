@@ -31,19 +31,6 @@ $('document').ready(function(){
 	showHome();
 });	
 
-
-function Photo(photoId, photoName, photoUrl, photoDiscription, createdDate, deletedDate, photoPrice, photoThumbnailUrl){
-	this.id = photoId;
-	this.name = photoName;
-	this.url = photoUrl;
-	this.thumbnailUrl = photoThumbnailUrl;
-	this.desc = photoDiscription;
-	this.createDate = createdDate;
-	this.deleteDate = deletedDate;
-	this.price = photoPrice;
-	this.jsonData = () => JSON.stringify(this);
-}
-
 function Event(id, eventThumbnailURL, folderId, branchName, collegeName, dataDelete, endDate, startDate, discription, name){
 	this.id = id;
 	this.eventThumbnailURL = eventThumbnailURL;
@@ -57,7 +44,7 @@ function Event(id, eventThumbnailURL, folderId, branchName, collegeName, dataDel
 	this.name = name;
 }
 
-function UserData(events){
+function UserData(events, photos){
 	this.events = events;
 	this.jsonData = () => JSON.stringify(this);
 }
@@ -88,7 +75,7 @@ function showHome(){
 				}	
 				
 				var ud = new UserData(allEvents);
-				loadTemplate(contentLoader, 'folders', JSON.parse(ud.jsonData()));
+				loadTemplate(contentLoader, 'events', JSON.parse(ud.jsonData()));
 			}	
 			else
 			{
@@ -102,11 +89,50 @@ function showHome(){
 	});
 }		
 
-function navigateToPhotos(id){
-	jQuery.getJSON('').then(function(promiseObejct){
-		console.log(promiseObejct.stringify());
+function PhotoPrenter(photos, eventName){
+	this.photos = photos;
+	this.eventName = eventName;
+	this.jsonData = () => JSON.stringify(this);
+}
+
+function Photo(photoId, photoName, photoUrl, photoDiscription, createdDate, deletedDate, photoPrice, photoThumbnailUrl, eventName){
+	this.formatDate = function(date){
+		var dateStringSplitted = Date(createdDate).toString().split(" "); 
+		return dateStringSplitted[2] + ' '+ dateStringSplitted[1] + ' ' + dateStringSplitted[3];
+	};
+	this.id = photoId;
+	this.name = photoName;
+	this.url = photoUrl;
+	this.thumbnailUrl = photoThumbnailUrl;
+	this.desc = photoDiscription;
+	this.createDate = this.formatDate(createdDate);
+	this.deleteDate = this.formatDate(deletedDate);
+	this.price = photoPrice;
+	this.eventName = eventName;
+	this.jsonData = () => JSON.stringify(this);
+}
+
+function navigateToPhotos(folderId, eventName){
+	sendAjax('user/getEventPhotos', 'POST', {folderId:folderId}, function(response){
+		if(response != "")
+		{
+			var photos = JSON.parse(response);
+			if(Array.isArray(photos))
+			{
+				var allPhotos = [];
+				for(photo of photos)
+				{
+					var ph = new Photo(photo.photoId,photo.photoName,photo.photoUrl,photo.photoDiscription,photo.createdDate,photo.deletedDate,photo.photoPrice,photo.photoThumbnailUrl);
+					allPhotos.push(ph);
+				}
+				
+				var photoPrenter = new PhotoPrenter(allPhotos, eventName);
+				loadTemplate(contentLoader, 'gallery-home', JSON.parse(photoPrenter.jsonData()));
+			}	
+		}	
+	}, function(error){
+		
 	});
-	loadTemplate(contentLoader, 'gallery-home', folderData);
 }
 
 //function compileAllTemplates(){
@@ -135,9 +161,8 @@ function navigateToPhotos(id){
 function addToCart(imageId){
 
 	var selectedPhotosData = selectedPhotos.photos;
-
-
 	var selectedImageElement = $('#' + imageId + ' .addImageIcon');
+	
 	if(selectedImageElement.hasClass('fa-plus'))
 	{
 		selectedImageElement.removeClass('fa-plus').addClass('fa-check');	
@@ -218,11 +243,4 @@ function closeImage(){
 
 function showLogoutOption(){
 	$('.logout-option').show();
-}
-
-function showSpinner(show){
-	if(show)
-		$('.spinner-main').css('width', '100%');
-	else
-		$('.spinner-main').css('width', '0');
 }

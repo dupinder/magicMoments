@@ -1,9 +1,6 @@
 package userAccountManagment;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -13,26 +10,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.google.gson.Gson;
-
-import user.PhotosBag;
 import user.UserDetails;
 import utilities.CommonTypes;
+
+import com.google.gson.Gson;
 
 /**
  * Servlet implementation class AddToCartOrWishlist
  */
  
- @WebServlet(urlPatterns = "/user/AddItemController", name = "AddItemController")
- 
- 
-public class AddItemController extends HttpServlet {
+@WebServlet(urlPatterns = "/user/addToCart", name = "AddToCartController")
+public class AddToCartController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AddItemController() {
+    public AddToCartController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -48,32 +42,16 @@ public class AddItemController extends HttpServlet {
 		HttpSession session = request.getSession();
 		UserDetails user = (UserDetails)session.getAttribute(CommonTypes.USER_DETAILS_SESSION_KEY);
 		int userId = user.getId();
-		int type = Integer.parseInt(request.getParameter("photoType"));
 		String photoId = request.getParameter("photoId");
-		int quantity = Integer.parseInt(request.getParameter("photoQuantity"));
-		PhotosBag photoBag = new PhotosBag();
 		
-		photoBag.setPhotoId(photoId);
-		photoBag.setUserId(userId);
-		photoBag.setType(type);
-		photoBag.setQuantity(quantity);
-		
-		Map<String, String> ItemAddStatus = new HashMap<String, String>();
-		if(AccountManagmentUtility.SaveAddToCartPhotos(photoBag))
+		if(utilities.StringTools.isValidString(photoId))
 		{
-			List<PhotosBag> photosBag = AccountManagmentUtility.getPhotosInBag(request.getSession());
-			ItemAddStatus.put("result", "true");
-			ItemAddStatus.put("dataItemsInBag", new Gson().toJson(photosBag));		
-			ItemAddStatus.put("dataItemCountsBasedOnType", new Gson().toJson(AccountManagmentUtility.getCountBasedOnType(photosBag)));
-		}
-		else
-		{
-			ItemAddStatus.put("result", "false");
+			ManageUserItems manageUserItem = new ManageUserItems();
+			Map<String, String> status = manageUserItem.addToBagage(photoId, CommonTypes.BAG_TYPE_CART, userId);
+			response.getWriter().write(new Gson().toJson(status));	
 		}
 		
-		response.getWriter().write(new Gson().toJson(ItemAddStatus));	
-
-		
+		response.getWriter().write(String.valueOf(false));	
 	}
 
 

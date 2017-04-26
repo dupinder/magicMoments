@@ -33,9 +33,8 @@ public class DriveCommunications {
 	 */
 	public static Drive SERVICE = null;
 	
-	
 	public DriveCommunications() throws IOException {
-		SERVICE = getDriveService();
+		SERVICE = DRIVE_SERVICE;
 	}
 	
 	/** Application name. */
@@ -51,6 +50,8 @@ public class DriveCommunications {
     /** Global instance of the JSON factory. */
     private static final JsonFactory JSON_FACTORY =
         JacksonFactory.getDefaultInstance();
+    
+    
 
     /** Global instance of the HTTP transport. */
     private static HttpTransport HTTP_TRANSPORT;
@@ -65,10 +66,12 @@ public class DriveCommunications {
 
    // private static Drive service = getGoogleDriveService();
     
+    public static Drive DRIVE_SERVICE = null;
     static {
         try {
             HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
             DATA_STORE_FACTORY = new FileDataStoreFactory(DATA_STORE_DIR);
+            DRIVE_SERVICE = getDriveService();
         } catch (Throwable t) {
             t.printStackTrace();
             System.exit(1);
@@ -119,11 +122,11 @@ public class DriveCommunications {
      * @return an authorized Drive client service
      * @throws IOException
      */
-    public static Drive getDriveService(){
+    private static Drive getDriveService(){
         Credential credential;
 		try {
 			credential = authorize();
-	        return new Drive.Builder(
+			return new Drive.Builder(
 	                HTTP_TRANSPORT, JSON_FACTORY, credential)
 	                .setApplicationName(APPLICATION_NAME)
 	                .build();
@@ -133,6 +136,11 @@ public class DriveCommunications {
 			return null;
 		}
 
+    }
+    
+    public static Drive getGoogleDriveService()
+    {
+    	return DRIVE_SERVICE;
     }
 
 
@@ -203,34 +211,43 @@ public class DriveCommunications {
      * @param folderId
      * @throws IOException
      */
-    public Map<String, List<Photos>> fetchEventPhotosMap(Set<String> folderIds) throws IOException{
+    public Map<String, List<Photos>> fetchEventPhotosMap(Set<String> folderIds) throws IOException
+    {
     	
-    	Map<String, List<Photos>> ListOfFolder = new HashMap<String, List<Photos>>();
-    	
-    	for (String folderId : folderIds) {
-        	
-        	List<Photos> photos = new ArrayList<Photos>();
-    		FileList result = SERVICE.files().list()
-    		          .setQ("'"+folderId+"' in parents")
-    		          .setSpaces("drive")
-    		          .setFields("nextPageToken, files(id, name, originalFilename, description, mimeType, webContentLink, createdTime, webViewLink)")
-    		          .execute();
-    		     List<File> files = result.getFiles();
-    		     if (files == null || files.size() == 0) {
-    		         //System.out.println("No files found.");
-    		     } else {
-    		    	 
-    		         for (File file : files) {
-    		        	 System.out.println(file.getWebViewLink());
-    		        	 photos.add(new Photos(file.getId(), file.getName(), getWebContentLink(file), file.getDescription(), file.getCreatedTime().toString(), file.getCreatedTime().toString(), "50", getImageThumbnail(file.getId()))); 
-    		         }
-    		         
-    		     }
-    		    	ListOfFolder.put(folderId, photos);
+    	Map<String, List<Photos>> listOfFolder = new HashMap<String, List<Photos>>();
+    	for (String folderId : folderIds) 
+    	{
+    		 listOfFolder.put(folderId, fetchEventPhotosMap(folderId));
 		}
     	
-		return ListOfFolder;
+		return listOfFolder;
     }
+    
+    public List<Photos> fetchEventPhotosMap(String folderId) throws IOException
+    {
+    	List<Photos> photos = new ArrayList<Photos>();
+		FileList result = SERVICE.files().list()
+		          .setQ("'"+folderId+"' in parents")
+		          .setSpaces("drive")
+		          .setFields("nextPageToken, files(id, name, originalFilename, description, mimeType, webContentLink, createdTime, webViewLink)")
+		          .execute();
+		     List<File> files = result.getFiles();
+	     if (files == null || files.size() == 0) 
+	     {
+	         //System.out.println("No files found.");
+	     } 
+	     else 
+	     {
+	         for(File file : files)
+	         {
+	        	 System.out.println(file.getWebViewLink());
+	        	 photos.add(new Photos(file.getId(), file.getName(), getWebContentLink(file), file.getDescription(), file.getCreatedTime().toString(), file.getCreatedTime().toString(), "50", getImageThumbnail(file.getId()))); 
+	         }
+	     }
+	     
+	     return photos;
+    }
+
    
  public List<Photos> fetchEventPhotos(Set<String> folderIds) throws IOException{
     	
@@ -333,7 +350,7 @@ public class DriveCommunications {
 	 */
 	public void fetchAllFolders() throws IOException
     {
-    	Drive service = getDriveService();
+    	Drive service = DRIVE_SERVICE;
 
         // Print the names and IDs for up to 10 files.
         FileList result = service.files().list()

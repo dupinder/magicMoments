@@ -19,8 +19,8 @@ public class Photos {
 		this.photoDiscription = photoDiscription;
 		this.createdDate = createdDate;
 		this.deletedDate = deletedDate;
-		this.setPhotoPrice(photoPrice);
-		this.setPhotoThumbnailUrl(photoThumbnailUrl);
+		this.photoPrice = photoPrice;
+		this.photoThumbnailUrl = photoThumbnailUrl;
 	}
 	
 	public String getPhotoId() {

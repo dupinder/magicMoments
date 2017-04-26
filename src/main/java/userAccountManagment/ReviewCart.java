@@ -34,7 +34,7 @@ public class ReviewCart extends HttpServlet {
 		 */
 		HttpSession session = requset.getSession();				
 		UserDetails userDetails = (UserDetails) session.getAttribute(CommonTypes.USER_DETAILS_SESSION_KEY);
-		List<PhotosBag> photosBag = AccountManagmentUtility.getPhotosInBag(session);
+		List<PhotosBag> photosBag = AccountManagmentUtility.getPhotosInBag(userDetails.getId());
 		Map<String, Integer> getPhotosConfig = AccountManagmentUtility.getPhotoDetailsFromConfiguration();
 		
 		for (PhotosBag photo : photosBag) 

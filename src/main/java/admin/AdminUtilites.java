@@ -344,7 +344,7 @@ public class AdminUtilites {
 			List<Event> events = new LinkedList<Event>();
 			while(rs.next())
 			{
-				Event event = new Event(rs.getString("EVENT_NAME"), rs.getString("EVENT_DISCRIPTION"), rs.getTimestamp("EVENT_START"), rs.getTimestamp("EVENT_END"), rs.getTimestamp("EVENT_DATA_DELETE"), collegeId, branchId, rs.getString("FOLDER_ID"), rs.getInt("ID"), DriveCommunications.getEventThumbnail(DriveCommunications.getDriveService(), rs.getString("FOLDER_ID")));
+				Event event = new Event(rs.getString("EVENT_NAME"), rs.getString("EVENT_DISCRIPTION"), rs.getTimestamp("EVENT_START"), rs.getTimestamp("EVENT_END"), rs.getTimestamp("EVENT_DATA_DELETE"), collegeId, branchId, rs.getString("FOLDER_ID"), rs.getInt("ID"), DriveCommunications.getEventThumbnail(DriveCommunications.getGoogleDriveService(), rs.getString("FOLDER_ID")));
 				events.add(event);
 			}
 			

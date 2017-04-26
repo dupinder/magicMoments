@@ -9,27 +9,23 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
-
-import com.google.gson.JsonElement;
-
-import connection.ConnectionManager;
 import user.PhotosBag;
 import user.UserAuthentication;
 import user.UserDetails;
 import utilities.CommonTypes;
 import utilities.EmailSender;
+import connection.ConnectionManager;
 
 public class AccountManagmentUtility {
 
-	public static boolean SaveAddToCartPhotos(PhotosBag photoBag) {
+	public static boolean saveAddToCartPhotos(PhotosBag photoBag) {
 		
-		String InsertPhotoToBag = "INSERT INTO MM_PHOTO_BAG (USER_ID, PHOTO_ID, TYPE, QUANTITY) VALUES (?, ?, ?, ?)";
+		String insertPhotoToBag = "INSERT INTO MM_PHOTO_BAG (USER_ID, PHOTO_ID, TYPE, QUANTITY) VALUES (?, ?, ?, ?)";
 		
 		Connection conn;
 		try {
 			conn = ConnectionManager.getConnection();
-			PreparedStatement pStmt = conn.prepareStatement(InsertPhotoToBag);
+			PreparedStatement pStmt = conn.prepareStatement(insertPhotoToBag);
 			pStmt.setInt(1, photoBag.getUserId());
 			pStmt.setString(2, photoBag.getPhotoId());
 			pStmt.setInt(3, photoBag.getType());
@@ -46,10 +42,9 @@ public class AccountManagmentUtility {
 	}
 
 
-	public static List<PhotosBag> getPhotosInBag(HttpSession session) 
+	public static List<PhotosBag> getPhotosInBag(int userId) 
 	{
-		UserDetails user = (UserDetails) session.getAttribute(CommonTypes.USER_DETAILS_SESSION_KEY);		
-		return getPhotosInUsersBag(user.getId());
+		return getPhotosInUsersBag(userId);
 	}
 
 
