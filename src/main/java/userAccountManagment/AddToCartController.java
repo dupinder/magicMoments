@@ -39,19 +39,19 @@ public class AddToCartController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		HttpSession session = request.getSession();
-		UserDetails user = (UserDetails)session.getAttribute(CommonTypes.USER_DETAILS_SESSION_KEY);
-		int userId = user.getId();
 		String photoId = request.getParameter("photoId");
-		
 		if(utilities.StringTools.isValidString(photoId))
 		{
+			HttpSession session = request.getSession();
+			UserDetails user = (UserDetails)session.getAttribute(CommonTypes.USER_DETAILS_SESSION_KEY);
+			int userId = user.getId();
+			
 			ManageUserItems manageUserItem = new ManageUserItems();
 			Map<String, String> status = manageUserItem.addToBagage(photoId, CommonTypes.BAG_TYPE_CART, userId);
 			response.getWriter().write(new Gson().toJson(status));	
 		}
-		
-		response.getWriter().write(String.valueOf(false));	
+		else
+			response.getWriter().write(String.valueOf(false));	
 	}
 
 
