@@ -2,6 +2,20 @@ var compiledTemplates = new Object();
 
 function compileAllTemplates(){
 	var templates = $('script[type="text/x-handlebar-template"]');
+	compileHandlebarTemplate(templates);
+}
+
+function compileTemplate(htmlContent){
+	var div = document.createElement("div");
+	div.innerHTML = htmlContent;
+	
+	var templates = $(div).find('script[type="text/x-handlebar-template"]');
+	compileHandlebarTemplate(templates);
+	
+	return $(templates).attr('id');
+}
+
+function compileHandlebarTemplate(templates){
 	for(template of templates)
 	{
 		let compiledTemplate = Handlebars.compile($(template).html());
