@@ -1,14 +1,21 @@
 package user;
 
 public class PhotosBag {
-
-	private String PhotoId;
+	private int id;
+	private String photoId;
 	private int userId;
 	private int type; 	
 	private int quantity;
 	private int price;
 	private int daysToDeliver;
 	private int eventId;
+	
+	public int getId(){
+		return id;
+	}
+	public void setId(int id){
+		this.id = id;
+	}
 	
 	public int getType() {
 		return type;
@@ -17,10 +24,10 @@ public class PhotosBag {
 		this.type = type;
 	}
 	public String getPhotoId() {
-		return PhotoId;
+		return photoId;
 	}
 	public void setPhotoId(String photoId) {
-		PhotoId = photoId;
+		this.photoId = photoId;
 	}
 	public int getUserId() {
 		return userId;

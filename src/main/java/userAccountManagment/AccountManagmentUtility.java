@@ -43,26 +43,40 @@ public class AccountManagmentUtility {
 	}
 
 
-	public static List<PhotosBag> getPhotosInBag(int userId) 
+	public static List<PhotosBag> getPhotosInBag(int userId, int bagType) 
 	{
-		return getPhotosInUsersBag(userId);
+		return getPhotosInUsersBag(userId, bagType);
 	}
 
 
-	private static List<PhotosBag> getPhotosInUsersBag(int id) {
-	
-		String selectPhotosInUserBag = "SELECT * FROM MM_PHOTO_BAG WHERE USER_ID = ?";
+	private static List<PhotosBag> getPhotosInUsersBag(int id, int bagType) {
+		
 		List<PhotosBag> photosDetails = new LinkedList<PhotosBag>();
 
 		try {
+			
 			Connection conn = ConnectionManager.getConnection();
-			PreparedStatement pStmt  = conn.prepareStatement(selectPhotosInUserBag);
+			
+			String selectPhotosInUserBag = null;
+			PreparedStatement pStmt = null;
+			if(bagType == 0)
+			{
+				selectPhotosInUserBag = "SELECT * FROM MM_PHOTO_BAG WHERE USER_ID = ?";
+				pStmt  = conn.prepareStatement(selectPhotosInUserBag);
+			}
+			else
+			{
+				selectPhotosInUserBag = "SELECT * FROM MM_PHOTO_BAG WHERE USER_ID = ? AND TYPE = ?";
+				pStmt  = conn.prepareStatement(selectPhotosInUserBag);
+				pStmt.setInt(2, bagType);
+			}
 			
 			pStmt.setInt(1, id);
 			
 			ResultSet resultSet = pStmt.executeQuery();
 			while (resultSet.next()) {
 				PhotosBag photo = new PhotosBag();
+				photo.setId(Integer.valueOf(resultSet.getString("ID")));
 				photo.setPhotoId(resultSet.getString("PHOTO_ID"));
 				photo.setUserId(id);
 				photo.setQuantity(Integer.parseInt(resultSet.getString("QUANTITY")));
@@ -134,26 +148,19 @@ public class AccountManagmentUtility {
 
 
 	public static boolean removeItem(PhotosBag photoBag) {
-		String DeleteItem = "DELETE * FROM MM_PHOTO_BAG WHERE USER_ID = ?, PHOTO_ID = ?, TYPE = ?, EVENT_ID = ?";
+		String deleteItem = "DELETE FROM MM_PHOTO_BAG WHERE ID = ?";
 		
 		try {
 			Connection conn = ConnectionManager.getConnection();
-			PreparedStatement pStmt = conn.prepareStatement(DeleteItem);
-			pStmt.setInt(1, photoBag.getUserId());
-			pStmt.setString(2, photoBag.getPhotoId());
-			pStmt.setInt(3, photoBag.getType());
-			pStmt.setInt(4, photoBag.getEventId());
-			
+			PreparedStatement pStmt = conn.prepareStatement(deleteItem);
+			pStmt.setInt(1, photoBag.getId());
 			pStmt.execute();
-			
 			return true;
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
-		
-		
 	}
 
 

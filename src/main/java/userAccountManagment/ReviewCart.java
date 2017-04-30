@@ -43,7 +43,7 @@ public class ReviewCart extends HttpServlet {
 		 */
 		HttpSession session = request.getSession();				
 		UserDetails userDetails = (UserDetails) session.getAttribute(CommonTypes.USER_DETAILS_SESSION_KEY);
-		List<PhotosBag> photosBag = AccountManagmentUtility.getPhotosInBag(userDetails.getId());
+		List<PhotosBag> photosBag = AccountManagmentUtility.getPhotosInBag(userDetails.getId(), CommonTypes.BAG_TYPE_CART);
 		Map<String, Integer> photosConfig = AccountManagmentUtility.getPhotoDetailsFromConfiguration();
 		
 		for (PhotosBag photo : photosBag) 
@@ -71,6 +71,7 @@ public class ReviewCart extends HttpServlet {
 		for (Photos photo : photos) {
 			for (PhotosBag photoInBag : photosBag) {
 				if(photo.getPhotoId().equals(photoInBag.getPhotoId())){
+					photoInBag.setQuantity(1);
 					cartPresenters.add(new CartPresenter(photoInBag, photo));
 				}
 			}

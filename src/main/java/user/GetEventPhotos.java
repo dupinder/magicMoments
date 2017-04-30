@@ -33,7 +33,7 @@ public class GetEventPhotos extends HttpServlet
 			List<Photos> photos = new DriveCommunications().fetchEventPhotosMap(eventFolderId);
 			HttpSession session = request.getSession();
 			UserDetails userDetails = (UserDetails) session.getAttribute(utilities.CommonTypes.USER_DETAILS_SESSION_KEY);
-			List<PhotosBag> photosBag = AccountManagmentUtility.getPhotosInBag(userDetails.getId());
+			List<PhotosBag> photosBag = AccountManagmentUtility.getPhotosInBag(userDetails.getId(), 0);
 
 			List<String> photosAddedToCart = new ArrayList<String>();
 			List<String> photosAddedToWishlist = new ArrayList<String>();

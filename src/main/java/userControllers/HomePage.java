@@ -55,7 +55,7 @@ public class HomePage extends HttpServlet {
 			userStatus.put("result", "true");
 			userStatus.put("dataUser", gson.toJson(userData));
 			userStatus.put("events", gson.toJson(events));
-			userStatus.put("dataItemCountsBasedOnType", new Gson().toJson(AccountManagmentUtility.getCountBasedOnType(AccountManagmentUtility.getPhotosInBag(userDetails.getId()))));
+			userStatus.put("dataItemCountsBasedOnType", new Gson().toJson(AccountManagmentUtility.getCountBasedOnType(AccountManagmentUtility.getPhotosInBag(userDetails.getId(), 0))));
 			response.getWriter().write(gson.toJson(userStatus));
 		}
 		else

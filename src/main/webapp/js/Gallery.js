@@ -127,29 +127,6 @@ function navigateToPhotos(folderId, eventName){
 	});
 }
 
-//function compileAllTemplates(){
-//	var templates = $('script[type="text/x-handlebar-template"]');
-//	for(template of templates)
-//	{
-//		let compiledTemplate = Handlebars.compile($(template).html());
-//		compiledTemplates[$(template).attr('id')] = compiledTemplate;
-//	}
-//}
-
-/*
-	container: Element into which content will be loaded
-	templateId: Id of templated to be loaded
-	context: data to be loaded for template
-*/
-//function loadTemplate(container, templateId, context, method){
-//	let template = compiledTemplates[templateId];
-//	if(template != undefined)
-//	{
-//		var html = template(context);
-//		container.html(html);
-//	}
-//}
-
 function addToCart(imageId){
 
 	var selectedPhotosData = selectedPhotos.photos;
@@ -165,6 +142,14 @@ function addToCart(imageId){
 	}	
 }
 
+function CartPresenter(cartPresenters, billingAmount, quantity){
+	this.cartPresenters = cartPresenters;
+	this.billingAmount = billingAmount;
+	this.quantity = quantity;
+	this.discount = 0;
+	this.amountPayable = this.billingAmount - this.discount;
+}
+
 function showCart(){
 	
 	sendAjax('user/showCartView', 'GET', {}, function(cartHtml){
@@ -174,28 +159,95 @@ function showCart(){
 			var cartData = JSON.parse(jsonCartData);
 			if(cartData.result == "true")
 			{
-				var cartPresenter = cartData.dataPhotosWithPrices;
-				cartPresenter = JSON.parse(cartPresenter);
+				var cartPresenters = cartData.dataPhotosWithPrices;
+				cartPresenters = JSON.parse(cartPresenters);
+				
+				var totalBillingAmount = 0;
+				var quantity = 0;
+				for(cartPresenter of cartPresenters)
+				{
+					totalBillingAmount+= parseInt(cartPresenter.photoBag.price);
+					quantity++;
+				}
 				
 				var templateId = compileTemplate(cartHtml);
-				loadTemplate(contentLoader, templateId, {'cartPresenters': cartPresenter});
+				cartP = new CartPresenter(cartPresenters, totalBillingAmount, quantity);
+				loadTemplate(contentLoader, templateId, cartP);
 				
-				var imagediv = $('.cart-view .image-div');
-				var spinner = $('.spinner-main').clone();
-				spinner.removeClass('spinner-main').addClass('inline-spinner-main');
-				spinner.find('.spinner').addClass('inline-spinner').removeClass('spinner');
-				spinner.css('width', '100%');
-				imagediv.append(spinner[0].outerHTML);
-				
-				$('.cart-view img').on('load', function(){
-					$(this).siblings('.inline-spinner-main').remove();
-				});
+				if(cartPresenters.length > 0)
+				{
+					var imagediv = $('.cart-view .image-div');
+					var spinner = $('.spinner-main').clone();
+					spinner.removeClass('spinner-main').addClass('inline-spinner-main');
+					spinner.find('.spinner').addClass('inline-spinner').removeClass('spinner');
+					spinner.css('width', '100%');
+					imagediv.append(spinner[0].outerHTML);
+					
+					$('.cart-view img').on('load', function(){
+						$(this).siblings('.inline-spinner-main').remove();
+					});
+				}	
 			}	
 		}, function(error){});
 		
 	}, function(error){
 		
 	});
+}
+
+function prepareBill(element, bagId){
+	$this = $(element);
+	var quantity = $this.val();
+	quantity = parseInt(quantity); 
+	if(isNaN(quantity) || quantity == 0)
+	{
+		return;
+	}	
+	
+	var oldQuantity = 0;
+	var totalPrice = 0;
+	let bagItem = undefined;
+	
+	for(cartPresenter of cartP.cartPresenters)
+	{
+		let photoBag = cartPresenter.photoBag;
+		if(bagId == photoBag.id)
+		{
+			bagItem = photoBag;
+			break;
+		}	
+	}
+	
+	if(bagItem !== undefined)
+	{
+		oldQuantity = bagItem.quantity;
+		var pricePerPhoto = bagItem.price;
+		var oldPrice = pricePerPhoto * oldQuantity;
+		totalPrice = pricePerPhoto * quantity;
+		
+		var billingAmount = cartP.billingAmount - oldPrice + totalPrice;
+		var amountPayable = billingAmount - cartP.discount;
+		cartP.amountPayable = amountPayable;
+		cartP.billingAmount = billingAmount;
+		cartP.quantity = cartP.quantity - oldQuantity + quantity;
+		
+		bagItem.quantity = quantity;
+		
+		$('.total-quantity').text(cartP.quantity);
+		$('.billing-amount').text(cartP.billingAmount);
+		$('.amount-payable').text(cartP.amountPayable);
+		$('.' + bagId).find('.price').text(totalPrice);
+	}
+}
+
+function removeFromCart(bagId){
+	sendAjax('user/RemoveItemCart', 'POST', {bagId: bagId}, function(response){
+		if(response == "true")
+		{
+			showCart();
+		}	
+		
+	}, function(error){});
 }
 
 function navigateToNext(){

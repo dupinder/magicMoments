@@ -17,7 +17,7 @@
 		<div class="row cart-view">
 			<div class="col-xs-12 col-sm-6 col-ms-7">
 				{{#each cartPresenters}}
-					<div class="row" style="margin-left: 5px;border-bottom: 1px solid rgba(0,0,0,0.1);padding:5px;">
+					<div class="row {{photoBag.id}}" style="margin-left: 5px;border-bottom: 1px solid rgba(0,0,0,0.1);padding:5px;">
 						<div class="col-xs-5 col-sm-5 col-ms-3 image-div" style="padding: 0;height: 150px; max-width: 150px;">
 							<img src="{{photo.photoUrl}}" style="height: 100%; width: 100%;" alt="LOADING..."/>
 						</div>
@@ -30,11 +30,11 @@
 							<div class="row padding-top-5">
 								<div class="col-xs-12">
 									<span> Select quantity </span>
-									<span> <input type="text" class="form-control" style="width: 30%;display: inline-block;margin-left: 5px;" placeholder="maximum 5" value="1"/> </span>
+									<span> <input type="number" class="form-control quantity" style="width: 30%;display: inline-block;margin-left: 5px;" placeholder="maximum 5" value="1" onkeyup="prepareBill(this, '{{photoBag.id}}')" onchange="prepareBill(this, '{{photoBag.id}}')" /> </span>
 								</div>
 								<div class="col-xs-12 padding-top-5">
 									<span> Total amount: </span>
-									<span style="margin-left: 5px;"> <i class="fa fa-inr" aria-hidden="true"></i> {{photoBag.price}} </span>
+									<span style="margin-left: 5px;"> <i class="fa fa-inr" aria-hidden="true"></i> <span class="price"> {{photoBag.price}} <span> </span>
 								</div>
 								<div class="col-xs-12 padding-top-5">
 									<label> Expected delivery within {{photoBag.daysToDeliver}} days </label>
@@ -42,7 +42,7 @@
 							</div>
 							<div class="row padding-bottom-5" style="position:absolute;bottom:0;">
 								<div class="col-xs-12">
-									<span> <input type="button" class="btn mm-button-style" value="Remove" style="float: left" /> </span>
+									<span> <input type="button" class="btn mm-button-style" value="Remove" style="float: left" onclick="removeFromCart({{photoBag.id}});"/> </span>
 									<!-- <span> <label style="float: left; height: 40px; margin-bottom: 0;margin-left: 10px; padding-left: 10px; border-left: 1px solid rgba(0,0,0,0.2);"> <span style="position: relative; top: 10px;"> Expected delivery within {{photoBag.daysToDeliver}} days </span> </label> </span> --> 
 								</div>
 							</div>
@@ -59,49 +59,31 @@
 				 	</div>				
 				 	<div class="row">
 				 		<div class="col-xs-12 col-sm-8 col-md-6 col-md-offset-3 col-sm-offset-2">
-				 			<label class="text-muted"> Price details </label>
-				 			<label class="pull-right text-muted"> 500 </label>
+				 			<label class="text-muted"> Quantity of frames </label>
+				 			<label class="pull-right text-muted total-quantity"> {{quantity}} </label>
 				 		</div>
 				 	</div>
 				 	<div class="row" style="padding-top: 5px;">
 				 		<div class="col-xs-12 col-sm-8 col-md-6 col-md-offset-3 col-sm-offset-2">
-				 			<label class="text-muted"> Total quantity </label>
-				 			<label class="pull-right text-muted"> 500 </label>
+				 			<label class="text-muted"> Total amount </label>
+				 			<label class="pull-right text-muted billing-amount"> {{billingAmount}} </label>
 				 		</div>
 				 	</div>
 				 	<div class="row" style="padding-top: 5px;">
 				 		<div class="col-xs-12 col-sm-8 col-md-6 col-md-offset-3 col-sm-offset-2">
-				 			<label class="text-muted">Bag Total</label>
-							<label class="pull-right text-muted"> 500 </label>					 		
-						</div>
-				 	</div>
-				 	<div class="row" style="padding-top: 5px;">
-				 		<div class="col-xs-12 col-sm-8 col-md-6 col-md-offset-3 col-sm-offset-2">
-				 			<label class="text-muted">Bag discount</label>
-							<label class="pull-right text-muted"> 500 </label>					 		
-						</div>
-				 	</div>
-				 	<div class="row" style="padding-top: 5px;">
-				 		<div class="col-xs-12 col-sm-8 col-md-6 col-md-offset-3 col-sm-offset-2">
-				 			<label class="text-muted">Estimated VAT/CST</label>
-							<label class="pull-right text-muted"> 500 </label>					 		
-						</div>
-				 	</div>
-				 	<div class="row" style="padding-top: 5px;">
-				 		<div class="col-xs-12 col-sm-8 col-md-6 col-md-offset-3 col-sm-offset-2">
-				 			<label class="text-muted">Delivery charges</label>
-							<label class="pull-right text-muted"> 500 </label>					 		
+				 			<label class="text-muted">Discount</label>
+							<label class="pull-right text-muted discount"> - {{discount}} </label>					 		
 						</div>
 				 	</div>
 				 	<div class="row" style="padding-top: 5px; padding-bottom: 20px;">
 				 		<div class="col-xs-12 col-sm-8 col-md-6 col-md-offset-3 col-sm-offset-2" style="border-top: 1px solid #eaeaec;padding-top: 10px;">
 				 			<label>Order total</label>
-				 			<label class="pull-right"> 500 </label>
+				 			<label class="pull-right amount-payable"> {{amountPayable}} </label>
 				 		</div>
 				 	</div>
 				 	<div class="row" style="padding-top: 5px; margin-bottom: 20px;">
 				 		<div class="col-xs-12 col-sm-8 col-md-6 col-md-offset-3 col-sm-offset-2">
-				 			<button type="button" class="btn btn-success form-control success-button"> Place order </button>
+				 			<button type="button" class="btn btn-success form-control success-button" onclick="placeOrder();"> Place order </button>
 				 		</div>
 				 	</div>
 				</div>
