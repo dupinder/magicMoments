@@ -166,31 +166,36 @@ function addToCart(imageId){
 }
 
 function showCart(){
-		/*jQuery.getJSON('').then(function(promiseObejct){
-			console.log(promiseObejct.stringify());
-		});*/
-
-	var selectedPhotos = {
-	photos: [
-	  { id: '1', url: 'img/try.jpg', desc: '', name: 'LPU Youth vibe, 2017', location: 'Jalandhar'},
-	  { id: '2', url: 'img/LPU Fest/b.jpg', desc: '', name: 'Academy Award, 2017', location: 'Kodak cinema, Las Vegas'},
-	  { id: '3', url: 'img/LPU Fest/f.jpg', desc: '', name: 'CatalystOne solutions Seminar', location: 'Hotel Marriot, Chandigarh'},
-	  { id: '4', url: 'img/LPU Fest/a.jpg', desc: '', name: 'Life is Easy Seminar', location: 'Baba chandandas Ashram'},
-	  { id: '5', url: 'img/LPU Fest/d.jpg', desc: '', name: 'Life is Easy Seminar', location: 'Baba chandandas Ashram'},
-	  { id: '6', url: 'img/LPU Fest/g.jpg', desc: '', name: 'Life is Easy Seminar', location: 'Baba chandandas Ashram'},
-	  { id: '7', url: 'img/LPU Fest/e.jpg', desc: '', name: 'Life is Easy Seminar', location: 'Baba chandandas Ashram'},
-	  { id: '8', url: 'img/drive-download/DSC08271.jpg', desc: '', name: 'Life is Easy Seminar', location: 'Baba chandandas Ashram'},
-	  { id: '9', url: 'img/drive-download/DSC08279.jpg', desc: '', name: 'Life is Easy Seminar', location: 'Baba chandandas Ashram'},
-	  { id: '10', url: 'img/drive-download/DSC08283.jpg', desc: '', name: 'Life is Easy Seminar', location: 'Baba chandandas Ashram'},
-	  { id: '11', url: 'img/drive-download/DSC08289.jpg', desc: '', name: 'Life is Easy Seminar', location: 'Baba chandandas Ashram'},
-	  { id: '12', url: 'img/drive-download/DSC08296.jpg', desc: '', name: 'Life is Easy Seminar', location: 'Baba chandandas Ashram'},
-	  { id: '13', url: 'img/drive-download/mikka.jpg', desc: '', name: 'Life is Easy Seminar', location: 'Baba chandandas Ashram'},
-	  { id: '14', url: 'img/drive-download/DSC08358.jpg', desc: '', name: 'Life is Easy Seminar', location: 'Baba chandandas Ashram'},
-	]
-};
-
-	loadTemplate(contentLoader, 'cart', selectedPhotos);
-	$('div[data-parent]').not('[data-parent="'+ $('li.nav-item.active').attr('id') +'"]').hide();
+	
+	sendAjax('user/showCartView', 'GET', {}, function(cartHtml){
+		
+		sendAjax('user/showCartView', 'POST', {}, function(jsonCartData){
+			
+			var cartData = JSON.parse(jsonCartData);
+			if(cartData.result == "true")
+			{
+				var cartPresenter = cartData.dataPhotosWithPrices;
+				cartPresenter = JSON.parse(cartPresenter);
+				
+				var templateId = compileTemplate(cartHtml);
+				loadTemplate(contentLoader, templateId, {'cartPresenters': cartPresenter});
+				
+				var imagediv = $('.cart-view .image-div');
+				var spinner = $('.spinner-main').clone();
+				spinner.removeClass('spinner-main').addClass('inline-spinner-main');
+				spinner.find('.spinner').addClass('inline-spinner').removeClass('spinner');
+				spinner.css('width', '100%');
+				imagediv.append(spinner[0].outerHTML);
+				
+				$('.cart-view img').on('load', function(){
+					$(this).siblings('.inline-spinner-main').remove();
+				});
+			}	
+		}, function(error){});
+		
+	}, function(error){
+		
+	});
 }
 
 function navigateToNext(){

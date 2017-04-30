@@ -12,7 +12,34 @@
 	padding: 20px;
 }
 
+.paranthesis{}
+.paranthesis::before{
+	content: '(';
+}
+.paranthesis::after{
+	content: ')';
+}
 
+.mm-button-style{
+	border-radius: 1px;
+	height: 40px;
+    background: #262626;
+    color: white;
+}
+		
+.mm-button-style:hover{
+	border-radius: 1px;
+	height: 40px;
+    background: #262626;
+    color: white;
+}
+
+.mm-header-style{
+    background-color: #262626;
+    color: white;
+    border: none;
+    border-radius: 0;
+}	
 .login-container-inner{	
 	background-color: white;
 	opacity: 0.9;
