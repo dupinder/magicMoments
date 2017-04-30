@@ -11,13 +11,14 @@ import com.google.gson.Gson;
 public class ManageUserItems
 {
 
-	public Map<String, String> addToBagage(String photoId, int bagType, int userId)
+	public Map<String, String> addToBagage(String photoId, int bagType, int userId, int eventId)
 	{
 		PhotosBag photoBag = new PhotosBag();
 		photoBag.setPhotoId(photoId);
 		photoBag.setUserId(userId);
 		photoBag.setType(bagType);
-		photoBag.setQuantity(0);
+		photoBag.setEventId(eventId);
+		photoBag.setQuantity(1);
 		
 		Map<String, String> itemAddStatus = new HashMap<String, String>();
 		if(AccountManagmentUtility.saveAddToCartPhotos(photoBag))

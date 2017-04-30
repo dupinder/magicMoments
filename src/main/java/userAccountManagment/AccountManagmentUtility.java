@@ -20,7 +20,7 @@ public class AccountManagmentUtility {
 
 	public static boolean saveAddToCartPhotos(PhotosBag photoBag) {
 		
-		String insertPhotoToBag = "INSERT INTO MM_PHOTO_BAG (USER_ID, PHOTO_ID, TYPE, QUANTITY) VALUES (?, ?, ?, ?)";
+		String insertPhotoToBag = "INSERT INTO MM_PHOTO_BAG (USER_ID, PHOTO_ID, TYPE, QUANTITY, EVENT_ID) VALUES (?, ?, ?, ?, ?)";
 		
 		Connection conn;
 		try {
@@ -30,6 +30,7 @@ public class AccountManagmentUtility {
 			pStmt.setString(2, photoBag.getPhotoId());
 			pStmt.setInt(3, photoBag.getType());
 			pStmt.setInt(4, photoBag.getQuantity());
+			pStmt.setInt(5, photoBag.getEventId());
 			
 			pStmt.execute();
 			
@@ -65,6 +66,7 @@ public class AccountManagmentUtility {
 				photo.setPhotoId(resultSet.getString("PHOTO_ID"));
 				photo.setUserId(id);
 				photo.setQuantity(Integer.parseInt(resultSet.getString("QUANTITY")));
+				photo.setEventId(resultSet.getInt("EVENT_ID"));
 				switch (resultSet.getInt("TYPE")) 
 				{
 					case 0:
@@ -132,7 +134,7 @@ public class AccountManagmentUtility {
 
 
 	public static boolean removeItem(PhotosBag photoBag) {
-		String DeleteItem = "DELETE * FROM MM_PHOTO_BAG WHERE USER_ID = ?, PHOTO_ID = ?, TYPE = ?";
+		String DeleteItem = "DELETE * FROM MM_PHOTO_BAG WHERE USER_ID = ?, PHOTO_ID = ?, TYPE = ?, EVENT_ID = ?";
 		
 		try {
 			Connection conn = ConnectionManager.getConnection();
@@ -140,6 +142,7 @@ public class AccountManagmentUtility {
 			pStmt.setInt(1, photoBag.getUserId());
 			pStmt.setString(2, photoBag.getPhotoId());
 			pStmt.setInt(3, photoBag.getType());
+			pStmt.setInt(4, photoBag.getEventId());
 			
 			pStmt.execute();
 			

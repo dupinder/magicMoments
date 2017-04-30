@@ -27,9 +27,10 @@ public class AddToWishlistController extends HttpServlet
 			HttpSession session = request.getSession();
 			UserDetails user = (UserDetails)session.getAttribute(CommonTypes.USER_DETAILS_SESSION_KEY);
 			int userId = user.getId();
-			
+			int eventId = Integer.parseInt(request.getParameter("eventId"));
+
 			ManageUserItems manageUserItem = new ManageUserItems();
-			Map<String, String> status = manageUserItem.addToBagage(photoId, CommonTypes.BAG_TYPE_WISHLIST, userId);
+			Map<String, String> status = manageUserItem.addToBagage(photoId, CommonTypes.BAG_TYPE_WISHLIST, userId, eventId);
 			response.getWriter().write(new Gson().toJson(status));	
 		}
 		else

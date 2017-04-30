@@ -8,6 +8,7 @@ public class PhotosBag {
 	private int quantity;
 	private int price;
 	private int daysToDeliver;
+	private int eventId;
 	
 	public int getType() {
 		return type;
@@ -44,6 +45,12 @@ public class PhotosBag {
 	}
 	public void setDaysToDeliver(int daysToDeliver) {
 		this.daysToDeliver = daysToDeliver;
+	}
+	public int getEventId() {
+		return eventId;
+	}
+	public void setEventId(int eventId) {
+		this.eventId = eventId;
 	}
 	
 	
