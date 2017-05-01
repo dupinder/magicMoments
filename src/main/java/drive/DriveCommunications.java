@@ -4,9 +4,11 @@ package drive;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +20,7 @@ import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -311,7 +314,8 @@ public class DriveCommunications {
  * @return
  * @throws IOException
  */
-	public static String getEventThumbnail(Drive service, String folderId) throws IOException {
+	public static String getEventThumbnail(Drive service, String folderId) throws IOException 
+	{
 		String EventThumbnail = "";
 		
 		FileList result = service.files().list()
@@ -325,7 +329,7 @@ public class DriveCommunications {
          //System.out.println("No files found.");
      } else {
     	 
-         for (File file : files) {
+         for (File file : files) {        	 
         	 EventThumbnail = getImageThumbnail(file.getId());
          }
          
@@ -334,8 +338,37 @@ public class DriveCommunications {
 	}
 
 	
-	/**
+	
+	/****
 	 * 
+	 * @param photoId
+	 * @return
+	 */
+	public static String getPhotoUrlById(String photoId)
+	{
+		return "https://drive.google.com/uc?id="+photoId;
+	}
+	
+	
+	/****
+	 * get Url by photo Ids
+	 * @param photoIds
+	 * @return
+	 */
+	public static Set<String> getPhotoUrlById(Set<String> photoIds)
+	{
+		Set<String> photoUrls = new HashSet<String>();
+		
+		for (String photoId : photoIds) {
+			photoUrls.add(getPhotoUrlById(photoId));
+		}
+		
+		return photoUrls;
+	}
+	
+	
+	/**
+	 * get photo thumbnail
 	 * @param id
 	 * @return
 	 */
