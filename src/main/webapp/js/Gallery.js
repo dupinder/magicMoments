@@ -312,3 +312,43 @@ function closeImage(){
 function showLogoutOption(){
 	$('.logout-option').show();
 }
+
+function MyOrderPresenter(reference, orders){
+	this.reference = reference;
+	this.orders = orders;
+}
+
+function showMyOrders(){
+	sendAjax('user/showMyOrders', 'GET', {}, function(htmlContent){
+		if(htmlContent != "false" || htmlContent != "")
+		{
+			sendAjax('user/showMyOrders', 'POST', {}, function(response){
+				
+				response = JSON.parse(response);
+				var myOrders = [];
+				for(key of Object.keys(response))
+				{
+					myOrders.push(new MyOrderPresenter(key, response[key]));
+				}	
+				
+				var templateId = compileTemplate(htmlContent);
+				loadTemplate(contentLoader, templateId, {'myOrders': myOrders});
+			}, function(error){
+				
+			});
+		}	
+	}, function(error){
+		
+	});
+}
+
+function cancelOrder(orderReference){
+	sendAjax('user/cancelOrder', 'POST', {orderReference: orderReference}, function(response){
+		if(response == "true")
+		{
+			showMyOrders();
+		}	
+	}, function(error){
+		
+	});
+}

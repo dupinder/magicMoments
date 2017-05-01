@@ -259,7 +259,46 @@ public class AccountManagmentUtility {
 		}
 	}
 
-
+	public static Map<String, List<Order>> getMyOrders(int userId)
+	{
+		String insertPlacedOrder = "SELECT * FROM MM_PLACE_OREDR WHERE USER_ID = ?";
+		try 
+		{
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement pStmt = conn.prepareStatement(insertPlacedOrder);
+			pStmt.setInt(1, userId);
+			ResultSet resultSet = pStmt.executeQuery();
+			Map<String, List<Order>> myOrders = new HashMap<String, List<Order>>();
+			while(resultSet.next())
+			{
+				Order order = new Order();
+				order.setReferenceId(resultSet.getString("REFERENCE_ID"));
+				order.setUserId(userId);
+				order.setPhotoId(resultSet.getString("PHOTO_ID"));
+				order.setPrice(Integer.valueOf(resultSet.getString("PRICE")));
+				order.setQuantity(resultSet.getInt("QUANTITY"));
+				order.setTotalBillingAmount(resultSet.getInt("TOTAL_BILLING_AMOUNT"));
+				order.setDeliveryCharges(Integer.valueOf(resultSet.getInt("DELIVERY_CHARGES")));
+				
+				List<Order> listOfOrder = myOrders.get(order.getReferenceId());
+				if(listOfOrder == null)
+				{
+					listOfOrder = new ArrayList<Order>();
+				}
+				listOfOrder.add(order);
+				myOrders.put(order.getReferenceId(), listOfOrder);
+			}
+			
+			return myOrders;
+		}
+		catch (ClassNotFoundException | SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
 	public static void sendEmailInvoiceOfOrder(List<Order> orders) 
 	{
 		EmailSender emailSender = new EmailSender();
@@ -283,8 +322,23 @@ public class AccountManagmentUtility {
 		
 	}
 
-
-	
-	
-	
+	public static boolean cancelOrder(int userId, String orderReference)
+	{
+		try
+		{
+			Connection conn = ConnectionManager.getConnection();
+			String query = "DELETE FROM MM_PLACE_OREDR WHERE USER_ID = ? AND REFERENCE_ID = ?";
+			PreparedStatement preparedStatement = conn.prepareStatement(query);
+			preparedStatement.setInt(1, userId);
+			preparedStatement.setString(2, orderReference);
+			preparedStatement.execute();
+			return true;
+		} 
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
 }
