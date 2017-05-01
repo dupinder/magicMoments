@@ -1,17 +1,23 @@
 package userAccountManagment;
 
-import java.util.List;
 
 public class Order {
 
 	int userId;
-	List<String> Photos;
+	String referenceId;
+	String photoId;
 	int price;
 	int quantity;
 	int totalBillingAmount;
 	int deliveryCharges;
 	int daysToDeliver;
 	
+	public String getReferenceId(){
+		return referenceId;
+	}
+	public void setReferenceId(String orderReference){
+		this.referenceId = orderReference;
+	}
 	public int getDaysToDeliver() {
 		return daysToDeliver;
 	}
@@ -24,11 +30,11 @@ public class Order {
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
-	public List<String> getPhotos() {
-		return Photos;
+	public String getPhotoId() {
+		return photoId;
 	}
-	public void setPhotos(List<String> photos) {
-		Photos = photos;
+	public void setPhotoId(String photoId) {
+		this.photoId = photoId;
 	}
 	public int getPrice() {
 		return price;

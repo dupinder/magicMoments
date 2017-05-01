@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -42,73 +42,107 @@ public class AccountManagmentUtility {
 		}
 	}
 
-
+	public static List<PhotosBag> getPhotosInBag(int userId) 
+	{
+		try
+		{
+			PreparedStatement pStmt = null;
+			String selectPhotosInUserBag = "SELECT * FROM MM_PHOTO_BAG WHERE USER_ID = ?";
+			Connection conn = ConnectionManager.getConnection();
+			pStmt  = conn.prepareStatement(selectPhotosInUserBag);
+			pStmt.setInt(1, userId);	
+			
+			return getPhotosInUsersBag(pStmt);			
+		}
+		catch(Exception e)
+		{
+			return null;
+		}
+	}
+	
 	public static List<PhotosBag> getPhotosInBag(int userId, int bagType) 
 	{
-		return getPhotosInUsersBag(userId, bagType);
+		try
+		{
+			PreparedStatement pStmt = null;
+			String selectPhotosInUserBag = "SELECT * FROM MM_PHOTO_BAG WHERE USER_ID = ? AND TYPE = ?";
+			Connection conn = ConnectionManager.getConnection();
+			pStmt  = conn.prepareStatement(selectPhotosInUserBag);
+			pStmt.setInt(1, userId);	
+			pStmt.setInt(2, bagType);
+			return getPhotosInUsersBag(pStmt);	
+		}
+		catch(Exception e)
+		{
+			return null;
+		}
 	}
-
-
-	private static List<PhotosBag> getPhotosInUsersBag(int id, int bagType) {
-		
-		List<PhotosBag> photosDetails = new LinkedList<PhotosBag>();
-
-		try {
+	
+	public static List<PhotosBag> getPhotosInBagById(List<String> photoBagIds) 
+	{
+		try
+		{
+			PreparedStatement pStmt = null;
+			String selectPhotosInUserBag = "SELECT * FROM MM_PHOTO_BAG WHERE ID in (";
+			
+			for(int index = 0; index < photoBagIds.size(); index++)
+			{
+				selectPhotosInUserBag += "?";
+				if(index != photoBagIds.size() -1)
+					selectPhotosInUserBag += ",";
+			}
+			
+			selectPhotosInUserBag+= ")";
 			
 			Connection conn = ConnectionManager.getConnection();
 			
-			String selectPhotosInUserBag = null;
-			PreparedStatement pStmt = null;
-			if(bagType == 0)
+			pStmt  = conn.prepareStatement(selectPhotosInUserBag);
+			
+			for(int index = 0; index < photoBagIds.size(); index++)
 			{
-				selectPhotosInUserBag = "SELECT * FROM MM_PHOTO_BAG WHERE USER_ID = ?";
-				pStmt  = conn.prepareStatement(selectPhotosInUserBag);
-			}
-			else
-			{
-				selectPhotosInUserBag = "SELECT * FROM MM_PHOTO_BAG WHERE USER_ID = ? AND TYPE = ?";
-				pStmt  = conn.prepareStatement(selectPhotosInUserBag);
-				pStmt.setInt(2, bagType);
+				pStmt.setInt(index + 1, Integer.valueOf(photoBagIds.get(index)));
 			}
 			
-			pStmt.setInt(1, id);
-			
-			ResultSet resultSet = pStmt.executeQuery();
-			while (resultSet.next()) {
-				PhotosBag photo = new PhotosBag();
-				photo.setId(Integer.valueOf(resultSet.getString("ID")));
-				photo.setPhotoId(resultSet.getString("PHOTO_ID"));
-				photo.setUserId(id);
-				photo.setQuantity(Integer.parseInt(resultSet.getString("QUANTITY")));
-				photo.setEventId(resultSet.getInt("EVENT_ID"));
-				switch (resultSet.getInt("TYPE")) 
-				{
-					case 0:
-						photo.setType(CommonTypes.BAG_TYPE_WISHLIST);
-					break;
-	
-					case 1:
-						photo.setType(CommonTypes.BAG_TYPE_FAVOURIT);
-					break;
-	
-					case 2:
-						photo.setType(CommonTypes.BAG_TYPE_CART);
-					break;
-	
-					default:
-					break;
-					
-				}
-				photosDetails.add(photo);
-			}
-			
-			
-		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return getPhotosInUsersBag(pStmt);
 		}
-		
-		
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+
+	private static List<PhotosBag> getPhotosInUsersBag(PreparedStatement pStmt) throws SQLException {
+		List<PhotosBag> photosDetails = new ArrayList<PhotosBag>();
+		ResultSet resultSet = pStmt.executeQuery();
+		while (resultSet.next()) {
+			PhotosBag photo = new PhotosBag();
+			photo.setId(Integer.valueOf(resultSet.getString("ID")));
+			photo.setPhotoId(resultSet.getString("PHOTO_ID"));
+			photo.setUserId(Integer.valueOf(resultSet.getString("USER_ID")));
+			photo.setQuantity(Integer.parseInt(resultSet.getString("QUANTITY")));
+			photo.setEventId(resultSet.getInt("EVENT_ID"));
+			switch (resultSet.getInt("TYPE")) 
+			{
+				case 0:
+					photo.setType(CommonTypes.BAG_TYPE_WISHLIST);
+				break;
+
+				case 1:
+					photo.setType(CommonTypes.BAG_TYPE_FAVOURIT);
+				break;
+
+				case 2:
+					photo.setType(CommonTypes.BAG_TYPE_CART);
+				break;
+
+				default:
+				break;
+				
+			}
+			photosDetails.add(photo);
+		}
 		return photosDetails;
 	}
 
@@ -197,45 +231,46 @@ public class AccountManagmentUtility {
 	}
 
 
-	public static boolean savePlacedOrder(Order order) 
+	public static boolean savePlacedOrder(List<Order> orders) 
 	{
-		List<String> photoIds = order.getPhotos();
-		String insertPlacedOrder = "INSERT INTO MM_PLACE_OREDR (USER_ID, PHOTO_ID, PRICE, QUANTITY, TOTAL_BILLING_AMOUNT, DELIVERY_CHARGES) VALUES (?, ?, ?, ?, ?, ?)";
+		String insertPlacedOrder = "INSERT INTO MM_PLACE_OREDR (USER_ID, PHOTO_ID, PRICE, QUANTITY, TOTAL_BILLING_AMOUNT, DELIVERY_CHARGES, REFERENCE_ID) VALUES (?, ?, ?, ?, ?, ?, ?)";
 		try 
 		{
 			Connection conn = ConnectionManager.getConnection();
-			
-			PreparedStatement pStmt = conn.prepareStatement(insertPlacedOrder);
-			pStmt.setInt(1, order.getUserId());
-			pStmt.setInt(3, order.getPrice());
-			pStmt.setInt(4, order.getQuantity());
-			pStmt.setInt(5, order.getTotalBillingAmount());
-			pStmt.setInt(6, order.getDeliveryCharges());
-			
-			for (String photoId : photoIds) 
+			for (Order order : orders) 
 			{
-				pStmt.setString(2, photoId);
+				PreparedStatement pStmt = conn.prepareStatement(insertPlacedOrder);
+				pStmt.setInt(1, order.getUserId());
+				pStmt.setString(2, order.getPhotoId());
+				pStmt.setInt(3, order.getPrice());
+				pStmt.setInt(4, order.getQuantity());
+				pStmt.setInt(5, order.getTotalBillingAmount());
+				pStmt.setInt(6, order.getDeliveryCharges());
+				pStmt.setString(7, order.getReferenceId());
 				pStmt.execute();
 			}
-		return true;
-			
+
+			return true;
 		}
 		catch (ClassNotFoundException | SQLException e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
-		
 	}
 
 
-	public static void sendEmailInvoiceOfOrder(Order order) 
+	public static void sendEmailInvoiceOfOrder(List<Order> orders) 
 	{
 		EmailSender emailSender = new EmailSender();
 		try {
-			UserDetails userDetail = UserAuthentication.getUserDetails(order.getUserId());
-			emailSender.sendEmail(userDetail.getEmailId(), "Hi "+ userDetail.getName() +" Your order has been place of "+order.getQuantity()+" photos. Your order will be deliverd between "+order.getDaysToDeliver()+" from order date to your collage location, worth rupees " + order.getTotalBillingAmount() + "<br/> Thank you");
+			UserDetails userDetail = UserAuthentication.getUserDetails(orders.get(0).getUserId());
+			
+			String emailContent = "Hi " + userDetail.getName() + ",\n\n";
+			emailContent+= "Your order on Magic moments has been placed successfully. Following is the summary:\n\n";
+			emailContent += "\t Order reference: " + orders.get(0).getReferenceId() + "\n";
+			emailContent += "\t Your order will be delivered at your college address.";
+			emailSender.sendEmail(userDetail.getEmailId(), emailContent);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

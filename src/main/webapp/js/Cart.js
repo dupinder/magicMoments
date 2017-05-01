@@ -1,5 +1,6 @@
 function addItemToCart(item, element){
-	sendAjax("user/addToCart", 'POST', {photoId: item}, function(response){
+	var eventId = $('.gallery-header-text .eventId').text();
+	sendAjax("user/addToCart", 'POST', {photoId: item, eventId: eventId}, function(response){
 		handleResponseForCartItems(response, element, 'added-to-cart');
 	}, function(error){
 		
@@ -7,7 +8,8 @@ function addItemToCart(item, element){
 }
 
 function addItemToWishlist(item, element){
-	sendAjax("user/addToWishlist", 'POST', {photoId: item}, function(response){
+	var eventId = $('.gallery-header-text .eventId').text();
+	sendAjax("user/addToWishlist", 'POST', {photoId: item, eventId: eventId}, function(response){
 		handleResponseForCartItems(response, element, 'added-to-wishlist');
 	}, function(error){
 		

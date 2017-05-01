@@ -71,11 +71,10 @@ function showHome(){
 	});
 }		
 
-function PhotoPrenter(photos, eventName, photosAddedToCart, photosAddedToWishlist){
+function PhotoPrenter(photos, eventName, eventId){
 	this.photos = photos;
 	this.eventName = eventName;
-	this.photosAddedToCart = photosAddedToCart;
-	this.photosAddedToWishlist = photosAddedToWishlist;
+	this.eventId = eventId;
 	this.jsonData = () => JSON.stringify(this);
 }
 
@@ -97,7 +96,7 @@ function Photo(photoId, photoName, photoUrl, photoDiscription, createdDate, dele
 	this.jsonData = () => JSON.stringify(this);
 }
 
-function navigateToPhotos(folderId, eventName){
+function navigateToPhotos(folderId, eventName, eventId){
 	sendAjax('user/getEventPhotos', 'POST', {folderId:folderId}, function(response){
 		if(response != "")
 		{
@@ -118,7 +117,7 @@ function navigateToPhotos(folderId, eventName){
 					allPhotos.push(ph);
 				}
 				
-				var photoPrenter = new PhotoPrenter(allPhotos, eventName);
+				var photoPrenter = new PhotoPrenter(allPhotos, eventName, eventId);
 				loadTemplate(contentLoader, 'gallery-home', JSON.parse(photoPrenter.jsonData()));
 			}	
 		}	
@@ -238,6 +237,26 @@ function prepareBill(element, bagId){
 		$('.amount-payable').text(cartP.amountPayable);
 		$('.' + bagId).find('.price').text(totalPrice);
 	}
+}
+
+function placeOrder(){
+	var mapOfPhotoAndQuantity = new Object();
+	for(cartPresenter of cartP.cartPresenters)
+	{
+		var bagId = cartPresenter.photoBag.id;
+		mapOfPhotoAndQuantity[bagId] = $('.' + bagId).find('input.quantity').val();
+	}	
+	
+	sendAjax('user/placeOrder', 'POST', {orderInfo: JSON.stringify(mapOfPhotoAndQuantity)}, function(response){
+		if(response == "true")
+		{
+			console.log('order placed successfully');
+			window.location.href = "Gallery.html";
+		}	
+		
+	}, function(error){
+		console.log('order placed failed');
+	});
 }
 
 function removeFromCart(bagId){

@@ -1,6 +1,5 @@
 package utilities;
 
-import javax.servlet.http.HttpSession;
 
 public class CommonTypes {
 	
