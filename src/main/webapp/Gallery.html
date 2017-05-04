@@ -12,7 +12,8 @@
 		<link href="https://fonts.googleapis.com/css?family=Baloo+Bhaina" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Handlee" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Mada" rel="stylesheet">
-
+		<link href="https://fonts.googleapis.com/css?family=Bree+Serif" rel="stylesheet">
+		
 		<script type="text/javascript" src="js/bootstrap.js"></script>
 		<script src="js/jquery-3.1.1.min.js"> </script>
 		<script src="js/MiscelleniousFunc.js"> </script>
@@ -27,8 +28,12 @@
 				color: #262626;
 				font-family: 'Handlee', cursive;
 			}
+			
+			.font-bree{
+				font-family: 'Bree Serif', serif;
+			}
 
-				.fa{
+			.fa{
 				color: #262626;
 			}
 			
@@ -492,7 +497,7 @@
 			No picture is available to you right now..!!
 		{{else}}
 		{{#each events}}
-			<div class="col-xs-12 col-sm-6 col-md-4 parent-grid" id={{id}} style="padding-right: 15px; margin-bottom: 20px; padding-top: 20px;" onclick="navigateToPhotos('{{folderId}}', '{{name}}', '{{id}}')">
+			<div class="col-xs-12 col-sm-6 col-md-4 parent-grid" id={{id}} style="padding-right: 15px; margin-bottom: 20px; padding-top: 20px;" onclick="navigateToPhotos('{{folderId}}', '{{name}}', '{{id}}', '{{collegeName}}', '{{branchName}}', '{{dataDelete}}')">
 				<div class="grid" style="padding: 0;max-width: 480px;box-shadow: 0 13px 8px -10px rgba(0, 0, 0, 0.1);xbox-shadow: 1px 1px 15px 2px rgba(0,0,0,0.2)">
 					<figure class="effect-zoe" style="width: 100%;margin: 0;height: 300px;float: none;padding:10px; background-color: white;">
 						<img src="{{eventThumbnailURL}}" alt="img25" style="width: 100%;" />								
@@ -525,10 +530,11 @@
 			}
 
 		</style>
-		<div class="col-xs-12 gallery-header-text" style="padding-top: 10px;">
-			<span class="text-muted">{{eventName}}</span>
-			<span class="hide eventId">{{eventId}}</span>
-
+		<div class="col-xs-12" style="padding-top: 10px;">
+			<div class="text-muted gallery-header-text"><b>{{eventName}}</b></div>
+			<div class="text-muted">Event is held at <b> {{collegeName}} </b> for <b>{{branchName}}</b></div>
+			<div class="text-muted">Last date to buy your memory is <b> {{dateToDelete}} </b></div>
+			<div class="hide eventId">{{eventId}}</div>
 		</div>
 		<div class="col-xs-12" style="padding-top: 10px;">
 			{{#each photos}}

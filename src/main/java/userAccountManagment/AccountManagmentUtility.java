@@ -184,12 +184,16 @@ public class AccountManagmentUtility {
 
 
 	public static boolean removeItem(PhotosBag photoBag) {
+		return removeItem(photoBag.getId());
+	}
+
+	public static boolean removeItem(int bagId) {
 		String deleteItem = "DELETE FROM MM_PHOTO_BAG WHERE ID = ?";
 		
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement pStmt = conn.prepareStatement(deleteItem);
-			pStmt.setInt(1, photoBag.getId());
+			pStmt.setInt(1, bagId);
 			pStmt.execute();
 			return true;
 		} catch (ClassNotFoundException | SQLException e) {
@@ -198,8 +202,7 @@ public class AccountManagmentUtility {
 			return false;
 		}
 	}
-
-
+	
 	public static Map<String, Integer> getPhotoDetailsFromConfiguration() {
 		
 		Map<String, Integer> photoConfigurations = new HashMap<String, Integer>();
@@ -370,6 +373,27 @@ public class AccountManagmentUtility {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	public static Integer itemExits(String photoId, int bagType, int userId, int eventId)
+	{
+		try
+		{
+			Connection conn = ConnectionManager.getConnection();
+			String query = "SELECT ID FROM MM_PHOTO_BAG WHERE USER_ID = ? AND PHOTO_ID = ? AND TYPE = ? AND EVENT_ID = ?";
+			PreparedStatement preparedStatement = conn.prepareStatement(query);
+			preparedStatement.setInt(1, userId);
+			preparedStatement.setString(2, photoId);
+			preparedStatement.setInt(3, bagType);
+			preparedStatement.setInt(4, eventId);
+			preparedStatement.execute();
+			ResultSet rs = preparedStatement.getResultSet();
+			rs.next();
+			return rs.getInt("ID");
+		}
+		catch(Exception e)
+		{}
 		
+		return null;
 	}
 }

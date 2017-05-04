@@ -1,5 +1,6 @@
 package userAccountManagment;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -20,20 +21,43 @@ public class AddToWishlistController extends HttpServlet
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, java.io.IOException
 	{
-		
-		String photoId = request.getParameter("photoId");
-		if(utilities.StringTools.isValidString(photoId))
+		try
 		{
-			HttpSession session = request.getSession();
-			UserDetails user = (UserDetails)session.getAttribute(CommonTypes.USER_DETAILS_SESSION_KEY);
-			int userId = user.getId();
+			String photoId = request.getParameter("photoId");
 			int eventId = Integer.parseInt(request.getParameter("eventId"));
+			
+			if(utilities.StringTools.isValidString(photoId))
+			{
+				HttpSession session = request.getSession();
+				UserDetails user = (UserDetails)session.getAttribute(CommonTypes.USER_DETAILS_SESSION_KEY);
+				int userId = user.getId();
 
-			ManageUserItems manageUserItem = new ManageUserItems();
-			Map<String, String> status = manageUserItem.addToBagage(photoId, CommonTypes.BAG_TYPE_WISHLIST, userId, eventId);
-			response.getWriter().write(new Gson().toJson(status));	
+				ManageUserItems manageUserItem = new ManageUserItems();
+				
+				Integer itemExists = manageUserItem.itemExists(photoId, CommonTypes.BAG_TYPE_WISHLIST, userId, eventId);
+				Map<String, String> status = null;
+				
+				if(itemExists == null)
+				{
+					status = manageUserItem.addToBagage(photoId, CommonTypes.BAG_TYPE_WISHLIST, userId, eventId);
+					status.put("itemAdded", "true");
+				}
+				else
+				{
+					if(manageUserItem.removeItem(itemExists))
+					{
+						status = new HashMap<String, String>(1);
+						status.put("itemRemoved", "true");
+					}
+				}
+				response.getWriter().write(new Gson().toJson(status));	
+			}
+			else
+				response.getWriter().write(String.valueOf(false));
 		}
-		else
-			response.getWriter().write(String.valueOf(false));
+		catch(Exception e)
+		{
+			
+		}
 	}
 }

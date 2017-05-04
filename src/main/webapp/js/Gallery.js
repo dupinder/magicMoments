@@ -87,10 +87,13 @@ function showHome(){
 	});
 }		
 
-function PhotoPrenter(photos, eventName, eventId){
+function PhotoPrenter(photos, eventName, eventId, collegeName, branchName, dateToDelete){
 	this.photos = photos;
 	this.eventName = eventName;
 	this.eventId = eventId;
+	this.collegeName = collegeName;
+	this.branchName = branchName;
+	this.dateToDelete = dateToDelete;
 	this.jsonData = () => JSON.stringify(this);
 }
 
@@ -112,7 +115,7 @@ function Photo(photoId, photoName, photoUrl, photoDiscription, createdDate, dele
 	this.jsonData = () => JSON.stringify(this);
 }
 
-function navigateToPhotos(folderId, eventName, eventId){
+function navigateToPhotos(folderId, eventName, eventId, collegeName, branchName, dateToDelete){
 	sendAjax('user/getEventPhotos', 'POST', {folderId:folderId}, function(response){
 		if(response != "")
 		{
@@ -133,7 +136,7 @@ function navigateToPhotos(folderId, eventName, eventId){
 					allPhotos.push(ph);
 				}
 				
-				var photoPrenter = new PhotoPrenter(allPhotos, eventName, eventId);
+				var photoPrenter = new PhotoPrenter(allPhotos, eventName, eventId, collegeName, branchName, dateToDelete);
 				loadTemplate(contentLoader, 'gallery-home', JSON.parse(photoPrenter.jsonData()));
 			}	
 		}	

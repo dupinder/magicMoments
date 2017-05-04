@@ -35,4 +35,14 @@ public class ManageUserItems
 		
 		return itemAddStatus;
 	}
+	
+	public Integer itemExists(String photoId, int bagType, int userId, int eventId)
+	{
+		return AccountManagmentUtility.itemExits(photoId, bagType, userId, eventId);
+	}
+	
+	public boolean removeItem(int bagId)
+	{
+		return AccountManagmentUtility.removeItem(bagId);
+	}
 }

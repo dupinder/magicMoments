@@ -29,6 +29,11 @@ function handleResponseForCartItems(response, element, className){
 			console.log("Something went wrong");
 		}	
 		else
-			$(element).addClass(className);
+		{
+			if(response.itemAdded == "true")
+				$(element).addClass(className);
+			else if(response.itemRemoved == "true")
+				$(element).removeClass(className);
+		}
 	}	
 }
