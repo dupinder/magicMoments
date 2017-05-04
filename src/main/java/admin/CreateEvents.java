@@ -113,7 +113,7 @@ public class CreateEvents extends HttpServlet {
 		}
 		
 		response.getWriter().write(new Gson().toJson(eventStatus));
-		response.sendRedirect("AdminHome.html");
+		response.sendRedirect("/AdminHome.html");
 	}
 	
 	private Map<String, String> fetchEventDataAndSave(Map<String, String> requestParams, Map<String, String> eventStatus, List<UserDetails> users) throws FileNotFoundException

@@ -74,6 +74,7 @@ public class PlaceFinalOrder extends HttpServlet {
 					order.setQuantity(Integer.valueOf(orderInfo.get(photo.getId()+"")));
 					order.setTotalBillingAmount(price * order.getQuantity());
 					order.setDaysToDeliver(deliveryDays);
+					order.setEventId(photo.getEventId());
 					orders.add(order);
 				}
 			}

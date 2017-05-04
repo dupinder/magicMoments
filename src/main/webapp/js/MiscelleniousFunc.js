@@ -19,3 +19,9 @@ function showSpinner(show){
 	else
 		$('.spinner-main').css('width', '0');
 }
+
+function showInlineSpinner(elementOnWhichSpinnerShouldApper){
+	var spinner = $('.inline-spinner-main').clone();
+	spinner.css('width', '100%');
+	elementOnWhichSpinnerShouldApper.append(spinner[0].outerHTML);
+}

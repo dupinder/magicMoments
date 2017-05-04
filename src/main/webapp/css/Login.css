@@ -15,16 +15,23 @@
 			}
 
 			.login-container{
-				width: 24%;
+				width: 30%;
 				min-height: 50%;
 				height: auto;
 				background-color: white;
 				position: absolute;
 				margin: 0;
-				left: 38%;
+				left: 35%;
 				top: 25%;
 				box-shadow: 1px 7px 14px -3px;
 			    z-index: 1;
+			}
+			
+			@media(max-width:768px){
+				.login-container{
+					width: 90%;
+					left: 5%;
+				}
 			}
 			
 			.logo-header{

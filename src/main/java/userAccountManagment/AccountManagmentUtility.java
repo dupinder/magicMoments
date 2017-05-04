@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
+import user.OrderPresenter;
 import user.PhotosBag;
 import user.UserAuthentication;
 import user.UserDetails;
@@ -233,7 +235,7 @@ public class AccountManagmentUtility {
 
 	public static boolean savePlacedOrder(List<Order> orders) 
 	{
-		String insertPlacedOrder = "INSERT INTO MM_PLACE_OREDR (USER_ID, PHOTO_ID, PRICE, QUANTITY, TOTAL_BILLING_AMOUNT, DELIVERY_CHARGES, REFERENCE_ID) VALUES (?, ?, ?, ?, ?, ?, ?)";
+		String insertPlacedOrder = "INSERT INTO MM_PLACE_OREDR (USER_ID, PHOTO_ID, PRICE, QUANTITY, TOTAL_BILLING_AMOUNT, DELIVERY_CHARGES, REFERENCE_ID, EVENT_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		try 
 		{
 			Connection conn = ConnectionManager.getConnection();
@@ -247,6 +249,7 @@ public class AccountManagmentUtility {
 				pStmt.setInt(5, order.getTotalBillingAmount());
 				pStmt.setInt(6, order.getDeliveryCharges());
 				pStmt.setString(7, order.getReferenceId());
+				pStmt.setInt(8, order.getEventId());
 				pStmt.execute();
 			}
 
@@ -259,37 +262,68 @@ public class AccountManagmentUtility {
 		}
 	}
 
-	public static Map<String, List<Order>> getMyOrders(int userId)
+	public static OrderPresenter getMyOrders(int userId)
 	{
-		String insertPlacedOrder = "SELECT * FROM MM_PLACE_OREDR WHERE USER_ID = ?";
+		String insertPlacedOrder = "SELECT MM_PLACE_OREDR.PHOTO_ID, MM_PLACE_OREDR.PRICE, MM_PLACE_OREDR.QUANTITY, MM_PLACE_OREDR.TOTAL_BILLING_AMOUNT,"
+									+"MM_PLACE_OREDR.REFERENCE_ID, MM_PLACE_OREDR.DELIVERY_CHARGES, MM_EVENT.EVENT_NAME, " 
+									+"MM_COLLAGE.COLLAGE_NAME, MM_BRANCH.BRANCH_NAME "
+									+"FROM MM_BRANCH INNER JOIN "
+									+"MM_COLLAGE ON MM_BRANCH.COLLAGE_ID = MM_COLLAGE.ID INNER JOIN "
+									+"MM_EVENT ON MM_BRANCH.ID = MM_EVENT.BRANCH_ID AND MM_COLLAGE.ID = MM_EVENT.COLLAGE_ID INNER JOIN "
+									+"MM_PLACE_OREDR ON MM_EVENT.ID = MM_PLACE_OREDR.EVENT_ID "
+									+"WHERE MM_PLACE_OREDR.USER_ID = ? ";
 		try 
 		{
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement pStmt = conn.prepareStatement(insertPlacedOrder);
 			pStmt.setInt(1, userId);
 			ResultSet resultSet = pStmt.executeQuery();
-			Map<String, List<Order>> myOrders = new HashMap<String, List<Order>>();
+			List<Order> orders = new ArrayList<Order>();
+			
+			String orderReference = null;
+			String branchName = null;
+			String collegeName = null;
+			int amountPayable = 0;
+			
 			while(resultSet.next())
 			{
 				Order order = new Order();
 				order.setReferenceId(resultSet.getString("REFERENCE_ID"));
+				
+				if(!Objects.nonNull(orderReference))
+				{
+					orderReference = order.getReferenceId();
+				}
+				
+				if(!Objects.nonNull(branchName))
+				{
+					branchName = resultSet.getString("BRANCH_NAME");
+				}
+				
+				if(!Objects.nonNull(collegeName))
+				{
+					collegeName = resultSet.getString("COLLAGE_NAME");
+				}
+				
 				order.setUserId(userId);
 				order.setPhotoId(resultSet.getString("PHOTO_ID"));
+				order.setPhotoUrl(drive.DriveCommunications.getPhotoUrlById(order.getPhotoId()));
 				order.setPrice(Integer.valueOf(resultSet.getString("PRICE")));
 				order.setQuantity(resultSet.getInt("QUANTITY"));
 				order.setTotalBillingAmount(resultSet.getInt("TOTAL_BILLING_AMOUNT"));
+				amountPayable += order.getTotalBillingAmount();
 				order.setDeliveryCharges(Integer.valueOf(resultSet.getInt("DELIVERY_CHARGES")));
-				
-				List<Order> listOfOrder = myOrders.get(order.getReferenceId());
-				if(listOfOrder == null)
-				{
-					listOfOrder = new ArrayList<Order>();
-				}
-				listOfOrder.add(order);
-				myOrders.put(order.getReferenceId(), listOfOrder);
+				order.setEventName(resultSet.getString("EVENT_NAME"));
+				orders.add(order);
 			}
 			
-			return myOrders;
+			OrderPresenter op = new OrderPresenter();
+			op.setReferenceId(orderReference);
+			op.setBranchName(branchName);
+			op.setCollegeName(collegeName);
+			op.setOrders(orders);
+			op.setAmountPayable(amountPayable);
+			return op;
 		}
 		catch (ClassNotFoundException | SQLException e) 
 		{
@@ -317,9 +351,6 @@ public class AccountManagmentUtility {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-
-		
 	}
 
 	public static boolean cancelOrder(int userId, String orderReference)

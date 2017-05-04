@@ -4,7 +4,23 @@ var selectedImages = [];
 $('document').ready(function(){
 	compileAllTemplates();
 	showHome();
+	
+	if($(window).width() < 749)
+	{
+		$('.hide-in-mobile').removeClass('container');
+		$('.fa.fa-user').click(function(){
+			openNavigationPane();
+		});
+	}
 });	
+
+function openNavigationPane() {
+    document.getElementById("mySidenav").style.width = "250px";
+}
+
+function closeNavigationPane() {
+    document.getElementById("mySidenav").style.width = "0";
+}
 
 function showDropdownOptions(selector){
 	$('.dropdown-option').hide();
@@ -176,11 +192,7 @@ function showCart(){
 				if(cartPresenters.length > 0)
 				{
 					var imagediv = $('.cart-view .image-div');
-					var spinner = $('.spinner-main').clone();
-					spinner.removeClass('spinner-main').addClass('inline-spinner-main');
-					spinner.find('.spinner').addClass('inline-spinner').removeClass('spinner');
-					spinner.css('width', '100%');
-					imagediv.append(spinner[0].outerHTML);
+					showInlineSpinner(imagediv);
 					
 					$('.cart-view img').on('load', function(){
 						$(this).siblings('.inline-spinner-main').remove();
@@ -324,15 +336,16 @@ function showMyOrders(){
 		{
 			sendAjax('user/showMyOrders', 'POST', {}, function(response){
 				
-				response = JSON.parse(response);
-				var myOrders = [];
-				for(key of Object.keys(response))
-				{
-					myOrders.push(new MyOrderPresenter(key, response[key]));
-				}	
+				myOrders = JSON.parse(response);
 				
 				var templateId = compileTemplate(htmlContent);
-				loadTemplate(contentLoader, templateId, {'myOrders': myOrders});
+				loadTemplate(contentLoader, templateId, myOrders);
+				var imageDiv = $('.image-div');
+				showInlineSpinner(imageDiv);
+				
+				$('.image-div img').on('load', function(){
+					$(this).siblings('.inline-spinner-main').remove();
+				});
 			}, function(error){
 				
 			});
@@ -352,3 +365,4 @@ function cancelOrder(orderReference){
 		
 	});
 }
+

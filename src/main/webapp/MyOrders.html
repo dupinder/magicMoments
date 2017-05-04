@@ -15,13 +15,34 @@
 		}
 	</style>
 	<div class="panel-group">
-		{{#each myOrders}}
+			{{#unless orders}}
+				<div class="row">
+					<div class="col-xs-12 col-sm-5 col-md-4">
+						You have not placed any order. <a href="Gallery.html"> Go and pick some events..!!</a>
+					</div>
+				</div>
+			{{else}}
 				<div class="panel panel-default" style="margin-bottom: 10px;">
 					<div class="panel-heading" style="background: #262626; color: white; letter-spacing: 1px;">
-						<label> Your order reference ID: {{reference}} </label>
-						<input type="button" class="btn mm-button-style" value="Cancel order" onclick="cancelOrder('{{reference}}')" style="margin-left: 20px;background: white;color: #262626;" />
+						<div class="row">
+							<div class="col-xs-12 col-sm-5 col-md-4">
+								<label> Your order reference ID: {{referenceId}} </label>
+								<label> Total amount: {{amountPayable}} </label>							
+							</div>
+							<div class="col-xs-12 col-sm-4 col-md-4">
+								<input type="button" class="btn mm-button-style" value="Cancel order" onclick="cancelOrder('{{referenceId}}')" style="margin-left: 20px;background: white;color: #262626;" />							
+							</div>
+						</div>					
 					</div>
 		    	<div class="panel-body" xstyle="box-shadow: 0px 8px 19px -7px;">
+					<div class="row">
+						<div class="col-xs-12">
+							<label> College name: {{collegeName}} </label>
+						</div>
+						<div class="col-xs-12" style="border-bottom: 1px solid rgba(0,0,0,0.2);">	
+							<label> Branch name: {{branchName}} </label>
+						</div>					
+					</div>
 		    		{{#each orders}}
 						<div class="row" style="margin-left: 5px;border-bottom: 1px solid rgba(0,0,0,0.1);padding:5px;">
 							<div class="col-xs-5 col-sm-5 col-ms-3 image-div" style="padding: 0;height: 150px; max-width: 150px;">
@@ -51,6 +72,6 @@
 		    		{{/each}}
 		  		</div>
   			</div>
-		{{/each}}  	
+ 		{{/unless}}
 	</div>
 </script>

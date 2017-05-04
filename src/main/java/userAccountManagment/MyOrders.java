@@ -1,8 +1,6 @@
 package userAccountManagment;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import user.OrderPresenter;
 import user.UserDetails;
 
 import com.google.gson.Gson;
@@ -38,22 +37,12 @@ public class MyOrders extends HttpServlet
 		try
 		{
 			UserDetails user = (UserDetails) request.getSession().getAttribute(utilities.CommonTypes.USER_DETAILS_SESSION_KEY);
-			Map<String, List<Order>> myOrders = AccountManagmentUtility.getMyOrders(user.getId());
-			response.getWriter().write(new Gson().toJson(myOrders));
+			OrderPresenter op = AccountManagmentUtility.getMyOrders(user.getId());
+			response.getWriter().write(new Gson().toJson(op));
 		}
 		catch(Exception e)
 		{
 			response.getWriter().write("false");
 		}
-	}
-	
-	private class OrderPresenter
-	{
-		String referenceId;
-		String photoUrl;
-		String eventName;
-		String Quantity;
-		String price;
-		String amountPayable;
 	}
 }

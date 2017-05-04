@@ -7,6 +7,10 @@
 			padding-bottom: 5px;	
 		}
 
+		.order-panel{
+			position: inherit;
+		}
+
 		@media(min-width: 750px){
 			.order-panel{
 				position: fixed;
@@ -14,12 +18,15 @@
 			}
 		}
 	</style>
+		{{#unless cartPresenters}}
+			You have not added any picture to your cart. <a href="Gallery.html"> Add now. </a>
+		{{else}}
 		<div class="row cart-view">
 			<div class="col-xs-12 col-sm-6 col-ms-7">
 				{{#each cartPresenters}}
 					<div class="row {{photoBag.id}}" style="margin-left: 5px;border-bottom: 1px solid rgba(0,0,0,0.1);padding:5px;">
 						<div class="col-xs-5 col-sm-5 col-ms-3 image-div" style="padding: 0;height: 150px; max-width: 150px;">
-							<img src="{{photo.photoUrl}}" style="height: 100%; width: 100%;" alt="LOADING..."/>
+							<img src="{{photo.photoThumbnailUrl}}" style="height: 100%; width: 100%;" alt="LOADING..."/>
 						</div>
 						<div class="col-xs-7 col-sm-7 col-ms-9" style="height: 150px;position:relative;">
 							<div class="row padding-top-5">
@@ -89,4 +96,5 @@
 				</div>
 			</div>
 		</div>
+		{{/unless}}
 </script>
