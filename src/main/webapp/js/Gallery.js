@@ -12,6 +12,11 @@ $('document').ready(function(){
 			openNavigationPane();
 		});
 	}
+	
+	$('body').click(function(e){
+		if(e.target.className.indexOf('fa-bars') == -1 && $('#mySidenav').width() > 0)
+			closeNavigationPane();
+	});
 });	
 
 function openNavigationPane() {
@@ -19,7 +24,9 @@ function openNavigationPane() {
 }
 
 function closeNavigationPane() {
+	$('#mySidenav a').hide();
     document.getElementById("mySidenav").style.width = "0";
+    $('#mySidenav a').show();
 }
 
 function showDropdownOptions(selector){
@@ -391,3 +398,10 @@ function cancelOrder(orderReference){
 	});
 }
 
+function logout(){
+	sendAjax('logout', 'POST', function(response){
+		window.location.href = "Login.html";
+	}, function(error){
+		
+	})
+}

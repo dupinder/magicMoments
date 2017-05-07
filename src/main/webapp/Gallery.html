@@ -409,16 +409,16 @@
 				<div class="header row" style="xborder-bottom: 1px solid rgba(0,0,0,0.1);">
 					<div class="col-xs-12">
 						<div class="row header-row">
-							<div class="col-xs-2 visible-xs" style="padding-top: 15px;" onclick="openNavigationPane()">
-								<i class="fa fa-bars" style="font-size: 25px;"> </i>
+							<div class="col-xs-2 visible-xs" style="padding-top: 15px;">
+								<i class="fa fa-bars" style="font-size: 25px;" onclick="openNavigationPane()"> </i>
 							</div>
 								<div id="mySidenav" class="sidenav visible-xs" onclick="closeNavigationPane();" style="color: white;z-index: 10000;">
-									<a href="" class="closebtn">&times;</a>
+									<a href="#" class="closebtn">&times;</a>
 									<a href="#">Profile</a>
 									<a href="#" onclick="showCart();">Review cart</a>
 									<a href="#">Wishlist</a>
 									<a href="#" onclick="showMyOrders();">My orders</a>
-									<a href="#">Logout</a>
+									<a href="#" onclick="logout();">Logout</a>
 								</div>
 							<div class="col-xs-9 col-sm-5">
 								<p class="visible-sm visible-md visible-lg visible-xs cursor-pointer logo" style="xfont-family: 'Josefin Slab', serif;font-size: 3vh;font-weight: bold;margin-bottom: 0;"> 							
@@ -619,7 +619,7 @@
 		}
 	</style>
   <!-- Button to close the overlay navigation -->
-  <a href="javascript:void(0)" class="closebtn" onclick="closeImage()">&times;</a>
+  <a href="#" class="closebtn" onclick="closeImage()">&times;</a>
 	<i class="fa fa-cart-plus add-to-cart overlay-items" style="right: 80px;" onclick="addItemToCart($(this).attr('photoId'), this)"></i>
 	<i class="fa fa-heart overlay-items add-to-wishlist" aria-hidden="true" style="right: 130px;" onclick="addItemToWishlist($(this).attr('photoId'), this)"></i>
   <!-- Overlay content -->

@@ -329,3 +329,11 @@ function createDOMForDropdowns(value, text, elementToAppend){
 	var text = document.createTextNode(text);
 	elementToAppend.appendChild(text);
 }
+
+function logout(){
+	sendAjax('logout', 'POST', function(response){
+		window.location.href = "AdminLogin.html";
+	}, function(error){
+		
+	})
+}
