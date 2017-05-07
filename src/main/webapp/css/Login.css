@@ -3,6 +3,8 @@
 				font-family: 'Handlee', cursive;
 				background-color: #F5F5F5;
 				font-size: 16px;
+				font-weight: 600;
+				letter-spacing: 1px;
 			}
 			
 			.brand{
@@ -74,8 +76,10 @@
 			.icon-holder .input-group-addon{
 				position: absolute;
 				z-index: 10;
-				height: 45px;
+				height: 43px;
 				background: #F5F5F5;
+				border: none;
+				margin: 1px;
 			}
 
 			.icon-holder.input-group input[type="text"], .icon-holder.input-group input[type="password"]{

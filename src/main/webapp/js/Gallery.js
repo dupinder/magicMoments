@@ -310,11 +310,28 @@ function navigateToPrevious(){
 	$('div[data-parent="'+ newActiveTab.attr('id') +'"]').show();
 }
 
-function openImage(url){
-	//$('.open-image-overlay img').attr('src', url);
-	//$('.open-image-overlay').show();
-	$('#myNav img').attr('src', url);
-	$('#myNav').css('width', '100%');
+function openImage(url, alreadyAddedToWishlist, alreadyAddedToCart, photoId){
+	var navDiv = $('#myNav');
+	navDiv.find('img').attr('src', url);
+	if(alreadyAddedToWishlist == '')
+	{
+		navDiv.find('.add-to-wishlist').removeClass('added-to-wishlist').attr('photoId', photoId);;
+	}
+	else
+	{
+		navDiv.find('.add-to-wishlist').addClass(alreadyAddedToWishlist).attr('photoId', photoId);
+	}	
+	
+	if(alreadyAddedToCart == '')
+	{
+		navDiv.find('.add-to-cart').removeClass('added-to-cart').attr('photoId', photoId);;
+	}
+	else
+	{
+		navDiv.find('.add-to-cart').addClass(alreadyAddedToCart).attr('photoId', photoId);;
+	}	
+	
+	navDiv.css('width', '100%');
 }
 
 function closeImage(){	

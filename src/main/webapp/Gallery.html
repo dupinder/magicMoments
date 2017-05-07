@@ -13,6 +13,7 @@
 		<link href="https://fonts.googleapis.com/css?family=Handlee" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Mada" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Bree+Serif" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Boogaloo|Brawler|Josefin+Sans|Poiret+One" rel="stylesheet">
 		
 		<script type="text/javascript" src="js/bootstrap.js"></script>
 		<script src="js/jquery-3.1.1.min.js"> </script>
@@ -27,6 +28,8 @@
 			body{
 				color: #262626;
 				font-family: 'Handlee', cursive;
+				letter-spacing: 1px;
+    			font-weight: 600;
 			}
 			
 			.font-bree{
@@ -527,15 +530,18 @@
 	{{else}}
 		<style>
 			.added-to-cart{
-				color: #70c1a0;
+				color: #70c1a0 !important;
 			}
 			
 			.added-to-wishlist{
-				color: #e0385f;
+				color: #e0385f !important;
+			}
+
+			.gallery-header-text{
 			}
 
 		</style>
-		<div class="col-xs-12" style="padding-top: 10px;">
+		<div class="col-xs-12 eventDetails" style="padding-top: 10px;">
 			<div class="text-muted gallery-header-text"><b>{{eventName}}</b></div>
 			<div class="text-muted">Event is held at <b> {{collegeName}} </b> for <b>{{branchName}}</b></div>
 			<div class="text-muted">Last date to buy your memory is <b> {{dateToDelete}} </b></div>
@@ -545,7 +551,7 @@
 			{{#each photos}}
 				<div class="col-xs-12 col-sm-6 col-md-3 parent-grid" style="padding:5px; padding-top: 10px; margin-bottom: 5px;padding-right: 20px;">
 					<div class="grid hvr-glow" style="box-shadow: 0 13px 8px -10px rgba(0, 0, 0, 0.1);box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19)!important;padding-top: 0;padding-bottom: 0;width: 100%;">
-						<figure class="effect-zoe" onclick="openImage('{{thumbnailUrl}}')" style="width: 100%;margin: 0;height: 250px;float: none;">
+						<figure class="effect-zoe" onclick="openImage('{{thumbnailUrl}}', '{{addedToWishlist}}', '{{addedToCart}}', '{{id}}')" style="width: 100%;margin: 0;height: 250px;float: none;">
 							<img src="{{thumbnailUrl}}" alt="img25" style="width: 100%;" />							 
 						</figure>	
 						<div style="max-width: 480px; position: relative;width: 100%; background: white; font-weight: 700;padding: 10px;text-align: left;">
@@ -606,11 +612,19 @@
 				right: 0;
 			}
 		}
-
+		
+		.overlay-items{
+			color: white;
+			font-size: 30px;
+			position: absolute;
+			top: 15px;
+			padding: 8px;			
+		}
 	</style>
   <!-- Button to close the overlay navigation -->
   <a href="javascript:void(0)" class="closebtn" onclick="closeImage()">&times;</a>
-  <button type="button" class="btn btn-success add-to-cart-btn"> Add to bag </button>
+	<i class="fa fa-cart-plus add-to-cart overlay-items" style="right: 80px;" onclick="addItemToCart($(this).attr('photoId'), this)"></i>
+	<i class="fa fa-heart overlay-items add-to-wishlist" aria-hidden="true" style="right: 130px;" onclick="addItemToWishlist($(this).attr('photoId'), this)"></i>
   <!-- Overlay content -->
 	<div class="overlay-parent-div">
 		<img src="" class="overlay-image" />
