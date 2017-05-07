@@ -25,3 +25,27 @@ function showInlineSpinner(elementOnWhichSpinnerShouldApper){
 	spinner.css('width', '100%');
 	elementOnWhichSpinnerShouldApper.append(spinner[0].outerHTML);
 }
+function dismissAlert(element)
+{
+	$(element.parentElement).fadeOut(1000);
+}
+
+function alertSuccess(message)
+{
+	var alertContainer = $("<div />");
+
+	alertContainer.addClass("alert alert-success alert-dismissable")
+		.css({'margin-top' : '18px', 'position' : 'absolute', 'top' : '10px', 'right' : '300px', 'z-index' : '1000000000'})
+		.attr({'id':'alertContainer'});
+
+	var crossIcon = $("<a />").attr({'href':'#', 'data-dismiss':'alert', 'aria-label' : 'close', 'title': 'close', 'onclick' : 'dismissAlert(this)'}).addClass('close');
+		crossIcon.append('x');
+	
+	alertContainer.append(crossIcon[0]);
+	alertContainer.append(message);
+	
+	var alertBody = $('.alertSection').clone();
+	alertBody.append(alertContainer[0].outerHTML);
+	alertBody.removeClass('hide').addClass('show');
+	$('body').append(alertBody[0].outerHTML);
+}

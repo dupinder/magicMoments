@@ -18,14 +18,14 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import connection.ConnectionManager;
+import drive.DriveCommunications;
 import user.Branches;
 import user.CollageInfo;
 import user.Event;
 import user.UserAuthentication;
 import user.UserDetails;
 import utilities.StringTools;
-import connection.ConnectionManager;
-import drive.DriveCommunications;
 
 public class AdminUtilites {
 
@@ -49,14 +49,12 @@ public class AdminUtilites {
 			 return true;
 			 
 		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}		
 		
 	}
 
-	@SuppressWarnings("null")
 	public static List<CollageInfo> getAllCollageList() {
 
 		 Connection conn;
@@ -73,7 +71,6 @@ public class AdminUtilites {
 			}
 			
 		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -122,7 +119,6 @@ public class AdminUtilites {
 			}
 			
 		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -357,5 +353,33 @@ public class AdminUtilites {
 			return null;
 		}		
 
+	}
+	
+	public static List<Eventpresenter> getListOfAllEvents()
+	{
+		String eventPresenterSql = "SELECT  MM_BRANCH.BRANCH_NAME, MM_BRANCH.BRANCH_ABBRIVATION, MM_COLLAGE.COLLAGE_NAME, MM_EVENT.EVENT_NAME, MM_EVENT.EVENT_DISCRIPTION, MM_EVENT.EVENT_START,"+ 
+                         "MM_EVENT.EVENT_END, MM_EVENT.EVENT_DATA_DELETE, MM_EVENT.COLLAGE_ID, MM_EVENT.BRANCH_ID, MM_EVENT.MODIFIED_BY, MM_EVENT.MODIFIED_ON, MM_EVENT.FOLDER_ID,"+ 
+                         "MM_EVENT.ID, MM_COLLAGE.COLLAGE_ABBREVATION"+
+                         "FROM MM_BRANCH INNER JOIN"+
+                         "MM_COLLAGE ON MM_BRANCH.COLLAGE_ID = MM_COLLAGE.ID INNER JOIN"+
+                         "MM_EVENT ON MM_BRANCH.ID = MM_EVENT.BRANCH_ID AND MM_COLLAGE.ID = MM_EVENT.COLLAGE_ID";
+		List<Eventpresenter> eventPresentor = new LinkedList<Eventpresenter>();
+
+		try {
+			PreparedStatement pStmt = ConnectionManager.getConnection().prepareStatement(eventPresenterSql);
+			
+			ResultSet rs = pStmt.executeQuery();
+			while (rs.next()) 
+			{
+				eventPresentor.add(new Eventpresenter(rs.getString("MM_EVENT.EVENT_NAME"), rs.getString("MM_EVENT.EVENT_DISCRIPTION"), rs.getTimestamp("MM_EVENT.EVENT_START"), rs.getTimestamp("MM_EVENT.EVENT_END"), rs.getTimestamp("MM_EVENT.EVENT_DATA_DELETE"), rs.getInt("MM_EVENT.COLLAGE_ID"), rs.getInt("MM_EVENT.BRANCH_ID"), rs.getString("MM_EVENT.FOLDER_ID"), rs.getInt("MM_EVENT.ID"), DriveCommunications.getEventThumbnail(DriveCommunications.DRIVE_SERVICE, rs.getString("MM_EVENT.FOLDER_ID")), rs.getString("MM_COLLAGE.COLLAGE_NAME"), rs.getString("MM_BRANCH.BRANCH_NAME"), rs.getString("MM_COLLAGE.COLLAGE_ABBREVATION"), rs.getString("MM_BRANCH.BRANCH_ABBRIVATION")));
+			}
+			
+		} catch (ClassNotFoundException | SQLException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return eventPresentor;
 	}
 }

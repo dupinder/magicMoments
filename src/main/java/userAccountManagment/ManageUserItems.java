@@ -23,7 +23,7 @@ public class ManageUserItems
 		Map<String, String> itemAddStatus = new HashMap<String, String>();
 		if(AccountManagmentUtility.saveAddToCartPhotos(photoBag))
 		{
-			List<PhotosBag> photosBag = AccountManagmentUtility.getPhotosInBag(userId);
+			List<PhotosBag> photosBag = AccountManagmentUtility.getPhotosInBag(userId, bagType);
 			itemAddStatus.put("result", "true");
 			itemAddStatus.put("dataItemsInBag", new Gson().toJson(photosBag));		
 			itemAddStatus.put("dataItemCountsBasedOnType", new Gson().toJson(AccountManagmentUtility.getCountBasedOnType(photosBag)));

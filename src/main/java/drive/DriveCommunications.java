@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import com.google.api.client.auth.oauth2.Credential;
@@ -243,7 +244,6 @@ public class DriveCommunications {
 	     {
 	         for(File file : files)
 	         {
-	        	 System.out.println(file.getWebViewLink());
 	        	 photos.add(new Photos(file.getId(), file.getName(), getWebContentLink(file), file.getDescription(), file.getCreatedTime().toString(), file.getCreatedTime().toString(), "50", getImageThumbnail(file.getId()))); 
 	         }
 	     }
@@ -265,9 +265,7 @@ public class DriveCommunications {
     		     if (files == null || files.size() == 0) {
     		         //System.out.println("No files found.");
     		     } else {
-    		    	 
     		         for (File file : files) {
-    		        	 System.out.println(file.getWebViewLink());
     		        	 ListOfPhotos.add(new Photos(file.getId(), file.getName(), getWebContentLink(file), file.getDescription(), file.getCreatedTime().toString(), file.getCreatedTime().toString(), "50", getImageThumbnail(file.getId()))); 
     		         }
     		     }
@@ -296,7 +294,6 @@ public class DriveCommunications {
                 .execute();
            List<File> files = result.getFiles();
            if (files == null || files.size() == 0) {
-               //System.out.println("No files found.");
            } else {
                //System.out.println("Files:");
                for (File file : files) {
@@ -322,7 +319,7 @@ public class DriveCommunications {
           .setPageSize(1)
           .setQ("'"+folderId+"' in parents")
           .setSpaces("drive")
-          .setFields("nextPageToken, files(id, name, originalFilename, description, mimeType)")
+          .setFields("nextPageToken, files(id, name, originalFilename, description, mimeType,thumbnailLink, iconLink, webViewLink)")
           .execute();
      List<File> files = result.getFiles();
      if (files == null || files.size() == 0) {
@@ -332,7 +329,7 @@ public class DriveCommunications {
          for (File file : files) {        	 
         	 EventThumbnail = getImageThumbnail(file.getId());
          }
-         
+        
      }
 		return EventThumbnail;
 	}
@@ -373,7 +370,14 @@ public class DriveCommunications {
 	 * @return
 	 */
 	public static String getImageThumbnail(String id) {
-		return "https://drive.google.com/thumbnail?sz=w300-h400&id="+id;
+		
+//		return "https://lh3.google.com/u/0/d/"+id+"=w200-h150";
+		//return "https://drive.google.com/thumbnail?id="+id;
+		//return "https://lh3.google.com/u/0/d/"+id;
+		//return "https://docs.google.com/uc?id="+id;
+		//return "https://drive.google.com/uc?id="+id;
+		//return "https://drive.google.com/thumbnail?sz=w300-h400&id="+id
+		return "https://drive.google.com/thumbnail?authuser=0&sz=w320&id="+id;
 	}
 
 	
