@@ -1,6 +1,7 @@
 package userAccountManagment;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -37,8 +38,8 @@ public class MyOrders extends HttpServlet
 		try
 		{
 			UserDetails user = (UserDetails) request.getSession().getAttribute(utilities.CommonTypes.USER_DETAILS_SESSION_KEY);
-			OrderPresenter op = AccountManagmentUtility.getMyOrders(user.getId());
-			response.getWriter().write(new Gson().toJson(op));
+			Map<String, OrderPresenter> op = AccountManagmentUtility.getMyOrders(user.getId());
+			response.getWriter().write(new Gson().toJson(op.values()));
 		}
 		catch(Exception e)
 		{

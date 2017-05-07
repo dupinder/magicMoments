@@ -420,9 +420,9 @@
 									<a href="#" onclick="showMyOrders();">My orders</a>
 									<a href="#">Logout</a>
 								</div>
-							<div class="col-xs-9 col-sm-5" onclick="showHome();">
+							<div class="col-xs-9 col-sm-5">
 								<p class="visible-sm visible-md visible-lg visible-xs cursor-pointer logo" style="xfont-family: 'Josefin Slab', serif;font-size: 3vh;font-weight: bold;margin-bottom: 0;"> 							
-									<img src="img/camera-nikon-dslr-512.png" style="width: 50px; height: auto;" /><span style="vertical-align: -webkit-baseline-middle;">Magic Moments </span>
+									<img src="img/camera-nikon-dslr-512.png" style="width: 50px; height: auto;" onclick="showHome();" /><span style="vertical-align: -webkit-baseline-middle;" onclick="showHome();">Magic Moments </span>
 								</p>
 <!-- 								<p class="visible-xs cursor-pointer logo" style="xfont-family: 'Josefin Slab', serif;font-size: 3vh;font-weight: bold;margin-bottom: 0;"> 							 -->
 <!-- 									<img src="img/camera-nikon-dslr-512.png" style="width: 50px; height: auto;" /><span style="vertical-align: -webkit-baseline-middle;">MM </span> -->
@@ -495,9 +495,6 @@
 				</div>
 			</div>
 		</div>
-		
-			<div class="alertSection hide"> 
-			</div>
 	</body>
 
 	<script type="text/x-handlebar-template" id="events">
@@ -645,3 +642,7 @@
 	 	<div class="double-bounce2"></div>
 	</div>	
 </div>
+
+<div class="alertSection hide"> 
+</div>
+			

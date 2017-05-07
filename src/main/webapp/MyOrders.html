@@ -15,32 +15,33 @@
 		}
 	</style>
 	<div class="panel-group">
-			{{#unless orders}}
+			{{#unless myOrders}}
 				<div class="row">
 					<div class="col-xs-12 col-sm-5 col-md-4">
 						You have not placed any order. <a href="Gallery.html"> Go and pick some events..!!</a>
 					</div>
 				</div>
 			{{else}}
+				{{#each myOrders}}
 				<div class="panel panel-default" style="margin-bottom: 10px;">
-					<div class="panel-heading" style="background: #262626; color: white; letter-spacing: 1px;">
+					<div class="panel-heading" style="background: rgba(38, 38, 38, 0.5); color: white; letter-spacing: 1px;">
 						<div class="row">
-							<div class="col-xs-12 col-sm-5 col-md-4">
-								<label> Your order reference ID: {{referenceId}} </label>
+							<div class="col-xs-8 col-sm-5 col-md-4">
+								<label> Reference ID: {{referenceId}} </label>
 								<label> Total amount: {{amountPayable}} </label>							
 							</div>
-							<div class="col-xs-12 col-sm-4 col-md-4">
-								<input type="button" class="btn mm-button-style" value="Cancel order" onclick="cancelOrder('{{referenceId}}')" style="margin-left: 20px;background: white;color: #262626;" />							
+							<div class="col-xs-3 col-sm-4 col-md-4 pull-right" style="padding: 0; padding-right: 10px;width: auto;">
+								<input type="button" class="btn mm-button-style" value="Cancel" onclick="cancelOrder('{{referenceId}}')" style="margin-left: 20px;background: white;color: #262626;" />							
 							</div>
 						</div>					
 					</div>
 		    	<div class="panel-body" xstyle="box-shadow: 0px 8px 19px -7px;">
 					<div class="row">
 						<div class="col-xs-12">
-							<label> College name: {{collegeName}} </label>
+							<label> College name: <span class="text-muted"> {{collegeName}} </span> </label>
 						</div>
 						<div class="col-xs-12" style="border-bottom: 1px solid rgba(0,0,0,0.2);">	
-							<label> Branch name: {{branchName}} </label>
+							<label> Branch name: <span class="text-muted"> {{branchName}} </span></label>
 						</div>					
 					</div>
 		    		{{#each orders}}
@@ -72,6 +73,7 @@
 		    		{{/each}}
 		  		</div>
   			</div>
+		{{/each}}
  		{{/unless}}
 	</div>
 </script>

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import user.OrderPresenter;
 import user.PhotosBag;
@@ -265,7 +264,7 @@ public class AccountManagmentUtility {
 		}
 	}
 
-	public static OrderPresenter getMyOrders(int userId)
+	public static Map<String, OrderPresenter> getMyOrders(int userId)
 	{
 		String insertPlacedOrder = "SELECT MM_PLACE_OREDR.PHOTO_ID, MM_PLACE_OREDR.PRICE, MM_PLACE_OREDR.QUANTITY, MM_PLACE_OREDR.TOTAL_BILLING_AMOUNT,"
 									+"MM_PLACE_OREDR.REFERENCE_ID, MM_PLACE_OREDR.DELIVERY_CHARGES, MM_EVENT.EVENT_NAME, " 
@@ -281,32 +280,27 @@ public class AccountManagmentUtility {
 			PreparedStatement pStmt = conn.prepareStatement(insertPlacedOrder);
 			pStmt.setInt(1, userId);
 			ResultSet resultSet = pStmt.executeQuery();
-			List<Order> orders = new ArrayList<Order>();
-			
-			String orderReference = null;
-			String branchName = null;
-			String collegeName = null;
-			int amountPayable = 0;
+			Map<String, OrderPresenter> results = new HashMap<String, OrderPresenter>();
 			
 			while(resultSet.next())
 			{
 				Order order = new Order();
 				order.setReferenceId(resultSet.getString("REFERENCE_ID"));
 				
-				if(!Objects.nonNull(orderReference))
-				{
-					orderReference = order.getReferenceId();
-				}
+				String orderReference = order.getReferenceId();
 				
-				if(!Objects.nonNull(branchName))
+				OrderPresenter opr = results.get(orderReference);
+				List<Order> orders = null;
+				if(opr == null)
 				{
-					branchName = resultSet.getString("BRANCH_NAME");
+					opr = new OrderPresenter();
+					opr.setCollegeName(resultSet.getString("COLLAGE_NAME"));
+					opr.setBranchName(resultSet.getString("BRANCH_NAME"));
+					opr.setReferenceId(orderReference);
+					orders = new ArrayList<Order>();
 				}
-				
-				if(!Objects.nonNull(collegeName))
-				{
-					collegeName = resultSet.getString("COLLAGE_NAME");
-				}
+				else
+					orders = opr.getOrders();
 				
 				order.setUserId(userId);
 				order.setPhotoId(resultSet.getString("PHOTO_ID"));
@@ -314,19 +308,16 @@ public class AccountManagmentUtility {
 				order.setPrice(Integer.valueOf(resultSet.getString("PRICE")));
 				order.setQuantity(resultSet.getInt("QUANTITY"));
 				order.setTotalBillingAmount(resultSet.getInt("TOTAL_BILLING_AMOUNT"));
-				amountPayable += order.getTotalBillingAmount();
+				opr.setAmountPayable(opr.getAmountPayable() + order.getTotalBillingAmount());
 				order.setDeliveryCharges(Integer.valueOf(resultSet.getInt("DELIVERY_CHARGES")));
 				order.setEventName(resultSet.getString("EVENT_NAME"));
+				
 				orders.add(order);
+				opr.setOrders(orders);
+				results.put(orderReference, opr);
 			}
 			
-			OrderPresenter op = new OrderPresenter();
-			op.setReferenceId(orderReference);
-			op.setBranchName(branchName);
-			op.setCollegeName(collegeName);
-			op.setOrders(orders);
-			op.setAmountPayable(amountPayable);
-			return op;
+			return results;
 		}
 		catch (ClassNotFoundException | SQLException e) 
 		{

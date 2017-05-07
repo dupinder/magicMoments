@@ -74,6 +74,7 @@ function showHome(){
 				var ud = new UserData(allEvents, userData);
 				loadTemplate(contentLoader, 'events', JSON.parse(ud.jsonData()));
 				$('.dropdown-option .username').text("Hi, " + userData.name);
+				showInlineSpinner($('.parent-grid figure img'));
 			}	
 			else
 			{
@@ -265,8 +266,11 @@ function placeOrder(){
 	sendAjax('user/placeOrder', 'POST', {orderInfo: JSON.stringify(mapOfPhotoAndQuantity)}, function(response){
 		if(response == "true")
 		{
-			console.log('order placed successfully');
-			window.location.href = "Gallery.html";
+			showSpinner(true);
+			alertSuccess("Your order has been placed successfully");
+			setTimeout(function(){
+				window.location.href = "Gallery.html";
+			}, 2000);
 		}	
 		
 	}, function(error){
@@ -279,6 +283,7 @@ function removeFromCart(bagId){
 		if(response == "true")
 		{
 			showCart();
+			alertSuccess("Picture has been removed from cart successfully");
 		}	
 		
 	}, function(error){});
@@ -357,9 +362,8 @@ function showMyOrders(){
 			sendAjax('user/showMyOrders', 'POST', {}, function(response){
 				
 				myOrders = JSON.parse(response);
-				
 				var templateId = compileTemplate(htmlContent);
-				loadTemplate(contentLoader, templateId, myOrders);
+				loadTemplate(contentLoader, templateId, {'myOrders': myOrders});
 				var imageDiv = $('.image-div');
 				showInlineSpinner(imageDiv);
 				
@@ -379,6 +383,7 @@ function cancelOrder(orderReference){
 	sendAjax('user/cancelOrder', 'POST', {orderReference: orderReference}, function(response){
 		if(response == "true")
 		{
+			alertSuccess("Your order with reference: " + orderReference + ' has been cancelled');
 			showMyOrders();
 		}	
 	}, function(error){
