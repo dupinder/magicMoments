@@ -76,9 +76,11 @@ public class VerifyEmail extends HttpServlet {
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				response.getWriter().write(String.valueOf(false));
 			}
-
 		}
+		else
+			response.getWriter().write(String.valueOf(false));
 	}
 
 }
