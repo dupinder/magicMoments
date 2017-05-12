@@ -25,20 +25,30 @@
 				font-family: 'Handlee', cursive;
 				background-color: #F5F5F5;
 				font-size: 16px;
+				font-weight: 600;
+				letter-spacing: 1px;
 			}
 
 			.login-container{
-				width: 24%;
+				width: 30%;
 				min-height: 50%;
 				height: auto;
 				background-color: white;
 				position: absolute;
 				margin: 0;
-				left: 38%;
+				left: 35%;
 				top: 25%;
 				box-shadow: 1px 7px 14px -3px;
 			    z-index: 1;
 			}
+			
+			@media(max-width:768px){
+				.login-container{
+					width: 90%;
+					left: 5%;
+				}
+			}
+			
 
 			.parent-login{
 				width: 100%;
@@ -77,8 +87,10 @@
 			.icon-holder .input-group-addon{
 				position: absolute;
 				z-index: 10;
-				height: 45px;
+				height: 43px;
 				background: #F5F5F5;
+				border: none;
+				margin: 1px;
 			}
 
 			.icon-holder.input-group input[type="text"], .icon-holder.input-group input[type="password"]{
@@ -125,7 +137,7 @@
 									</div>
 								</div>
 							
-								<div class="col-xs-12 input-group">
+								<div class="col-xs-12">
 									<div class="input-group" style="display: block;">
 										<input type="button" class="btn btn-primary form-control button-style signin" value="Sign in" />
 									</div>	

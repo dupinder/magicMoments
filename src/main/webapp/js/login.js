@@ -1,9 +1,5 @@
 $(document).ready(function(){
-
-
 	$('.login-button').click(function(){
-
-
 		var usernameEle = $('input#username'); 
 		var passwordEle = $('input#password');
 		var username = usernameEle.val().trim();
